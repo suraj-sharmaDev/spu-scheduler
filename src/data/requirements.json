@@ -1,0 +1,360 @@
+{
+  "catalogYear": "2026-2027",
+  "sourceUrl": "https://catalog.spu.edu/undergraduate/college-schools/cbt-technology/computer-science/computer-science-bs/",
+  "scrapedAt": "2026-06-19",
+  "totalCreditsForDegree": 103,
+  "verified": false,
+  "groups": [
+    {
+      "name": "General Core",
+      "creditsRequired": 72,
+      "selectionRule": null,
+      "courses": [
+        {
+          "id": "CSC1250",
+          "credits": 5
+        },
+        {
+          "id": "CSC1260",
+          "credits": 5
+        },
+        {
+          "id": "CSC2430",
+          "credits": 5
+        },
+        {
+          "id": "CSC2431",
+          "credits": 5
+        },
+        {
+          "id": "CSC3011",
+          "credits": 3
+        },
+        {
+          "id": "CSC3150",
+          "credits": 5
+        },
+        {
+          "id": "CSC3220",
+          "credits": 5
+        },
+        {
+          "id": "CSC3221",
+          "credits": 5
+        },
+        {
+          "id": "CSC3310",
+          "credits": 4
+        },
+        {
+          "id": "CSC3350",
+          "credits": 3
+        },
+        {
+          "id": "CSC3430",
+          "credits": 4
+        },
+        {
+          "id": "CSC4410",
+          "credits": 5
+        },
+        {
+          "id": "MAT1234",
+          "credits": 5
+        },
+        {
+          "id": "MAT1235",
+          "credits": 5
+        },
+        {
+          "id": "MAT2360",
+          "credits": 5
+        },
+        {
+          "id": "MAT2401",
+          "credits": 3
+        }
+      ]
+    },
+    {
+      "name": "Science Requirement",
+      "creditsRequired": 5,
+      "selectionRule": "Select one of the following:",
+      "courses": [
+        {
+          "id": "CHM1310",
+          "credits": null
+        },
+        {
+          "id": "PHY1121",
+          "credits": null
+        }
+      ]
+    },
+    {
+      "name": "Discrete Math and Computer Hardware",
+      "creditsRequired": 10,
+      "selectionRule": "Select one of the two sequences",
+      "courses": [
+        {
+          "id": "MAT1720",
+          "credits": null
+        },
+        {
+          "id": "MAT1720",
+          "credits": null
+        }
+      ]
+    },
+    {
+      "name": "Interview Preparation",
+      "creditsRequired": 2,
+      "selectionRule": null,
+      "courses": [
+        {
+          "id": "CSC2099",
+          "credits": 1
+        },
+        {
+          "id": "CSC3099",
+          "credits": 1
+        }
+      ]
+    },
+    {
+      "name": "Project & Internship",
+      "creditsRequired": 11,
+      "selectionRule": null,
+      "courses": [
+        {
+          "id": "CSC3000",
+          "credits": 1
+        },
+        {
+          "id": "GS3001",
+          "credits": null,
+          "or": true
+        },
+        {
+          "id": "CSC4941",
+          "credits": 1
+        },
+        {
+          "id": "CSC4896",
+          "credits": 3
+        },
+        {
+          "id": "CSC4897",
+          "credits": 3
+        },
+        {
+          "id": "CSC4898",
+          "credits": 3
+        }
+      ]
+    },
+    {
+      "name": "Technical Electives",
+      "creditsRequired": 3,
+      "selectionRule": "Select 3 credits of the following:",
+      "courses": [
+        {
+          "id": "CSC4210",
+          "credits": null
+        },
+        {
+          "id": "CSC4220",
+          "credits": null
+        },
+        {
+          "id": "CSC4250",
+          "credits": null
+        },
+        {
+          "id": "CSC4310",
+          "credits": null
+        },
+        {
+          "id": "CSC4350",
+          "credits": null
+        },
+        {
+          "id": "CSC4430",
+          "credits": null
+        },
+        {
+          "id": "CSC4750",
+          "credits": null
+        },
+        {
+          "id": "CSC4760",
+          "credits": null
+        },
+        {
+          "id": "CSC4800",
+          "credits": null
+        },
+        {
+          "id": "DAT3380",
+          "credits": null
+        },
+        {
+          "id": "DAT4380",
+          "credits": null
+        },
+        {
+          "id": "DAT4500",
+          "credits": null
+        },
+        {
+          "id": "EE4770",
+          "credits": null
+        },
+        {
+          "id": "PHI2500",
+          "credits": null
+        },
+        {
+          "id": "PHI3999",
+          "credits": null
+        }
+      ]
+    },
+    {
+      "name": "Technical Elective Courses",
+      "creditsRequired": 3,
+      "selectionRule": null,
+      "courses": [
+        {
+          "id": "CSC4210",
+          "credits": 3
+        },
+        {
+          "id": "CSC4220",
+          "credits": 3
+        },
+        {
+          "id": "CSC4250",
+          "credits": 3
+        },
+        {
+          "id": "CSC4310",
+          "credits": 3
+        },
+        {
+          "id": "CSC4350",
+          "credits": 3
+        },
+        {
+          "id": "CSC4430",
+          "credits": 3
+        },
+        {
+          "id": "CSC4750",
+          "credits": 5
+        },
+        {
+          "id": "CSC4760",
+          "credits": 5
+        },
+        {
+          "id": "CSC4800",
+          "credits": 3
+        },
+        {
+          "id": "DAT3380",
+          "credits": 5
+        },
+        {
+          "id": "DAT4500",
+          "credits": 5
+        },
+        {
+          "id": "EE3280",
+          "credits": 5
+        },
+        {
+          "id": "EE4770",
+          "credits": 3
+        }
+      ]
+    },
+    {
+      "name": "Common Curriculum",
+      "creditsRequired": null,
+      "selectionRule": null,
+      "courses": [
+        {
+          "id": "TCOR2000",
+          "credits": 5
+        },
+        {
+          "id": "TCOR3100",
+          "credits": 5
+        },
+        {
+          "id": "UCOR2100",
+          "credits": 5
+        },
+        {
+          "id": "UCOR3000",
+          "credits": 5
+        }
+      ]
+    },
+    {
+      "name": "Exploratory Curriculum",
+      "creditsRequired": 35,
+      "selectionRule": "WK; CUE",
+      "courses": []
+    },
+    {
+      "name": "Two Quarters of Object Oriented Programming in the Same Language",
+      "creditsRequired": 10,
+      "selectionRule": "Object oriented progamming 1; Object oriented programming 2 with Data Structures",
+      "courses": []
+    },
+    {
+      "name": "Math Courses Equivalent to SPU's",
+      "creditsRequired": 20,
+      "selectionRule": null,
+      "courses": [
+        {
+          "id": "MAT1234",
+          "credits": null
+        },
+        {
+          "id": "MAT1235",
+          "credits": null
+        },
+        {
+          "id": "MAT2360",
+          "credits": null
+        }
+      ]
+    },
+    {
+      "name": "A Science Course Equivalent to one of the following SPU courses:",
+      "creditsRequired": 5,
+      "selectionRule": null,
+      "courses": [
+        {
+          "id": "BIO2202",
+          "credits": null
+        },
+        {
+          "id": "CHM1211",
+          "credits": null
+        },
+        {
+          "id": "CHM1310",
+          "credits": null
+        },
+        {
+          "id": "PHY1121",
+          "credits": null
+        }
+      ]
+    }
+  ]
+}

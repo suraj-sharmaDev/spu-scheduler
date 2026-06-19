@@ -10,6 +10,7 @@
     "generate-routes": "tsr generate",
     "build": "vite build",
     "preview": "vite preview",
+    "scrape": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/scrape.ts",
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
