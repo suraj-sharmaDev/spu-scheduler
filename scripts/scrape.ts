@@ -29,6 +29,13 @@ const COURSE_DESC_BASE = "https://catalog.spu.edu/undergraduate/course-descripti
 const REQUIREMENTS_URL =
   "https://catalog.spu.edu/undergraduate/college-schools/cbt-technology/computer-science/computer-science-bs/"
 
+/** Quarterly time schedule (the ONLY place meeting days/times live). Unlike the
+ * catalog this is volatile — re-scrape it per academic year. `TERM_YEAR` is SPU's
+ * academic-year code: 20266 = the 2026-2027 year (Autumn 2026 → Summer 2027). */
+const TIME_SCHEDULE_BASE = "https://spu.edu/undergraduate-time-schedule/subjects/"
+const TERM_YEAR = "20266"
+const ACADEMIC_YEAR_START = 2026
+
 /** Subjects scraped in full (the major + its math sequence). Others referenced by
  * the degree (e.g. a single CHM/PHY science option) are scraped but filtered down
  * to only the courses the requirements actually name — keeping the dataset tiny. */
@@ -83,6 +90,25 @@ interface Requirements {
   totalCreditsForDegree: number | null
   verified: false
   groups: ReqGroup[]
+}
+
+type Day = "M" | "Tu" | "W" | "Th" | "F" | "Sa"
+type Season = "AUT" | "WIN" | "SPR" | "SUM"
+
+/** A concrete, schedulable class section from the quarterly time schedule. */
+interface Section {
+  crn: string // "1390" — unique per section
+  courseId: string // "CSC1250"
+  season: Season // the quarter this section actually runs in
+  year: number // calendar year that quarter starts in
+  days: Day[] // meeting days, [] when fully arranged / online-async
+  startMin: number | null // minutes from midnight, null when no fixed time
+  endMin: number | null
+  timeRaw: string // original "9:00 AM-11:00 AM"
+  credits: number // section credits (upper bound for variable-credit)
+  /** "Arranged" sections meet online / by appointment — days are advisory. */
+  arranged: boolean
+  instructor: string
 }
 
 // ---------------------------------------------------------------------------
@@ -286,6 +312,88 @@ function categorize(courses: Course[], requirements: Requirements): void {
 }
 
 // ---------------------------------------------------------------------------
+// Time schedule → Section[]  (meeting days/times — the volatile data)
+// ---------------------------------------------------------------------------
+
+const DAY_TOKENS: Day[] = ["M", "Tu", "W", "Th", "F", "Sa"]
+
+function seasonFromTerm(term: string): Season | null {
+  if (/autumn|fall/i.test(term)) return "AUT"
+  if (/winter/i.test(term)) return "WIN"
+  if (/spring/i.test(term)) return "SPR"
+  if (/summer/i.test(term)) return "SUM"
+  return null
+}
+
+/** Autumn opens the academic year; Winter/Spring/Summer fall in the next year. */
+function yearForSeason(season: Season): number {
+  return season === "AUT" ? ACADEMIC_YEAR_START : ACADEMIC_YEAR_START + 1
+}
+
+function parseDays(raw: string): Day[] {
+  // Drop the "Arranged" marker, split the "M,W,F" / "Tu,Th" list, keep known tokens.
+  const tokens = raw
+    .replace(/Arranged/gi, "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s): s is Day => (DAY_TOKENS as string[]).includes(s))
+  return DAY_TOKENS.filter((d) => tokens.includes(d)) // canonical order
+}
+
+/** "9:00 AM-11:00 AM" (with an optional leading "- " from arranged rows) → minutes. */
+function parseTime(raw: string): { startMin: number | null; endMin: number | null } {
+  const m = raw.match(/(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)/i)
+  if (!m) return { startMin: null, endMin: null }
+  const toMin = (h: string, mm: string, ap: string): number =>
+    ((Number(h) % 12) + (/pm/i.test(ap) ? 12 : 0)) * 60 + Number(mm)
+  return { startMin: toMin(m[1], m[2], m[3]), endMin: toMin(m[4], m[5], m[6]) }
+}
+
+function parseSections(html: string, keep: ReadonlySet<string>): Section[] {
+  const doc = parse(html)
+  const table = doc.querySelector("table.offerings-wrapper")
+  if (!table) return []
+
+  const sections: Section[] = []
+  let courseId: string | null = null
+
+  for (const row of table.querySelectorAll("tr")) {
+    if (row.classList.contains("course-heading")) {
+      // "CSC 1250: Problem Solving and Programming Course details"
+      const m = text(row).match(/^([A-Z]{2,4})\s*(\d{4})/)
+      courseId = m ? toId(m[1], m[2]) : null
+      continue
+    }
+    if (!row.classList.contains("section") || !courseId) continue
+    if (!keep.has(courseId)) continue
+
+    const season = seasonFromTerm(text(row.querySelector("td.term")))
+    if (!season) continue
+
+    const daysRaw = text(row.querySelector("td.days"))
+    const timeRaw = text(row.querySelector("td.times")).replace(/^-\s*/, "")
+    const creditsRaw = text(row.querySelector("td.credits"))
+    const credits = Number(creditsRaw.match(/\d+/g)?.at(-1) ?? 0)
+    const { startMin, endMin } = parseTime(timeRaw)
+
+    sections.push({
+      crn: text(row.querySelector("td.crn")),
+      courseId,
+      season,
+      year: yearForSeason(season),
+      days: parseDays(daysRaw),
+      startMin,
+      endMin,
+      timeRaw,
+      credits,
+      arranged: /arranged/i.test(daysRaw) || timeRaw === "" || timeRaw === "-",
+      instructor: text(row.querySelector("td.instructors")),
+    })
+  }
+  return sections
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -325,11 +433,28 @@ async function main(): Promise<void> {
   const courses = [...byId.values()].sort((a, b) => a.id.localeCompare(b.id))
   categorize(courses, requirements)
 
+  // ---- Time schedule: meeting days/times for the courses we kept ----------
+  const keepIds = new Set(courses.map((c) => c.id))
+  const sections: Section[] = []
+  for (const subject of [...subjects].sort()) {
+    const url = `${TIME_SCHEDULE_BASE}${subject}?term_year=${TERM_YEAR}&cat_year=${TERM_YEAR}`
+    try {
+      console.log(`→ Fetching ${subject} time schedule …`)
+      sections.push(...parseSections(await fetchHtml(url), keepIds))
+    } catch (err) {
+      console.warn(`  ⚠ could not scrape ${subject} schedule (${url}): ${(err as Error).message}`)
+    }
+  }
+  sections.sort(
+    (a, b) => a.courseId.localeCompare(b.courseId) || a.crn.localeCompare(b.crn),
+  )
+
   // ---- Write -------------------------------------------------------------
   const dataDir = fileURLToPath(new URL("../src/data/", import.meta.url))
   mkdirSync(dataDir, { recursive: true })
   writeFileSync(`${dataDir}courses.json`, `${JSON.stringify(courses, null, 2)}\n`)
   writeFileSync(`${dataDir}requirements.json`, `${JSON.stringify(requirements, null, 2)}\n`)
+  writeFileSync(`${dataDir}sections.json`, `${JSON.stringify(sections, null, 2)}\n`)
 
   // ---- Verification report ----------------------------------------------
   const missing = [...referencedIds].filter((id) => !byId.has(id)).sort()
@@ -343,6 +468,11 @@ async function main(): Promise<void> {
   console.log(`catalog year        : ${requirements.catalogYear}`)
   console.log(`courses written     : ${courses.length}  → src/data/courses.json`)
   console.log(`requirement groups  : ${requirements.groups.length}  → src/data/requirements.json`)
+  console.log(
+    `sections written    : ${sections.length}  → src/data/sections.json  (${ACADEMIC_YEAR_START}-${ACADEMIC_YEAR_START + 1})`,
+  )
+  const coursesWithSections = new Set(sections.map((s) => s.courseId)).size
+  console.log(`courses with a section this year: ${coursesWithSections}/${courses.length}`)
   console.log(`total degree credits: ${requirements.totalCreditsForDegree ?? "?"}`)
   if (missing.length)
     console.log(`⚠ required courses with NO catalog entry: ${missing.join(", ")}`)

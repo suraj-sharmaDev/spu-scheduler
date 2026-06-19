@@ -56,7 +56,32 @@ export interface Term {
 	year: number;
 }
 
-/** A plan maps a term key (see `termKey`) to the course ids placed in it. */
+/** Weekday tokens exactly as the SPU time schedule prints them. */
+export type Day = "M" | "Tu" | "W" | "Th" | "F" | "Sa";
+
+/** A concrete, schedulable class section from the quarterly time schedule.
+ *  Mirrors `src/data/sections.json` (produced by `pnpm scrape`). */
+export interface Section {
+	/** Course Registration Number — unique per section, our selection key. */
+	crn: string;
+	courseId: string;
+	season: Season;
+	year: number;
+	/** Meeting days; empty for fully-arranged / online-async sections. */
+	days: Day[];
+	/** Minutes from midnight, null when there is no fixed meeting time. */
+	startMin: number | null;
+	endMin: number | null;
+	timeRaw: string;
+	credits: number;
+	/** Online / by-appointment — its days are advisory, not a hard conflict. */
+	arranged: boolean;
+	instructor: string;
+}
+
+/** A plan maps a term key (see `termKey`) to the course ids placed in it.
+ *  Derived from the chosen sections; still the unit the requirements/credit
+ *  helpers operate on. */
 export type Plan = Record<string, string[]>;
 
 /** Everything we persist to localStorage. */
@@ -65,10 +90,10 @@ export interface AppState {
 	completed: string[];
 	/** Whether the DTA / Common Curriculum is considered satisfied. */
 	dtaComplete: boolean;
-	/** First quarter of the plan timeline. */
-	startTerm: Term;
-	/** How many consecutive quarters the timeline shows. */
-	horizon: number;
-	/** The working plan: term key -> course ids. */
-	plan: Plan;
+	/** Quarter she begins attending (within the published schedule year). */
+	startSeason: Season;
+	/** Weekdays she's willing to be on campus — the offering filter. */
+	availableDays: Day[];
+	/** CRNs of the sections she's chosen — the working plan. */
+	selectedCrns: string[];
 }

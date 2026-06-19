@@ -1,0 +1,2132 @@
+[
+  {
+    "crn": "21603",
+    "courseId": "BIO2202",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Jenny Tenlen"
+  },
+  {
+    "crn": "21604",
+    "courseId": "BIO2202",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu"
+    ],
+    "startMin": 480,
+    "endMin": 650,
+    "timeRaw": "8:00 AM-10:50 AM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Jenny Tenlen"
+  },
+  {
+    "crn": "21605",
+    "courseId": "BIO2202",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu"
+    ],
+    "startMin": 720,
+    "endMin": 890,
+    "timeRaw": "12:00 PM-2:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Jenny Tenlen"
+  },
+  {
+    "crn": "21606",
+    "courseId": "BIO2202",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Th"
+    ],
+    "startMin": 480,
+    "endMin": 650,
+    "timeRaw": "8:00 AM-10:50 AM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Jenny Tenlen"
+  },
+  {
+    "crn": "1758",
+    "courseId": "CHM1211",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Karisa Pierce"
+  },
+  {
+    "crn": "1759",
+    "courseId": "CHM1211",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "F"
+    ],
+    "startMin": 735,
+    "endMin": 905,
+    "timeRaw": "12:15 PM-3:05 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Karisa Pierce"
+  },
+  {
+    "crn": "1760",
+    "courseId": "CHM1211",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu"
+    ],
+    "startMin": 720,
+    "endMin": 890,
+    "timeRaw": "12:00 PM-2:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Minhee Lee"
+  },
+  {
+    "crn": "21527",
+    "courseId": "CHM1211",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Karisa Pierce"
+  },
+  {
+    "crn": "21528",
+    "courseId": "CHM1211",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu"
+    ],
+    "startMin": 720,
+    "endMin": 890,
+    "timeRaw": "12:00 PM-2:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Minhee Lee"
+  },
+  {
+    "crn": "21529",
+    "courseId": "CHM1211",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1070,
+    "timeRaw": "3:00 PM-5:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Karisa Pierce"
+  },
+  {
+    "crn": "21530",
+    "courseId": "CHM1211",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu"
+    ],
+    "startMin": 900,
+    "endMin": 1070,
+    "timeRaw": "3:00 PM-5:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Karisa Pierce"
+  },
+  {
+    "crn": "1762",
+    "courseId": "CHM1310",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 750,
+    "endMin": 870,
+    "timeRaw": "12:30 PM-2:30 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Wade Grabow"
+  },
+  {
+    "crn": "1763",
+    "courseId": "CHM1310",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Sue Martin"
+  },
+  {
+    "crn": "1764",
+    "courseId": "CHM1310",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu"
+    ],
+    "startMin": 900,
+    "endMin": 1010,
+    "timeRaw": "3:00 PM-4:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Wade Grabow"
+  },
+  {
+    "crn": "1765",
+    "courseId": "CHM1310",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1010,
+    "timeRaw": "3:00 PM-4:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Sue Martin"
+  },
+  {
+    "crn": "1766",
+    "courseId": "CHM1310",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "W"
+    ],
+    "startMin": 900,
+    "endMin": 1010,
+    "timeRaw": "3:00 PM-4:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Sue Martin"
+  },
+  {
+    "crn": "1767",
+    "courseId": "CHM1310",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "W"
+    ],
+    "startMin": 780,
+    "endMin": 890,
+    "timeRaw": "1:00 PM-2:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Wade Grabow"
+  },
+  {
+    "crn": "1768",
+    "courseId": "CHM1310",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "F"
+    ],
+    "startMin": 660,
+    "endMin": 770,
+    "timeRaw": "11:00 AM-12:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Sue Martin"
+  },
+  {
+    "crn": "21534",
+    "courseId": "CHM1310",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Sue Martin"
+  },
+  {
+    "crn": "21535",
+    "courseId": "CHM1310",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "W"
+    ],
+    "startMin": 900,
+    "endMin": 1010,
+    "timeRaw": "3:00 PM-4:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Sue Martin"
+  },
+  {
+    "crn": "21536",
+    "courseId": "CHM1310",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1010,
+    "timeRaw": "3:00 PM-4:50 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Sue Martin"
+  },
+  {
+    "crn": "21537",
+    "courseId": "CHM1310",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "F"
+    ],
+    "startMin": 750,
+    "endMin": 860,
+    "timeRaw": "12:30 PM-2:20 PM",
+    "credits": 0,
+    "arranged": false,
+    "instructor": "Sue Martin"
+  },
+  {
+    "crn": "1892",
+    "courseId": "CSC1250",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Jihoon Lim"
+  },
+  {
+    "crn": "21720",
+    "courseId": "CSC1250",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Jihoon Lim"
+  },
+  {
+    "crn": "21721",
+    "courseId": "CSC1260",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Jihoon Lim Carlos Arias Arevalo"
+  },
+  {
+    "crn": "41575",
+    "courseId": "CSC1260",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Melani Plett"
+  },
+  {
+    "crn": "41588",
+    "courseId": "CSC2099",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M"
+    ],
+    "startMin": 780,
+    "endMin": 830,
+    "timeRaw": "1:00 PM-1:50 PM",
+    "credits": 1,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "21722",
+    "courseId": "CSC2230",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Daniel Keene"
+  },
+  {
+    "crn": "1893",
+    "courseId": "CSC2330",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "1894",
+    "courseId": "CSC2430",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "41576",
+    "courseId": "CSC2430",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "21723",
+    "courseId": "CSC2431",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "21737",
+    "courseId": "CSC3011",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "Andy Cameron"
+  },
+  {
+    "crn": "41577",
+    "courseId": "CSC3099",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M"
+    ],
+    "startMin": 780,
+    "endMin": 830,
+    "timeRaw": "1:00 PM-1:50 PM",
+    "credits": 1,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "41589",
+    "courseId": "CSC3150",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "Andy Cameron"
+  },
+  {
+    "crn": "21738",
+    "courseId": "CSC3220",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "Andy Cameron"
+  },
+  {
+    "crn": "41578",
+    "courseId": "CSC3221",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "1895",
+    "courseId": "CSC3310",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 770,
+    "endMin": 890,
+    "timeRaw": "12:50 PM-2:50 PM",
+    "credits": 4,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "41594",
+    "courseId": "CSC3350",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 920,
+    "timeRaw": "2:30 PM-3:20 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Andy Cameron"
+  },
+  {
+    "crn": "21724",
+    "courseId": "CSC3430",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 4,
+    "arranged": false,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "21725",
+    "courseId": "CSC3750",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Lin Liu"
+  },
+  {
+    "crn": "22075",
+    "courseId": "CSC4220",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 960,
+    "endMin": 1040,
+    "timeRaw": "4:00 PM-5:20 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "1909",
+    "courseId": "CSC4410",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "Andy Cameron"
+  },
+  {
+    "crn": "1910",
+    "courseId": "CSC4896",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "Andy Cameron"
+  },
+  {
+    "crn": "21739",
+    "courseId": "CSC4897",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 990,
+    "timeRaw": "2:30 PM-4:30 PM",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "Andy Cameron"
+  },
+  {
+    "crn": "41590",
+    "courseId": "CSC4898",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 750,
+    "timeRaw": "10:30 AM-12:30 PM",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "Andy Cameron"
+  },
+  {
+    "crn": "21740",
+    "courseId": "CSC4930",
+    "season": "WIN",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 2,
+    "arranged": true,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "60615",
+    "courseId": "CSC4940",
+    "season": "SUM",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 1,
+    "arranged": true,
+    "instructor": "Carlos Arias Arevalo"
+  },
+  {
+    "crn": "1912",
+    "courseId": "CSC4941",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M"
+    ],
+    "startMin": 960,
+    "endMin": 1020,
+    "timeRaw": "4:00 PM-5:00 PM",
+    "credits": 1,
+    "arranged": true,
+    "instructor": "Andy Cameron Melani Plett"
+  },
+  {
+    "crn": "1789",
+    "courseId": "DAT3380",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Brian Gill"
+  },
+  {
+    "crn": "21565",
+    "courseId": "DAT3380",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Brian Gill"
+  },
+  {
+    "crn": "41426",
+    "courseId": "DAT4500",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "41591",
+    "courseId": "EE3280",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM 1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Lin Liu"
+  },
+  {
+    "crn": "1734",
+    "courseId": "GS3001",
+    "season": "AUT",
+    "year": 2026,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "Online-",
+    "credits": 1,
+    "arranged": true,
+    "instructor": "Christina Longcor"
+  },
+  {
+    "crn": "21501",
+    "courseId": "GS3001",
+    "season": "WIN",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "Online-",
+    "credits": 1,
+    "arranged": true,
+    "instructor": "Christina Longcor"
+  },
+  {
+    "crn": "41378",
+    "courseId": "GS3001",
+    "season": "SPR",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "Online-",
+    "credits": 1,
+    "arranged": true,
+    "instructor": "Christina Longcor"
+  },
+  {
+    "crn": "1790",
+    "courseId": "MAT0144",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 920,
+    "timeRaw": "2:30 PM-3:20 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "21566",
+    "courseId": "MAT0144",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 720,
+    "endMin": 770,
+    "timeRaw": "12:00 PM-12:50 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "21567",
+    "courseId": "MAT0145",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 920,
+    "timeRaw": "2:30 PM-3:20 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "41427",
+    "courseId": "MAT0145",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 920,
+    "timeRaw": "2:30 PM-3:20 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "1791",
+    "courseId": "MAT1141",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "Th",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 840,
+    "timeRaw": "1:00 PM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "21568",
+    "courseId": "MAT1142",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "Th",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 840,
+    "timeRaw": "1:00 PM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "1792",
+    "courseId": "MAT1234",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "Th",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 840,
+    "timeRaw": "1:00 PM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "1793",
+    "courseId": "MAT1234",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 1,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "41428",
+    "courseId": "MAT1234",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "Th",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 840,
+    "timeRaw": "1:00 PM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "1794",
+    "courseId": "MAT1235",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "Th",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 840,
+    "timeRaw": "1:00 PM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "1799",
+    "courseId": "MAT1235",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 1,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "21569",
+    "courseId": "MAT1235",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "Th",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 840,
+    "timeRaw": "1:00 PM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "21570",
+    "courseId": "MAT1235",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 1,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "41429",
+    "courseId": "MAT1236",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "Th",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 840,
+    "timeRaw": "1:00 PM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "41430",
+    "courseId": "MAT1521",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "22025",
+    "courseId": "MAT1560",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 4,
+    "arranged": true,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "21571",
+    "courseId": "MAT1720",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "41431",
+    "courseId": "MAT2200",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 720,
+    "endMin": 770,
+    "timeRaw": "12:00 PM-12:50 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "1795",
+    "courseId": "MAT2360",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "21572",
+    "courseId": "MAT2360",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "21573",
+    "courseId": "MAT2360",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "41432",
+    "courseId": "MAT2360",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Brian Gill"
+  },
+  {
+    "crn": "1796",
+    "courseId": "MAT2401",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 720,
+    "endMin": 770,
+    "timeRaw": "12:00 PM-12:50 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Sarah McCord"
+  },
+  {
+    "crn": "41433",
+    "courseId": "MAT2401",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 720,
+    "endMin": 770,
+    "timeRaw": "12:00 PM-12:50 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "41798",
+    "courseId": "MAT2561",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 900,
+    "endMin": 980,
+    "timeRaw": "3:00 PM-4:20 PM",
+    "credits": 4,
+    "arranged": false,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "1797",
+    "courseId": "MAT3237",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 720,
+    "endMin": 770,
+    "timeRaw": "12:00 PM-12:50 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "21574",
+    "courseId": "MAT3238",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 720,
+    "endMin": 770,
+    "timeRaw": "12:00 PM-12:50 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "John Lindberg"
+  },
+  {
+    "crn": "1798",
+    "courseId": "MAT3333",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Brian Gill"
+  },
+  {
+    "crn": "21575",
+    "courseId": "MAT3360",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Brian Gill"
+  },
+  {
+    "crn": "2205",
+    "courseId": "MAT3562",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 975,
+    "endMin": 1095,
+    "timeRaw": "4:15 PM-6:15 PM",
+    "credits": 4,
+    "arranged": false,
+    "instructor": "Sherri White"
+  },
+  {
+    "crn": "1800",
+    "courseId": "MAT4900",
+    "season": "AUT",
+    "year": 2026,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "21576",
+    "courseId": "MAT4900",
+    "season": "WIN",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "41434",
+    "courseId": "MAT4900",
+    "season": "SPR",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "21577",
+    "courseId": "MAT4920",
+    "season": "WIN",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 1,
+    "arranged": true,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "1801",
+    "courseId": "MAT4930",
+    "season": "AUT",
+    "year": 2026,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "21578",
+    "courseId": "MAT4930",
+    "season": "WIN",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "41435",
+    "courseId": "MAT4930",
+    "season": "SPR",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "Wai Lau"
+  },
+  {
+    "crn": "1802",
+    "courseId": "MAT4960",
+    "season": "AUT",
+    "year": 2026,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "21579",
+    "courseId": "MAT4960",
+    "season": "WIN",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "41436",
+    "courseId": "MAT4960",
+    "season": "SPR",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "",
+    "credits": 3,
+    "arranged": true,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "1917",
+    "courseId": "PHI2500",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu"
+    ],
+    "startMin": 930,
+    "endMin": 1100,
+    "timeRaw": "3:30 PM-6:20 PM",
+    "credits": 3,
+    "arranged": false,
+    "instructor": "Rebekah Rice"
+  },
+  {
+    "crn": "1875",
+    "courseId": "PHY1121",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM 12:50 PM-2:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "John Lindberg"
+  },
+  {
+    "crn": "1876",
+    "courseId": "PHY1121",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM 9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "John Lindberg"
+  },
+  {
+    "crn": "2114",
+    "courseId": "TCOR2000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "Tu",
+      "W",
+      "Th"
+    ],
+    "startMin": 600,
+    "endMin": 840,
+    "timeRaw": "10:00 AM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Dave Nienhuis"
+  },
+  {
+    "crn": "2115",
+    "courseId": "TCOR2000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Esther Cen"
+  },
+  {
+    "crn": "2116",
+    "courseId": "TCOR2000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Esther Cen"
+  },
+  {
+    "crn": "21767",
+    "courseId": "TCOR2000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Sara Koenig"
+  },
+  {
+    "crn": "21768",
+    "courseId": "TCOR2000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Dave Nienhuis"
+  },
+  {
+    "crn": "21769",
+    "courseId": "TCOR2000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 1080,
+    "endMin": 1200,
+    "timeRaw": "6:00 PM-8:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Zach Jacobsen"
+  },
+  {
+    "crn": "41614",
+    "courseId": "TCOR2000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Sara Koenig"
+  },
+  {
+    "crn": "41615",
+    "courseId": "TCOR2000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Esther Cen"
+  },
+  {
+    "crn": "41616",
+    "courseId": "TCOR2000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1020,
+    "timeRaw": "3:00 PM-5:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Esther Cen"
+  },
+  {
+    "crn": "2119",
+    "courseId": "TCOR3100",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 870,
+    "endMin": 990,
+    "timeRaw": "2:30 PM-4:30 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Doug Koskela"
+  },
+  {
+    "crn": "2120",
+    "courseId": "TCOR3100",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Mike Langford"
+  },
+  {
+    "crn": "2121",
+    "courseId": "TCOR3100",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Doug Koskela"
+  },
+  {
+    "crn": "2122",
+    "courseId": "TCOR3100",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "Tu",
+      "W",
+      "Th"
+    ],
+    "startMin": 600,
+    "endMin": 840,
+    "timeRaw": "10:00 AM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Matt Sigler"
+  },
+  {
+    "crn": "21771",
+    "courseId": "TCOR3100",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Doug Koskela"
+  },
+  {
+    "crn": "21772",
+    "courseId": "TCOR3100",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Matt Sigler"
+  },
+  {
+    "crn": "21773",
+    "courseId": "TCOR3100",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1020,
+    "timeRaw": "3:00 PM-5:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Matt Sigler"
+  },
+  {
+    "crn": "41618",
+    "courseId": "TCOR3100",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Matt Sigler"
+  },
+  {
+    "crn": "41619",
+    "courseId": "TCOR3100",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 870,
+    "endMin": 990,
+    "timeRaw": "2:30 PM-4:30 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Matt Sigler"
+  },
+  {
+    "crn": "41620",
+    "courseId": "TCOR3100",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Mike Langford"
+  },
+  {
+    "crn": "41947",
+    "courseId": "TCOR3100",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Emanuel Padilla"
+  },
+  {
+    "crn": "1976",
+    "courseId": "UCOR2100",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Zhiguo Ye"
+  },
+  {
+    "crn": "1977",
+    "courseId": "UCOR2100",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 770,
+    "endMin": 890,
+    "timeRaw": "12:50 PM-2:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Alissa Walter"
+  },
+  {
+    "crn": "1978",
+    "courseId": "UCOR2100",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 960,
+    "timeRaw": "Online- 3:00 PM-4:00 PM",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "Zhiguo Ye"
+  },
+  {
+    "crn": "21743",
+    "courseId": "UCOR2100",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Zhiguo Ye"
+  },
+  {
+    "crn": "21744",
+    "courseId": "UCOR2100",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Alissa Walter"
+  },
+  {
+    "crn": "41597",
+    "courseId": "UCOR2100",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Zhiguo Ye"
+  },
+  {
+    "crn": "41598",
+    "courseId": "UCOR2100",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 770,
+    "endMin": 890,
+    "timeRaw": "12:50 PM-2:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Alissa Walter"
+  },
+  {
+    "crn": "1919",
+    "courseId": "UCOR3000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Leland Saunders"
+  },
+  {
+    "crn": "1924",
+    "courseId": "UCOR3000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "Online-",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "TBA Staff"
+  },
+  {
+    "crn": "21747",
+    "courseId": "UCOR3000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Leland Saunders"
+  },
+  {
+    "crn": "21748",
+    "courseId": "UCOR3000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Rebekah Rice"
+  },
+  {
+    "crn": "41601",
+    "courseId": "UCOR3000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Leland Saunders"
+  },
+  {
+    "crn": "41602",
+    "courseId": "UCOR3000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 770,
+    "endMin": 890,
+    "timeRaw": "12:50 PM-2:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Rebekah Rice"
+  },
+  {
+    "crn": "60591",
+    "courseId": "UCOR3000",
+    "season": "SUM",
+    "year": 2027,
+    "days": [],
+    "startMin": null,
+    "endMin": null,
+    "timeRaw": "Online-",
+    "credits": 5,
+    "arranged": true,
+    "instructor": "Leland Saunders"
+  }
+]

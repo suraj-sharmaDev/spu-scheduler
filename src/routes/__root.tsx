@@ -36,7 +36,7 @@ const NAV_LINKS = [
 function NavBar() {
 	return (
 		<header className="border-b border-slate-200 bg-white">
-			<div className="mx-auto flex max-w-5xl items-center gap-6 px-4 py-3">
+			<div className="mx-auto flex max-w-7xl items-center gap-6 px-4 py-3">
 				<Link to="/" className="flex items-center gap-2">
 					<span className="grid h-7 w-7 place-items-center rounded-md bg-maroon-700 text-sm font-bold text-white">
 						S
@@ -71,7 +71,7 @@ function RootDocument({ children }: { children: ReactNode }) {
 			</head>
 			<body>
 				<NavBar />
-				<main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
+				<main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
 				<TanStackDevtools
 					config={{ position: "bottom-right" }}
 					plugins={[

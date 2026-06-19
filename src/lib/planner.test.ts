@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { requirements } from "./data";
 import {
+	checkPlan,
 	creditsForQuarter,
 	isEligible,
 	offeredInSeason,
 	offeringInfo,
 	remainingRequirements,
+	sectionsToPlan,
 	validatePlan,
 } from "./planner";
 import {
@@ -16,7 +18,8 @@ import {
 	termIndex,
 	termKey,
 } from "./quarters";
-import type { Course } from "./types";
+import { findConflicts, sectionsClash } from "./schedule";
+import type { Course, Section } from "./types";
 
 function makeCourse(partial: Partial<Course> & { id: string }): Course {
 	return {
@@ -31,6 +34,22 @@ function makeCourse(partial: Partial<Course> & { id: string }): Course {
 		prereqsRaw: "",
 		category: "CS_CORE",
 		verified: false,
+		...partial,
+	};
+}
+
+function makeSection(partial: Partial<Section> & { crn: string }): Section {
+	return {
+		courseId: "CSC2430",
+		season: "AUT",
+		year: 2026,
+		days: ["M", "W", "F"],
+		startMin: 9 * 60,
+		endMin: 10 * 60,
+		timeRaw: "9:00 AM-10:00 AM",
+		credits: 5,
+		arranged: false,
+		instructor: "Test",
 		...partial,
 	};
 }
@@ -181,5 +200,132 @@ describe("validatePlan", () => {
 				(w) => w.level === "warning" && /heavy load/i.test(w.message),
 			),
 		).toBe(true);
+	});
+});
+
+describe("sectionsClash", () => {
+	it("clashes when a day and time both overlap", () => {
+		const a = makeSection({
+			crn: "1",
+			days: ["M", "W"],
+			startMin: 540,
+			endMin: 600,
+		});
+		const b = makeSection({
+			crn: "2",
+			days: ["W", "F"],
+			startMin: 570,
+			endMin: 660,
+		});
+		expect(sectionsClash(a, b)).toBe(true);
+	});
+
+	it("does not clash when days are disjoint", () => {
+		const a = makeSection({ crn: "1", days: ["M", "W", "F"] });
+		const b = makeSection({ crn: "2", days: ["Tu", "Th"] });
+		expect(sectionsClash(a, b)).toBe(false);
+	});
+
+	it("does not clash when times are back-to-back", () => {
+		const a = makeSection({
+			crn: "1",
+			days: ["M"],
+			startMin: 540,
+			endMin: 600,
+		});
+		const b = makeSection({
+			crn: "2",
+			days: ["M"],
+			startMin: 600,
+			endMin: 660,
+		});
+		expect(sectionsClash(a, b)).toBe(false);
+	});
+
+	it("never clashes when a section has no fixed time (arranged)", () => {
+		const a = makeSection({
+			crn: "1",
+			days: ["M"],
+			startMin: null,
+			endMin: null,
+		});
+		const b = makeSection({
+			crn: "2",
+			days: ["M"],
+			startMin: 540,
+			endMin: 600,
+		});
+		expect(sectionsClash(a, b)).toBe(false);
+		expect(findConflicts([a, b])).toEqual([]);
+	});
+});
+
+describe("checkPlan", () => {
+	it("succeeds for non-overlapping sections that meet prereqs", () => {
+		const sections = [
+			makeSection({
+				crn: "1",
+				courseId: "CSC2430",
+				days: ["M", "W"],
+				startMin: 540,
+				endMin: 600,
+			}),
+			makeSection({
+				crn: "2",
+				courseId: "MAT1234",
+				days: ["Tu", "Th"],
+				startMin: 540,
+				endMin: 660,
+			}),
+		];
+		const result = checkPlan(sections, new Set());
+		expect(result.success).toBe(true);
+		expect(result.totalCredits).toBe(10);
+		expect(result.quarters).toHaveLength(1);
+	});
+
+	it("fails when two sections clash in the same quarter", () => {
+		const sections = [
+			makeSection({
+				crn: "1",
+				courseId: "CSC2430",
+				days: ["M"],
+				startMin: 540,
+				endMin: 600,
+			}),
+			makeSection({
+				crn: "2",
+				courseId: "MAT1234",
+				days: ["M"],
+				startMin: 570,
+				endMin: 630,
+			}),
+		];
+		const result = checkPlan(sections, new Set());
+		expect(result.success).toBe(false);
+		expect(result.problems.some((p) => /overlap/i.test(p.message))).toBe(true);
+	});
+
+	it("groups sections across quarters chronologically", () => {
+		const sections = [
+			makeSection({ crn: "2", courseId: "MAT1235", season: "WIN", year: 2027 }),
+			makeSection({ crn: "1", courseId: "CSC2430", season: "AUT", year: 2026 }),
+		];
+		const result = checkPlan(sections, new Set());
+		expect(result.quarters.map((q) => q.key)).toEqual(["AUT-2026", "WIN-2027"]);
+	});
+});
+
+describe("sectionsToPlan", () => {
+	it("buckets sections into their term keys", () => {
+		const sections = [
+			makeSection({ crn: "1", courseId: "CSC2430", season: "AUT", year: 2026 }),
+			makeSection({ crn: "2", courseId: "MAT1234", season: "AUT", year: 2026 }),
+			makeSection({ crn: "3", courseId: "MAT1235", season: "WIN", year: 2027 }),
+		];
+		expect(sectionsToPlan(sections)).toEqual({
+			"AUT-2026": ["CSC2430", "MAT1234"],
+			"WIN-2027": ["MAT1235"],
+		});
 	});
 });

@@ -1,15 +1,15 @@
 import { useSyncExternalStore } from "react";
-import { termKey } from "./quarters";
-import type { AppState, Term } from "./types";
+import { getSection } from "./data";
+import type { AppState, Day, Season } from "./types";
 
-const STORAGE_KEY = "spu-scheduler:v1";
+const STORAGE_KEY = "spu-scheduler:v2";
 
 const DEFAULT_STATE: AppState = {
 	completed: [],
 	dtaComplete: true,
-	startTerm: { season: "AUT", year: 2026 },
-	horizon: 8,
-	plan: {},
+	startSeason: "AUT",
+	availableDays: ["M", "Tu", "W", "Th", "F"],
+	selectedCrns: [],
 };
 
 // --- module-level store -----------------------------------------------------
@@ -61,30 +61,21 @@ function subscribe(callback: () => void): () => void {
 // --- actions ----------------------------------------------------------------
 
 export const actions = {
-	addToTerm(term: Term, courseId: string): void {
+	/** Pick (or unpick) a section. Selecting a section for a course that already
+	 *  has one chosen swaps it — a course occupies exactly one slot. */
+	toggleSection(crn: string): void {
 		setState((prev) => {
-			const key = termKey(term);
-			const current = prev.plan[key] ?? [];
-			if (current.includes(courseId)) return prev;
-			// A course lives in exactly one term — move it if already placed.
-			const plan: AppState["plan"] = {};
-			for (const [k, ids] of Object.entries(prev.plan)) {
-				const filtered = ids.filter((id) => id !== courseId);
-				if (filtered.length > 0) plan[k] = filtered;
+			if (prev.selectedCrns.includes(crn)) {
+				return {
+					...prev,
+					selectedCrns: prev.selectedCrns.filter((c) => c !== crn),
+				};
 			}
-			plan[key] = [...(plan[key] ?? []), courseId];
-			return { ...prev, plan };
-		});
-	},
-
-	removeFromTerm(term: Term, courseId: string): void {
-		setState((prev) => {
-			const key = termKey(term);
-			const filtered = (prev.plan[key] ?? []).filter((id) => id !== courseId);
-			const plan = { ...prev.plan };
-			if (filtered.length > 0) plan[key] = filtered;
-			else delete plan[key];
-			return { ...prev, plan };
+			const courseId = getSection(crn)?.courseId;
+			const kept = prev.selectedCrns.filter(
+				(c) => getSection(c)?.courseId !== courseId,
+			);
+			return { ...prev, selectedCrns: [...kept, crn] };
 		});
 	},
 
@@ -105,16 +96,22 @@ export const actions = {
 		setState((prev) => ({ ...prev, dtaComplete: value }));
 	},
 
-	setStartTerm(term: Term): void {
-		setState((prev) => ({ ...prev, startTerm: term }));
+	setStartSeason(season: Season): void {
+		setState((prev) => ({ ...prev, startSeason: season }));
 	},
 
-	setHorizon(horizon: number): void {
-		setState((prev) => ({ ...prev, horizon }));
+	toggleDay(day: Day): void {
+		setState((prev) => {
+			const has = prev.availableDays.includes(day);
+			const availableDays = has
+				? prev.availableDays.filter((d) => d !== day)
+				: [...prev.availableDays, day];
+			return { ...prev, availableDays };
+		});
 	},
 
-	clearPlan(): void {
-		setState((prev) => ({ ...prev, plan: {} }));
+	clearSelection(): void {
+		setState((prev) => ({ ...prev, selectedCrns: [] }));
 	},
 
 	resetAll(): void {

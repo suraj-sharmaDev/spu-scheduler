@@ -1,9 +1,23 @@
 import coursesJson from "#/data/courses.json" with { type: "json" };
 import requirementsJson from "#/data/requirements.json" with { type: "json" };
-import type { Course, Requirements } from "./types";
+import sectionsJson from "#/data/sections.json" with { type: "json" };
+import type { Course, Requirements, Season, Section, Term } from "./types";
 
 export const courses = coursesJson as Course[];
 export const requirements = requirementsJson as Requirements;
+export const sections = sectionsJson as Section[];
+
+/** Academic year the published time schedule covers (Autumn 2026 → Summer 2027). */
+export const SCHEDULE_YEAR_START = 2026;
+export const SCHEDULE_YEAR_LABEL = `${SCHEDULE_YEAR_START}–${SCHEDULE_YEAR_START + 1}`;
+
+/** The calendar term a season maps to inside the schedule year (Autumn opens it). */
+export function scheduleTerm(season: Season): Term {
+	return {
+		season,
+		year: season === "AUT" ? SCHEDULE_YEAR_START : SCHEDULE_YEAR_START + 1,
+	};
+}
 
 /** Fast lookup by course id. */
 export const coursesById: ReadonlyMap<string, Course> = new Map(
@@ -12,6 +26,15 @@ export const coursesById: ReadonlyMap<string, Course> = new Map(
 
 export function getCourse(id: string): Course | undefined {
 	return coursesById.get(id);
+}
+
+/** Fast lookup of a section by its CRN (the selection key). */
+export const sectionByCrn: ReadonlyMap<string, Section> = new Map(
+	sections.map((s) => [s.crn, s]),
+);
+
+export function getSection(crn: string): Section | undefined {
+	return sectionByCrn.get(crn);
 }
 
 /** True if either dataset still has unverified rows (drives the UI warning). */
@@ -28,4 +51,10 @@ export const degreeCourseIds: ReadonlySet<string> = new Set(
  *  order), skipping any id we don't have a description for. */
 export const degreeCourses: Course[] = courses.filter((c) =>
 	degreeCourseIds.has(c.id),
+);
+
+/** Sections of degree-relevant courses that actually run this schedule year —
+ *  the universe the guided planner offers. */
+export const degreeSections: Section[] = sections.filter((s) =>
+	degreeCourseIds.has(s.courseId),
 );

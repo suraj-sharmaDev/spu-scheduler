@@ -1,6 +1,14 @@
 import { getCourse } from "./data";
-import { compareTerms, parseTermKey } from "./quarters";
-import type { Course, Plan, Requirements, Season } from "./types";
+import { compareTerms, parseTermKey, termKey, termLabel } from "./quarters";
+import { findConflicts, type SectionConflict } from "./schedule";
+import type {
+	Course,
+	Plan,
+	Requirements,
+	Season,
+	Section,
+	Term,
+} from "./types";
 
 export const MAX_CREDITS = 18;
 export const FULL_TIME_CREDITS = 12;
@@ -274,4 +282,118 @@ export function validatePlan(
 	}
 
 	return warnings;
+}
+
+// ---------------------------------------------------------------------------
+// Section-based plan (what the guided planner actually works with)
+// ---------------------------------------------------------------------------
+
+/** Collapse chosen sections into the term -> course-ids shape the requirements
+ *  and credit helpers expect. */
+export function sectionsToPlan(sections: Section[]): Plan {
+	const plan: Plan = {};
+	for (const s of sections) {
+		const key = termKey({ season: s.season, year: s.year });
+		const ids = plan[key] ?? [];
+		ids.push(s.courseId);
+		plan[key] = ids;
+	}
+	return plan;
+}
+
+export interface QuarterPlan {
+	term: Term;
+	key: string;
+	sections: Section[];
+	credits: number;
+	conflicts: SectionConflict[];
+}
+
+export interface PlanCheck {
+	/** No blocking problems — the plan is schedulable as drawn. */
+	success: boolean;
+	quarters: QuarterPlan[];
+	totalCredits: number;
+	/** Blocking issues: prereq gaps and time clashes. */
+	problems: PlanWarning[];
+	/** Advisory: heavy / light quarters. */
+	notes: PlanWarning[];
+}
+
+/** Group selected sections into quarters and check the plan end-to-end:
+ *  prerequisites earned in order, no time clashes, sane credit loads. */
+export function checkPlan(
+	selected: Section[],
+	completed: ReadonlySet<string>,
+): PlanCheck {
+	const byTerm = new Map<string, Section[]>();
+	for (const s of selected) {
+		const key = termKey({ season: s.season, year: s.year });
+		const list = byTerm.get(key) ?? [];
+		list.push(s);
+		byTerm.set(key, list);
+	}
+
+	const quarters: QuarterPlan[] = [...byTerm.entries()]
+		.map(([key, sections]) => ({
+			key,
+			term: parseTermKey(key),
+			sections,
+			credits: sections.reduce((sum, s) => sum + s.credits, 0),
+			conflicts: findConflicts(sections),
+		}))
+		.sort((a, b) => compareTerms(a.term, b.term));
+
+	const problems: PlanWarning[] = [];
+	const notes: PlanWarning[] = [];
+	const earned = new Set(completed);
+
+	for (const q of quarters) {
+		if (q.credits > MAX_CREDITS) {
+			notes.push({
+				termKey: q.key,
+				level: "warning",
+				message: `Heavy load: ${q.credits} credits (over ${MAX_CREDITS}).`,
+			});
+		} else if (q.credits < FULL_TIME_CREDITS) {
+			notes.push({
+				termKey: q.key,
+				level: "warning",
+				message: `Part-time: ${q.credits} credits (under ${FULL_TIME_CREDITS}).`,
+			});
+		}
+
+		for (const s of q.sections) {
+			const course = getCourse(s.courseId);
+			const missing = (course?.prereqs ?? []).filter((id) => !earned.has(id));
+			if (missing.length > 0) {
+				problems.push({
+					termKey: q.key,
+					level: "error",
+					courseId: s.courseId,
+					message: `${s.courseId} needs ${missing.join(", ")} beforehand.`,
+				});
+			}
+		}
+
+		for (const { a, b } of q.conflicts) {
+			problems.push({
+				termKey: q.key,
+				level: "error",
+				courseId: a.courseId,
+				message: `${a.courseId} and ${b.courseId} overlap in ${termLabel(q.term)}.`,
+			});
+		}
+
+		// Courses taken this quarter unlock prereqs for later quarters only.
+		for (const s of q.sections) earned.add(s.courseId);
+	}
+
+	return {
+		success: problems.length === 0,
+		quarters,
+		totalCredits: selected.reduce((sum, s) => sum + s.credits, 0),
+		problems,
+		notes,
+	};
 }
