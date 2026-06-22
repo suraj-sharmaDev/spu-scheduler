@@ -182,6 +182,56 @@ describe("remainingRequirements", () => {
 		);
 		expect(progress.completedCredits).toBeGreaterThanOrEqual(5);
 	});
+
+	// The catalog lists only a handful of named technical electives, but the
+	// requirement is "pick N credits" — any upper-division CS elective should fill it.
+	const techElectiveGroups = (p: ReturnType<typeof remainingRequirements>) =>
+		p.groups.filter((g) => /technical elective/i.test(g.name));
+
+	it("fills a technical-elective bucket with an unlisted upper-division elective", () => {
+		// CSC3750 is a 3000-level CS elective the BS-CS page never names individually.
+		const progress = remainingRequirements(
+			requirements,
+			new Set(),
+			new Set(["CSC3750"]),
+		);
+		const groups = techElectiveGroups(progress);
+		expect(groups.length).toBeGreaterThan(0);
+		const filled = groups.find((g) =>
+			g.courses.some((c) => c.id === "CSC3750" && c.status === "planned"),
+		);
+		expect(filled).toBeDefined();
+		expect(filled?.plannedCredits).toBeGreaterThanOrEqual(
+			filled?.creditsRequired ?? 0,
+		);
+	});
+
+	it("does not let a lower-division CS elective count as a technical elective", () => {
+		// CSC1230 is tagged CS_ELECTIVE but is intro-level — not a technical elective.
+		const progress = remainingRequirements(
+			requirements,
+			new Set(),
+			new Set(["CSC1230"]),
+		);
+		for (const g of techElectiveGroups(progress)) {
+			expect(g.courses.some((c) => c.id === "CSC1230")).toBe(false);
+			expect(g.plannedCredits).toBe(0);
+		}
+	});
+
+	it("caps a technical-elective bucket at its required credits", () => {
+		// Two unlisted electives planned, but the bucket only needs its credits once.
+		const progress = remainingRequirements(
+			requirements,
+			new Set(),
+			new Set(["CSC3750", "CSC3760"]),
+		);
+		for (const g of techElectiveGroups(progress)) {
+			const counted = g.completedCredits + g.plannedCredits;
+			// Never counts more than the first course needed to satisfy the bucket.
+			expect(counted).toBeLessThanOrEqual(5);
+		}
+	});
 });
 
 describe("validatePlan", () => {

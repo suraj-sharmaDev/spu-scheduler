@@ -1,4 +1,4 @@
-import { getCourse } from "./data";
+import { courses, getCourse } from "./data";
 import { compareTerms, parseTermKey, termKey, termLabel } from "./quarters";
 import { findConflicts, type SectionConflict } from "./schedule";
 import type {
@@ -141,6 +141,19 @@ export interface RequirementsProgress {
 	groups: RequirementGroupProgress[];
 }
 
+/** Groups whose requirement is "pick N credits of technical electives" rather than
+ *  a fixed course list. Matched by name so both the "Technical Electives" and
+ *  "Technical Elective Courses" rows the catalog emits are covered. */
+const TECH_ELECTIVE_GROUP = /technical elective/i;
+
+/** Courses that satisfy a technical-elective bucket beyond the ones the catalog
+ *  happens to list: any upper-division (3000+) CS elective. Intro CS electives
+ *  (CSC1xxx/2xxx, tagged CS_ELECTIVE too) are excluded — they don't count as
+ *  technical electives. Heuristic over unverified data; confirm with an advisor. */
+function isTechnicalElective(course: Course): boolean {
+	return course.category === "CS_ELECTIVE" && Number(course.number) >= 3000;
+}
+
 export function remainingRequirements(
 	requirements: Requirements,
 	completed: ReadonlySet<string>,
@@ -149,27 +162,55 @@ export function remainingRequirements(
 	let completedTotal = 0;
 	let plannedTotal = 0;
 
+	const statusOf = (id: string): RequirementStatus =>
+		completed.has(id)
+			? "completed"
+			: planned.has(id)
+				? "planned"
+				: "remaining";
+
 	const groups: RequirementGroupProgress[] = requirements.groups.map(
 		(group) => {
+			const isElectiveBucket =
+				group.creditsRequired != null && TECH_ELECTIVE_GROUP.test(group.name);
+			const cap = group.creditsRequired ?? Number.POSITIVE_INFINITY;
+
 			let completedCredits = 0;
 			let plannedCredits = 0;
 			const seen = new Set<string>();
-			const courses: RequirementCourseProgress[] = [];
+			const courseRows: RequirementCourseProgress[] = [];
 
+			// Count a course toward this group, respecting the bucket's credit cap.
+			const tally = (status: RequirementStatus, credits: number): void => {
+				if (status === "remaining") return;
+				if (isElectiveBucket && completedCredits + plannedCredits >= cap) return;
+				if (status === "completed") completedCredits += credits;
+				else plannedCredits += credits;
+			};
+
+			// 1) Courses the catalog explicitly lists for this group.
 			for (const rc of group.courses) {
 				if (seen.has(rc.id)) continue; // dedupe messy scraped rows
 				seen.add(rc.id);
-
 				const credits = rc.credits ?? getCourse(rc.id)?.credits ?? 0;
-				let status: RequirementStatus = "remaining";
-				if (completed.has(rc.id)) {
-					status = "completed";
-					completedCredits += credits;
-				} else if (planned.has(rc.id)) {
-					status = "planned";
-					plannedCredits += credits;
+				const status = statusOf(rc.id);
+				tally(status, credits);
+				courseRows.push({ id: rc.id, credits, status, or: rc.or ?? false });
+			}
+
+			// 2) For an elective bucket, also let any upper-division CS elective the
+			//    student actually picked fill it — so electives the catalog never
+			//    names individually still count toward the requirement.
+			if (isElectiveBucket) {
+				for (const c of courses) {
+					if (seen.has(c.id) || !isTechnicalElective(c)) continue;
+					const status = statusOf(c.id);
+					if (status === "remaining") continue; // only surface chosen ones
+					if (completedCredits + plannedCredits >= cap) break;
+					seen.add(c.id);
+					tally(status, c.credits);
+					courseRows.push({ id: c.id, credits: c.credits, status, or: false });
 				}
-				courses.push({ id: rc.id, credits, status, or: rc.or ?? false });
 			}
 
 			completedTotal += completedCredits;
@@ -180,7 +221,7 @@ export function remainingRequirements(
 				creditsRequired: group.creditsRequired,
 				completedCredits,
 				plannedCredits,
-				courses,
+				courses: courseRows,
 			};
 		},
 	);

@@ -44,6 +44,66 @@ function loadTone(credits: number): string {
 	return "text-green-600";
 }
 
+// A lowercased blob of everything worth searching for one section. We include
+// both the unspaced course id ("csc1007") and the spaced subject+number form
+// ("csc 1007") so typing the code either way matches.
+function sectionHaystack(s: Section): string {
+	const c = getCourse(s.courseId);
+	return [
+		s.courseId,
+		c ? `${c.subject} ${c.number}` : "",
+		c?.title ?? "",
+		s.instructor,
+	]
+		.join(" ")
+		.toLowerCase();
+}
+
+// Levenshtein distance, capped: bails out as soon as the best possible result
+// exceeds `max`, so a miss costs almost nothing. Used only as a typo fallback.
+function withinEditDistance(a: string, b: string, max: number): boolean {
+	if (Math.abs(a.length - b.length) > max) return false;
+	let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+	for (let i = 1; i <= a.length; i++) {
+		const curr = [i];
+		let rowMin = i;
+		for (let j = 1; j <= b.length; j++) {
+			const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+			const d = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+			curr[j] = d;
+			if (d < rowMin) rowMin = d;
+		}
+		if (rowMin > max) return false; // no cell in this row can recover
+		prev = curr;
+	}
+	return prev[b.length] <= max;
+}
+
+// True if every char of `needle` appears in `hay` in order (allowing gaps).
+// This is what makes abbreviations work: "genr" ⊂ "general", "strct" ⊂ "structures".
+function isSubsequence(needle: string, hay: string): boolean {
+	let i = 0;
+	for (let j = 0; j < hay.length && i < needle.length; j++) {
+		if (needle[i] === hay[j]) i++;
+	}
+	return i === needle.length;
+}
+
+// One query word matches a section if it's a substring of the blob (precise) or,
+// failing that, fuzzily matches some word in it — either as an in-order
+// abbreviation ("genr"→general) or a near-miss typo ("genral"→general). Tokens
+// under 4 chars stay exact: codes like "cs" shouldn't fuzzily match everything.
+function tokenMatches(hay: string, words: string[], token: string): boolean {
+	if (hay.includes(token)) return true;
+	if (token.length < 4) return false;
+	const max = token.length <= 6 ? 1 : 2;
+	return words.some(
+		(w) =>
+			w.length >= 3 &&
+			(isSubsequence(token, w) || withinEditDistance(token, w, max)),
+	);
+}
+
 function Planner() {
 	const { startSeason, availableDays, selectedCrns, completed } = useAppState();
 	const [query, setQuery] = useState("");
@@ -68,7 +128,22 @@ function Planner() {
 	const startTerm = scheduleTerm(startSeason);
 	const startIdx = termIndex(startTerm);
 
-	const q = query.trim().toLowerCase();
+	// Precomputed once (degreeSections is a module constant): crn → search blob
+	// plus its word list (the fuzzy fallback matches against individual words).
+	const haystacks = useMemo(() => {
+		const m = new Map<string, { text: string; words: string[] }>();
+		for (const s of degreeSections) {
+			const text = sectionHaystack(s);
+			m.set(s.crn, { text, words: text.split(/\s+/).filter(Boolean) });
+		}
+		return m;
+	}, []);
+	// Each whitespace-separated word must match somewhere, so "general chem" or
+	// "csc 1007 lin" narrow results instead of needing an exact substring.
+	const tokens = useMemo(
+		() => query.trim().toLowerCase().split(/\s+/).filter(Boolean),
+		[query],
+	);
 	const rows = useMemo(
 		() =>
 			degreeSections
@@ -77,13 +152,10 @@ function Planner() {
 					if (termIndex({ season: s.season, year: s.year }) < startIdx)
 						return false;
 					if (!fitsDays(s, dayset)) return false;
-					if (q === "") return true;
-					const c = getCourse(s.courseId);
-					return (
-						s.courseId.toLowerCase().includes(q) ||
-						(c?.title.toLowerCase().includes(q) ?? false) ||
-						s.instructor.toLowerCase().includes(q)
-					);
+					if (tokens.length === 0) return true;
+					const entry = haystacks.get(s.crn);
+					if (!entry) return false;
+					return tokens.every((t) => tokenMatches(entry.text, entry.words, t));
 				})
 				.sort(
 					(a, b) =>
@@ -92,7 +164,7 @@ function Planner() {
 							{ season: b.season, year: b.year },
 						) || a.courseId.localeCompare(b.courseId),
 				),
-		[completedSet, dayset, q, startIdx],
+		[completedSet, dayset, haystacks, tokens, startIdx],
 	);
 
 	const check = useMemo(
@@ -333,11 +405,18 @@ function PlanPanel({
 		plannedSet,
 	);
 	const completedCredits = totalCompletedCredits(completedSet);
-	const total = progress.totalCreditsForDegree;
-	const remaining = Math.max(
-		0,
-		total - completedCredits - progress.plannedCredits,
+	// Count every planned course (electives included), not just requirement-listed
+	// ones, so the headline matches the overview page.
+	const plannedCredits = useMemo(
+		() =>
+			[...plannedSet].reduce(
+				(sum, id) => sum + (getCourse(id)?.credits ?? 0),
+				0,
+			),
+		[plannedSet],
 	);
+	const total = progress.totalCreditsForDegree;
+	const remaining = Math.max(0, total - completedCredits - plannedCredits);
 
 	return (
 		<div className="space-y-4 lg:sticky lg:top-4">
@@ -417,12 +496,12 @@ function PlanPanel({
 				<div className="space-y-2">
 					<ProgressBar
 						completed={completedCredits}
-						planned={progress.plannedCredits}
+						planned={plannedCredits}
 						total={total}
 					/>
 					<div className="flex justify-between text-xs text-slate-500">
 						<span>{completedCredits} done</span>
-						<span>{progress.plannedCredits} planned</span>
+						<span>{plannedCredits} planned</span>
 						<span>
 							{remaining} left of {total}
 						</span>
