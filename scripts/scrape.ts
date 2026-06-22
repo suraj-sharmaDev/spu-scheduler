@@ -36,10 +36,20 @@ const TIME_SCHEDULE_BASE = "https://spu.edu/undergraduate-time-schedule/subjects
 const TERM_YEAR = "20266"
 const ACADEMIC_YEAR_START = 2026
 
-/** Subjects scraped in full (the major + its math sequence). Others referenced by
- * the degree (e.g. a single CHM/PHY science option) are scraped but filtered down
- * to only the courses the requirements actually name — keeping the dataset tiny. */
-const FULL_SUBJECTS = ["CSC", "MAT"]
+/** The major itself + its math sequence — scraped in full. */
+const MAJOR_SUBJECTS = ["CSC", "MAT"]
+
+/** SPU Common Curriculum / general-education subjects. A DTA transfer still has to
+ * slot these university-wide courses (General Studies, University Core, Theology
+ * Core), and the BS-CS major page doesn't enumerate most of them — so scrape them
+ * in full too. These are small, SPU-specific subjects; broad disciplinary subjects
+ * (ENG/HIS/ART/…) are deliberately left out to keep the dataset tiny. */
+const GENED_SUBJECTS = ["GS", "UCOR", "TCOR"]
+
+/** Subjects we keep every course of. Other subjects referenced by the degree (e.g.
+ * a single CHM/PHY science option) are scraped but filtered down to only the courses
+ * the requirements actually name. */
+const FULL_SUBJECTS = [...MAJOR_SUBJECTS, ...GENED_SUBJECTS]
 
 const USER_AGENT =
   "spu-scheduler-scraper/1.0 (personal course-planning tool; +docs/PLAN.md)"

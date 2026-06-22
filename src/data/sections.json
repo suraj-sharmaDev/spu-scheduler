@@ -846,6 +846,21 @@
     "instructor": "Lin Liu"
   },
   {
+    "crn": "2325",
+    "courseId": "GS1007",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Th"
+    ],
+    "startMin": 710,
+    "endMin": 760,
+    "timeRaw": "11:50 AM-12:40 PM",
+    "credits": 1,
+    "arranged": false,
+    "instructor": "Rachel Goodrich"
+  },
+  {
     "crn": "1734",
     "courseId": "GS3001",
     "season": "AUT",
@@ -883,6 +898,21 @@
     "credits": 1,
     "arranged": true,
     "instructor": "Christina Longcor"
+  },
+  {
+    "crn": "2324",
+    "courseId": "GS3418",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1010,
+    "timeRaw": "3:00 PM-4:50 PM",
+    "credits": 2,
+    "arranged": false,
+    "instructor": "Sarah Snodgrass"
   },
   {
     "crn": "1790",
@@ -1575,6 +1605,223 @@
     "instructor": "John Lindberg"
   },
   {
+    "crn": "2109",
+    "courseId": "TCOR1000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Katherine Douglass"
+  },
+  {
+    "crn": "2110",
+    "courseId": "TCOR1000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Katherine Douglass"
+  },
+  {
+    "crn": "2111",
+    "courseId": "TCOR1000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Rachel Dodd"
+  },
+  {
+    "crn": "2112",
+    "courseId": "TCOR1000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 870,
+    "endMin": 950,
+    "timeRaw": "2:30 PM-3:50 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Emanuel Padilla"
+  },
+  {
+    "crn": "2113",
+    "courseId": "TCOR1000",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1020,
+    "timeRaw": "3:00 PM-5:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Mike Langford"
+  },
+  {
+    "crn": "21763",
+    "courseId": "TCOR1000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Emanuel Padilla"
+  },
+  {
+    "crn": "21764",
+    "courseId": "TCOR1000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Esther Cen"
+  },
+  {
+    "crn": "21765",
+    "courseId": "TCOR1000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Katherine Douglass"
+  },
+  {
+    "crn": "21766",
+    "courseId": "TCOR1000",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1020,
+    "timeRaw": "3:00 PM-5:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Mike Langford"
+  },
+  {
+    "crn": "41610",
+    "courseId": "TCOR1000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 540,
+    "endMin": 620,
+    "timeRaw": "9:00 AM-10:20 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Emanuel Padilla"
+  },
+  {
+    "crn": "41611",
+    "courseId": "TCOR1000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 630,
+    "endMin": 710,
+    "timeRaw": "10:30 AM-11:50 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Rachel Dodd"
+  },
+  {
+    "crn": "41612",
+    "courseId": "TCOR1000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "M",
+      "W",
+      "F"
+    ],
+    "startMin": 780,
+    "endMin": 860,
+    "timeRaw": "1:00 PM-2:20 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Doug Koskela"
+  },
+  {
+    "crn": "41613",
+    "courseId": "TCOR1000",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 900,
+    "endMin": 1020,
+    "timeRaw": "3:00 PM-5:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Craig Brown"
+  },
+  {
     "crn": "2114",
     "courseId": "TCOR2000",
     "season": "AUT",
@@ -1724,6 +1971,88 @@
     "credits": 5,
     "arranged": false,
     "instructor": "Esther Cen"
+  },
+  {
+    "crn": "21770",
+    "courseId": "TCOR3001",
+    "season": "WIN",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Bo Lim"
+  },
+  {
+    "crn": "2351",
+    "courseId": "TCOR3001",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "W"
+    ],
+    "startMin": 870,
+    "endMin": 990,
+    "timeRaw": "2:30 PM-4:30 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Prentice Park"
+  },
+  {
+    "crn": "2355",
+    "courseId": "TCOR3001",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 870,
+    "endMin": 990,
+    "timeRaw": "2:30 PM-4:30 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Ashley Skinner"
+  },
+  {
+    "crn": "2364",
+    "courseId": "TCOR3001",
+    "season": "AUT",
+    "year": 2026,
+    "days": [
+      "M",
+      "Tu",
+      "W",
+      "Th"
+    ],
+    "startMin": 600,
+    "endMin": 840,
+    "timeRaw": "10:00 AM-2:00 PM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Dave Nienhuis"
+  },
+  {
+    "crn": "41617",
+    "courseId": "TCOR3001",
+    "season": "SPR",
+    "year": 2027,
+    "days": [
+      "Tu",
+      "Th"
+    ],
+    "startMin": 540,
+    "endMin": 660,
+    "timeRaw": "9:00 AM-11:00 AM",
+    "credits": 5,
+    "arranged": false,
+    "instructor": "Bo Lim"
   },
   {
     "crn": "2119",

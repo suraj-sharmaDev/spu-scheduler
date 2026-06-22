@@ -53,8 +53,10 @@ export const degreeCourses: Course[] = courses.filter((c) =>
 	degreeCourseIds.has(c.id),
 );
 
-/** Sections of degree-relevant courses that actually run this schedule year —
- *  the universe the guided planner offers. */
+/** Sections the guided planner offers: every section of a course in our curated
+ *  catalog that actually runs this schedule year. This is broader than
+ *  `degreeCourseIds` on purpose — electives (e.g. CSC2330) and gen-ed courses are
+ *  valid choices even though the BS-CS program page never names them individually. */
 export const degreeSections: Section[] = sections.filter((s) =>
-	degreeCourseIds.has(s.courseId),
+	coursesById.has(s.courseId),
 );
