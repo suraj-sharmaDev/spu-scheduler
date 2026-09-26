@@ -14,7 +14,8 @@
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "import-project": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/import-project.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -44,6 +45,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "exceljs": "^4.4.0",
     "jsdom": "^28.1.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",

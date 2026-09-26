@@ -1,0 +1,4144 @@
+{
+  "slug": "cpp-developer",
+  "title": "C++ Developer Plan",
+  "source": "Cpp_Developer_Plan.xlsx",
+  "about": [
+    {
+      "label": "The goal",
+      "text": "Not 'know C++'. The goal: someone gives you a problem you've never seen, and you know how to figure it out."
+    },
+    {
+      "label": "The mindset",
+      "text": "\"I don't know how to do this YET. I'll investigate, break it down, experiment, and figure it out.\""
+    },
+    {
+      "label": "Time",
+      "text": "30-60 minutes a session, about 5 sessions a week. Sessions are numbered, not tied to days. Missed a day? Just carry on with the next one."
+    }
+  ],
+  "milestones": [
+    {
+      "id": "w1",
+      "number": 1,
+      "subproject": "Student Manager",
+      "bigQuestion": "How do I turn a real-world problem into a program?",
+      "outcome": "A console program with a menu that adds and lists students.",
+      "guidance": "Step-by-step"
+    },
+    {
+      "id": "w2",
+      "number": 2,
+      "subproject": "Student Manager",
+      "bigQuestion": "How does a program find, change and remove things?",
+      "outcome": "Search, update and delete working.",
+      "guidance": "Step-by-step"
+    },
+    {
+      "id": "w3",
+      "number": 3,
+      "subproject": "Student Manager",
+      "bigQuestion": "What happens when users do something unexpected?",
+      "outcome": "An app that bad input can't break, and you can use a debugger.",
+      "guidance": "Step-by-step"
+    },
+    {
+      "id": "w4",
+      "number": 4,
+      "subproject": "Student Manager",
+      "bigQuestion": "How does a program remember things after it closes?",
+      "outcome": "Save/load to a file, and a plan for splitting up your code.",
+      "guidance": "You choose how"
+    },
+    {
+      "id": "w5",
+      "number": 5,
+      "subproject": "Student Manager",
+      "bigQuestion": "Why split code into parts?",
+      "outcome": "Code split into files and classes, plus your first automatic tests.",
+      "guidance": "You choose how"
+    },
+    {
+      "id": "w6",
+      "number": 6,
+      "subproject": "Student Manager",
+      "bigQuestion": "Can I change the screen without touching the logic?",
+      "outcome": "A Qt window running on the same logic. Project 1 done!",
+      "guidance": "You choose how"
+    },
+    {
+      "id": "w7",
+      "number": 7,
+      "subproject": "Library",
+      "bigQuestion": "How do different kinds of data connect?",
+      "outcome": "Books, members and borrowing with rules.",
+      "guidance": "Requirements only"
+    },
+    {
+      "id": "w8",
+      "number": 8,
+      "subproject": "Library",
+      "bigQuestion": "How do I handle things that are similar but not the same?",
+      "outcome": "Waitlists, books AND DVDs, saving linked data, tests. Project 2 done!",
+      "guidance": "Requirements only"
+    },
+    {
+      "id": "w9",
+      "number": 9,
+      "subproject": "Expense Tracker",
+      "bigQuestion": "How do I turn many records into useful answers?",
+      "outcome": "Expenses with sorting, filtering and totals. Project 3 done!",
+      "guidance": "Requirements only"
+    },
+    {
+      "id": "w10",
+      "number": 10,
+      "subproject": "Mini Search Engine",
+      "bigQuestion": "How do I solve a problem nobody has taught me?",
+      "outcome": "A small search engine you researched and designed yourself.",
+      "guidance": "On your own"
+    },
+    {
+      "id": "w11",
+      "number": 11,
+      "subproject": "Capstone",
+      "bigQuestion": "Can I plan a project myself?",
+      "outcome": "Your own app idea, scoped, designed and half built.",
+      "guidance": "On your own"
+    },
+    {
+      "id": "w12",
+      "number": 12,
+      "subproject": "Capstone",
+      "bigQuestion": "Can I finish, test and explain it?",
+      "outcome": "A finished app you can demo and explain.",
+      "guidance": "On your own"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "s1",
+      "number": 1,
+      "milestoneId": "w1",
+      "sessionInMilestone": 1,
+      "title": "Understand the problem, then build a menu",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s1.do.0",
+          "text": "Create requirements.txt. Describe the 5 features (add, view, search, update, delete) in YOUR OWN words.",
+          "stretch": false
+        },
+        {
+          "id": "s1.do.1",
+          "text": "For each feature write: what the user gives the program (input) and what they get back (output).",
+          "stretch": false
+        },
+        {
+          "id": "s1.do.2",
+          "text": "Create a new C++ console project called StudentManager.",
+          "stretch": false
+        },
+        {
+          "id": "s1.do.3",
+          "text": "Make it show a numbered menu (1 Add, 2 View all, 3 Search, 4 Update, 5 Delete, 0 Exit), read the choice and print 'You chose: Add' etc.",
+          "stretch": false
+        },
+        {
+          "id": "s1.do.4",
+          "text": "Show the menu again after each choice, until the user picks 0.",
+          "stretch": false
+        },
+        {
+          "id": "s1.do.5",
+          "text": "draw the menu screens on paper first.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "requirements",
+          "isNew": true
+        },
+        {
+          "conceptId": "console-program",
+          "isNew": true
+        },
+        {
+          "conceptId": "loop",
+          "isNew": true
+        },
+        {
+          "conceptId": "condition",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What's the difference between WHAT a program must do and HOW it does it?",
+        "Which kind of loop fits 'keep going until the user says stop'?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s1.done.0",
+          "text": "requirements.txt has 5 features, each with input + output.",
+          "stretch": false
+        },
+        {
+          "id": "s1.done.1",
+          "text": "The menu keeps coming back until you pick 0.",
+          "stretch": false
+        },
+        {
+          "id": "s1.done.2",
+          "text": "Check: every option; a number that isn't on the menu (like 7).",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": false
+    },
+    {
+      "id": "s2",
+      "number": 2,
+      "milestoneId": "w1",
+      "sessionInMilestone": 2,
+      "title": "Describe a student in code",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s2.do.0",
+          "text": "A student has: ID, name, age, major, GPA. For each, decide what kind of value it is - whole number, decimal or text? Write your reasons in requirements.txt.",
+          "stretch": false
+        },
+        {
+          "id": "s2.do.1",
+          "text": "Create your own Student type that groups these 5 values together.",
+          "stretch": false
+        },
+        {
+          "id": "s2.do.2",
+          "text": "When the user picks 'Add', ask for each value, fill in a Student, and print it back neatly.",
+          "stretch": false
+        },
+        {
+          "id": "s2.do.3",
+          "text": "write a function that turns a Student into one neat line of text.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "data-model",
+          "isNew": true
+        },
+        {
+          "conceptId": "variable-type",
+          "isNew": true
+        },
+        {
+          "conceptId": "struct",
+          "isNew": true
+        },
+        {
+          "conceptId": "std-string",
+          "isNew": true
+        },
+        {
+          "conceptId": "compiler-error",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Why is age a whole number but GPA a decimal?",
+        "Type a name with a space (e.g. 'Priya Sharma'). What happens? Why?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s2.done.0",
+          "text": "Add asks for all 5 values and prints them back correctly.",
+          "stretch": false
+        },
+        {
+          "id": "s2.done.1",
+          "text": "Check: a name with a space; GPA 0 and 4; a long major name.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": false
+    },
+    {
+      "id": "s3",
+      "number": 3,
+      "milestoneId": "w1",
+      "sessionInMilestone": 3,
+      "title": "Remember many students",
+      "intro": [
+        "Right now the program forgets a student as soon as you add the next one."
+      ],
+      "steps": [
+        {
+          "id": "s3.do.0",
+          "text": "Find a way to keep a LIST of students that grows each time you add someone. (Look up 'vector' in the Concepts tab.)",
+          "stretch": false
+        },
+        {
+          "id": "s3.do.1",
+          "text": "'Add' puts the new student into the list.",
+          "stretch": false
+        },
+        {
+          "id": "s3.do.2",
+          "text": "'View all' prints every student, one per line.",
+          "stretch": false
+        },
+        {
+          "id": "s3.do.3",
+          "text": "If there are no students, 'View all' says 'No students yet.'",
+          "stretch": false
+        },
+        {
+          "id": "s3.do.4",
+          "text": "print the students as a neat table with lined-up columns.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "vector",
+          "isNew": true
+        },
+        {
+          "conceptId": "single-source-of-truth",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Why not just make 100 separate Student variables?",
+        "How do you go through every item in a list, one by one?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s3.done.0",
+          "text": "Add 5 students; View all shows all 5 in the order added.",
+          "stretch": false
+        },
+        {
+          "id": "s3.done.1",
+          "text": "View all with no students shows the friendly message.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s4",
+      "number": 4,
+      "milestoneId": "w1",
+      "sessionInMilestone": 4,
+      "title": "Split main() into functions",
+      "intro": [
+        "Your main() is getting long and hard to read."
+      ],
+      "steps": [
+        {
+          "id": "s4.do.0",
+          "text": "List the separate jobs main() does (show menu, add a student, print all...).",
+          "stretch": false
+        },
+        {
+          "id": "s4.do.1",
+          "text": "Move each job into its own function with a clear name, e.g. addStudent, printAllStudents.",
+          "stretch": false
+        },
+        {
+          "id": "s4.do.2",
+          "text": "main() should become short: show menu, read choice, call the right function.",
+          "stretch": false
+        },
+        {
+          "id": "s4.do.3",
+          "text": "Some functions need the student list. Find out how to give them the list WITHOUT making a copy.",
+          "stretch": false
+        },
+        {
+          "id": "s4.do.4",
+          "text": "no function longer than 20 lines.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "breaking-a-problem-down",
+          "isNew": true
+        },
+        {
+          "conceptId": "function",
+          "isNew": true
+        },
+        {
+          "conceptId": "reference-vs-copy",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What makes a good function name?",
+        "If addStudent gets a COPY of the list, what happens to the student you add?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s4.done.0",
+          "text": "main() fits on one screen.",
+          "stretch": false
+        },
+        {
+          "id": "s4.done.1",
+          "text": "Each function does one job and its name says what.",
+          "stretch": false
+        },
+        {
+          "id": "s4.done.2",
+          "text": "Add and View all still work exactly as before.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s5",
+      "number": 5,
+      "milestoneId": "w1",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s5.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s5.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s5.do.2",
+          "text": "Make sure you can add 5 students and see them all.",
+          "stretch": false
+        },
+        {
+          "id": "s5.do.3",
+          "text": "Make a backup copy of your project folder called StudentManager_W1.",
+          "stretch": false
+        },
+        {
+          "id": "s5.do.4",
+          "text": "Fill in this week's row in the Weekly Reflection tab.\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s5.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s5.done.1",
+          "text": "5 students add and show correctly.",
+          "stretch": false
+        },
+        {
+          "id": "s5.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s6",
+      "number": 6,
+      "milestoneId": "w2",
+      "sessionInMilestone": 1,
+      "title": "Find a student by ID",
+      "intro": [
+        "PSEUDOCODE FIRST: write the steps in Notes using the template on Start Here."
+      ],
+      "steps": [
+        {
+          "id": "s6.do.0",
+          "text": "Add a menu option 'Search by ID'.",
+          "stretch": false
+        },
+        {
+          "id": "s6.do.1",
+          "text": "Write a function that looks through the list and gives back WHERE the student is (their position), or a special value meaning 'not found'.",
+          "stretch": false
+        },
+        {
+          "id": "s6.do.2",
+          "text": "Print the student, or 'No student with ID 105'.",
+          "stretch": false
+        },
+        {
+          "id": "s6.do.3",
+          "text": "count how many students your search checked, and print it.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "pseudocode",
+          "isNew": true
+        },
+        {
+          "conceptId": "algorithm",
+          "isNew": true
+        },
+        {
+          "conceptId": "linear-search",
+          "isNew": true
+        },
+        {
+          "conceptId": "big-o",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "With 1 million students, how many would you check in the worst case?",
+        "What should the function give back when nothing is found?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s6.done.0",
+          "text": "Pseudocode is in Notes (written BEFORE the code).",
+          "stretch": false
+        },
+        {
+          "id": "s6.done.1",
+          "text": "Check: first student, last student, an ID that doesn't exist, an empty list.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s7",
+      "number": 7,
+      "milestoneId": "w2",
+      "sessionInMilestone": 2,
+      "title": "Search by part of a name",
+      "intro": [
+        "Typing 'pri' should find 'Priya' AND 'PRINCE'."
+      ],
+      "steps": [
+        {
+          "id": "s7.do.0",
+          "text": "Split this into two smaller problems: (a) make upper/lower case not matter, (b) check whether one piece of text contains another.",
+          "stretch": false
+        },
+        {
+          "id": "s7.do.1",
+          "text": "Solve each small problem in its own function. Test each one alone.",
+          "stretch": false
+        },
+        {
+          "id": "s7.do.2",
+          "text": "Combine them: print EVERY student whose name matches.",
+          "stretch": false
+        },
+        {
+          "id": "s7.do.3",
+          "text": "search the major too.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "breaking-a-problem-down",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "How can 'Pri' and 'pri' be compared as equal?",
+        "How do you check if one string contains another in C++?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s7.done.0",
+          "text": "Shows all matches, not just the first.",
+          "stretch": false
+        },
+        {
+          "id": "s7.done.1",
+          "text": "Check: 'PRI', 'pri', a letter from the middle of a name, no matches, empty search.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s8",
+      "number": 8,
+      "milestoneId": "w2",
+      "sessionInMilestone": 3,
+      "title": "Update a student",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s8.do.0",
+          "text": "Ask for an ID and find the student (reuse your search function!).",
+          "stretch": false
+        },
+        {
+          "id": "s8.do.1",
+          "text": "Show their current details, then ask for new values.",
+          "stretch": false
+        },
+        {
+          "id": "s8.do.2",
+          "text": "Save the changes into the list.",
+          "stretch": false
+        },
+        {
+          "id": "s8.do.3",
+          "text": "If 'View all' still shows the OLD values, stop and investigate: are you changing the real student, or a copy?",
+          "stretch": false
+        },
+        {
+          "id": "s8.do.4",
+          "text": "pressing Enter without typing keeps the old value.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "reference-vs-copy",
+          "isNew": false
+        },
+        {
+          "conceptId": "dry",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What's the difference between  Student s = list[i];  and  Student& s = list[i];  ?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s8.done.0",
+          "text": "Changes show up in View all.",
+          "stretch": false
+        },
+        {
+          "id": "s8.done.1",
+          "text": "In Notes, explain copy vs reference in your own words.",
+          "stretch": false
+        },
+        {
+          "id": "s8.done.2",
+          "text": "Check: update an ID that doesn't exist; change every field.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s9",
+      "number": 9,
+      "milestoneId": "w2",
+      "sessionInMilestone": 4,
+      "title": "Delete a student",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s9.do.0",
+          "text": "Ask for an ID and find the student.",
+          "stretch": false
+        },
+        {
+          "id": "s9.do.1",
+          "text": "Ask 'Are you sure? (y/n)'.",
+          "stretch": false
+        },
+        {
+          "id": "s9.do.2",
+          "text": "Remove them from the list.",
+          "stretch": false
+        },
+        {
+          "id": "s9.do.3",
+          "text": "Before running it, predict: after deleting the 2nd of 4 students, what position is the old 3rd student in now?",
+          "stretch": false
+        },
+        {
+          "id": "s9.do.4",
+          "text": "'Delete all students' with a double confirmation.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "id-vs-position",
+          "isNew": true
+        },
+        {
+          "conceptId": "edge-case",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "How do you remove an item from the middle of a vector?",
+        "Why is 'delete student ID 105' safer than 'delete the 3rd student'?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s9.done.0",
+          "text": "The right student is removed.",
+          "stretch": false
+        },
+        {
+          "id": "s9.done.1",
+          "text": "Check: first, last and middle student; missing ID; answering 'n'; deleting the only student.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s10",
+      "number": 10,
+      "milestoneId": "w2",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s10.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s10.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s10.do.2",
+          "text": "Write README.txt: what the app does and how to use each feature.",
+          "stretch": false
+        },
+        {
+          "id": "s10.do.3",
+          "text": "Make a backup copy of your project folder called StudentManager_V1.",
+          "stretch": false
+        },
+        {
+          "id": "s10.do.4",
+          "text": "Fill in this week's row in the Weekly Reflection tab.\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        },
+        {
+          "conceptId": "documentation",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s10.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s10.done.1",
+          "text": "Add, search, update and delete all work. README.txt exists.",
+          "stretch": false
+        },
+        {
+          "id": "s10.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s11",
+      "number": 11,
+      "milestoneId": "w3",
+      "sessionInMilestone": 1,
+      "title": "Try to break your own app (no coding today!)",
+      "intro": [
+        "Be a user who makes mistakes - or who is trying to break things."
+      ],
+      "steps": [
+        {
+          "id": "s11.do.0",
+          "text": "Use the 7 test types on the Start Here tab.",
+          "stretch": false
+        },
+        {
+          "id": "s11.do.1",
+          "text": "Try at least 15 things. For each, write in bugs.txt: what I did -> what happened -> what SHOULD happen.",
+          "stretch": false
+        },
+        {
+          "id": "s11.do.2",
+          "text": "Don't fix anything today. Just collect.\nMust try: typing a letter when it asks for age.",
+          "stretch": false
+        },
+        {
+          "id": "s11.do.3",
+          "text": "rank the 3 bugs a real user would hate most.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "testing",
+          "isNew": true
+        },
+        {
+          "conceptId": "edge-case",
+          "isNew": false
+        },
+        {
+          "conceptId": "boundary-value",
+          "isNew": true
+        },
+        {
+          "conceptId": "bug-report",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What does 'boundary value' mean for GPA (0.0 to 4.0)? Which exact values should you try?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s11.done.0",
+          "text": "bugs.txt has 15+ entries, each with: steps, what happened, what should happen.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": false
+    },
+    {
+      "id": "s12",
+      "number": 12,
+      "milestoneId": "w3",
+      "sessionInMilestone": 2,
+      "title": "Read numbers safely",
+      "intro": [
+        "You probably found that typing letters where a number is expected breaks the program badly."
+      ],
+      "steps": [
+        {
+          "id": "s12.do.0",
+          "text": "Research WHY that happens.",
+          "stretch": false
+        },
+        {
+          "id": "s12.do.1",
+          "text": "Write ONE helper function that asks a question and keeps asking until the user types a valid whole number in a range, e.g.  readInt(\"Age: \", 16, 100).",
+          "stretch": false
+        },
+        {
+          "id": "s12.do.2",
+          "text": "Make similar helpers for decimals (GPA) and for non-empty text (name).",
+          "stretch": false
+        },
+        {
+          "id": "s12.do.3",
+          "text": "Use these helpers everywhere you read input, including the menu.",
+          "stretch": false
+        },
+        {
+          "id": "s12.do.4",
+          "text": "reject '12abc' and '3.5' when a whole number is expected.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "input-validation",
+          "isNew": true
+        },
+        {
+          "conceptId": "exception",
+          "isNew": true
+        },
+        {
+          "conceptId": "dry",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What happens to std::cin when it can't read a number?",
+        "What does std::stoi do when given 'abc'?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s12.done.0",
+          "text": "No input can crash or freeze the app.",
+          "stretch": false
+        },
+        {
+          "id": "s12.done.1",
+          "text": "Check: letters, empty, -5, 999, 3.5 for age, only spaces.",
+          "stretch": false
+        },
+        {
+          "id": "s12.done.2",
+          "text": "Mark the fixed bugs in bugs.txt.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s13",
+      "number": 13,
+      "milestoneId": "w3",
+      "sessionInMilestone": 3,
+      "title": "Rules: valid students and unique IDs",
+      "intro": [
+        "Some rules aren't about typing, they're about the data itself."
+      ],
+      "steps": [
+        {
+          "id": "s13.do.0",
+          "text": "Write every rule for a valid student (e.g. name not blank, GPA 0-4, ID not already used).",
+          "stretch": false
+        },
+        {
+          "id": "s13.do.1",
+          "text": "Write ONE function that checks a student against all rules and returns a message saying what's wrong (or nothing if it's fine).",
+          "stretch": false
+        },
+        {
+          "id": "s13.do.2",
+          "text": "Use it in both Add and Update.",
+          "stretch": false
+        },
+        {
+          "id": "s13.do.3",
+          "text": "Careful with Update: a student keeping their OWN ID is fine.",
+          "stretch": false
+        },
+        {
+          "id": "s13.do.4",
+          "text": "show ALL problems at once, not just the first.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "business-rules",
+          "isNew": true
+        },
+        {
+          "conceptId": "const",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Why keep all the rules in one function instead of checking separately in Add and Update?",
+        "Why is 'update student 101 but keep ID 101' a tricky case?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s13.done.0",
+          "text": "Duplicate IDs are impossible.",
+          "stretch": false
+        },
+        {
+          "id": "s13.done.1",
+          "text": "Check: add a duplicate ID (fails); update keeping own ID (works); update to another student's ID (fails); update to a new free ID (works).",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s14",
+      "number": 14,
+      "milestoneId": "w3",
+      "sessionInMilestone": 4,
+      "title": "Use the debugger",
+      "intro": [
+        "Print statements only get you so far. A debugger lets you pause the program and look inside."
+      ],
+      "steps": [
+        {
+          "id": "s14.do.0",
+          "text": "Find how to set a breakpoint (in Qt Creator: click left of a line number).",
+          "stretch": false
+        },
+        {
+          "id": "s14.do.1",
+          "text": "Put one in your search function. Run in Debug mode.",
+          "stretch": false
+        },
+        {
+          "id": "s14.do.2",
+          "text": "Step through line by line. Watch the variables change.",
+          "stretch": false
+        },
+        {
+          "id": "s14.do.3",
+          "text": "Ask your mentor for a 'mystery bug' (or pick one from bugs.txt) and find it using ONLY the debugger.",
+          "stretch": false
+        },
+        {
+          "id": "s14.do.4",
+          "text": "use the call stack to see which function called which.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "debugger",
+          "isNew": true
+        },
+        {
+          "conceptId": "debugging",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What's the difference between 'Step Over' and 'Step Into'?",
+        "What does the call stack show?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s14.done.0",
+          "text": "You found a bug using breakpoints and stepping.",
+          "stretch": false
+        },
+        {
+          "id": "s14.done.1",
+          "text": "In Notes: what you expected, what you saw, what the cause was.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s15",
+      "number": 15,
+      "milestoneId": "w3",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s15.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s15.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s15.do.2",
+          "text": "Re-try every entry in bugs.txt and mark each Fixed / Not fixed.",
+          "stretch": false
+        },
+        {
+          "id": "s15.do.3",
+          "text": "Make a backup copy of your project folder called StudentManager_V2.",
+          "stretch": false
+        },
+        {
+          "id": "s15.do.4",
+          "text": "Fill in this week's row in the Weekly Reflection tab.\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s15.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s15.done.1",
+          "text": "Every bugs.txt entry is marked.",
+          "stretch": false
+        },
+        {
+          "id": "s15.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s16",
+      "number": 16,
+      "milestoneId": "w4",
+      "sessionInMilestone": 1,
+      "title": "Design how to save students (no coding)",
+      "intro": [
+        "When the program closes, every student is lost. You'll fix that by saving to a file. Today, design only:"
+      ],
+      "steps": [
+        {
+          "id": "s16.do.0",
+          "text": "By hand, write 2 students into students.txt in a layout you like (e.g. one student per line).",
+          "stretch": false
+        },
+        {
+          "id": "s16.do.1",
+          "text": "What separates the values? What if a name contains that character?",
+          "stretch": false
+        },
+        {
+          "id": "s16.do.2",
+          "text": "When do you save: after every change, or on Exit? When do you load?",
+          "stretch": false
+        },
+        {
+          "id": "s16.do.3",
+          "text": "Write your choices and reasons in design_storage.txt.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "persistence",
+          "isNew": true
+        },
+        {
+          "conceptId": "file-format",
+          "isNew": true
+        },
+        {
+          "conceptId": "tradeoff",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What is a CSV file? What goes wrong with the name 'Smith, John' in a CSV?",
+        "What's the risk of only saving on Exit?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s16.done.0",
+          "text": "design_storage.txt explains your format and when you save/load, with reasons.",
+          "stretch": false
+        },
+        {
+          "id": "s16.done.1",
+          "text": "A hand-written students.txt exists.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s17",
+      "number": 17,
+      "milestoneId": "w4",
+      "sessionInMilestone": 2,
+      "title": "Save students to a file",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s17.do.0",
+          "text": "Save all students into a file using your format.",
+          "stretch": false
+        },
+        {
+          "id": "s17.do.1",
+          "text": "Plan your own steps in Notes first.",
+          "stretch": false
+        },
+        {
+          "id": "s17.do.2",
+          "text": "Rule: if the file can't be opened, tell the user. Never fail silently.",
+          "stretch": false
+        },
+        {
+          "id": "s17.do.3",
+          "text": "save to a temporary file first, then rename it - so a crash can't leave a half-written file.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "file-i-o",
+          "isNew": true
+        },
+        {
+          "conceptId": "fail-loudly",
+          "isNew": true
+        },
+        {
+          "conceptId": "raii",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "How do you write to a file in C++?",
+        "How do you know if opening the file failed?",
+        "When does the file get closed? (Look up RAII.)"
+      ],
+      "doneWhen": [
+        {
+          "id": "s17.done.0",
+          "text": "Open the file in a text editor: every student is there and correct.",
+          "stretch": false
+        },
+        {
+          "id": "s17.done.1",
+          "text": "Check: 0 students, 10 students, a name containing your separator character.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s18",
+      "number": 18,
+      "milestoneId": "w4",
+      "sessionInMilestone": 3,
+      "title": "Load students from the file",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s18.do.0",
+          "text": "When the program starts, load the students back.",
+          "stretch": false
+        },
+        {
+          "id": "s18.do.1",
+          "text": "Before coding, think about bad cases: no file yet (first run), a line with missing values, age written as 'abc', a duplicate ID in the file.",
+          "stretch": false
+        },
+        {
+          "id": "s18.do.2",
+          "text": "Plan your own steps.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "parsing",
+          "isNew": true
+        },
+        {
+          "conceptId": "trust-boundary",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "How do you split one line of text into pieces in C++?",
+        "Should one bad line stop ALL students from loading?",
+        "Can you reuse your rules function from week 3?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s18.done.0",
+          "text": "Close and reopen: your data is back.",
+          "stretch": false
+        },
+        {
+          "id": "s18.done.1",
+          "text": "Check: first run with no file; hand-edit the file to break a line in each of the ways above. Clear message, no crash.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s19",
+      "number": 19,
+      "milestoneId": "w4",
+      "sessionInMilestone": 4,
+      "title": "Audit: what is main.cpp doing?",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s19.do.0",
+          "text": "Count the lines in main.cpp.",
+          "stretch": false
+        },
+        {
+          "id": "s19.do.1",
+          "text": "List EVERY job it does: showing menus, reading input, checking rules, searching, saving files...",
+          "stretch": false
+        },
+        {
+          "id": "s19.do.2",
+          "text": "Sort the jobs into 4 boxes:\n- Screen (talking to the user)\n- Rules (what's allowed)\n- Data (what a student is)\n- Storage (files)",
+          "stretch": false
+        },
+        {
+          "id": "s19.do.3",
+          "text": "Draw the boxes with arrows showing who uses whom. Save as architecture.txt or a photo.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "separation-of-concerns",
+          "isNew": true
+        },
+        {
+          "conceptId": "layers",
+          "isNew": true
+        },
+        {
+          "conceptId": "coupling-cohesion",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "If you wanted a WINDOW app instead of a console app, which of your code could stay exactly the same?",
+        "If you switched from a text file to a database, which code would change?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s19.done.0",
+          "text": "Every function is in a box. The drawing is done.",
+          "stretch": false
+        },
+        {
+          "id": "s19.done.1",
+          "text": "You can explain in 2 sentences why the boxes exist.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s20",
+      "number": 20,
+      "milestoneId": "w4",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s20.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s20.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s20.do.2",
+          "text": "Close and reopen the app several times with different data - nothing lost?",
+          "stretch": false
+        },
+        {
+          "id": "s20.do.3",
+          "text": "Make a backup copy of your project folder called StudentManager_V3.",
+          "stretch": false
+        },
+        {
+          "id": "s20.do.4",
+          "text": "Fill in this week's row in the Weekly Reflection tab.\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s20.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s20.done.1",
+          "text": "Save/load reliable. architecture.txt done.",
+          "stretch": false
+        },
+        {
+          "id": "s20.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s21",
+      "number": 21,
+      "milestoneId": "w5",
+      "sessionInMilestone": 1,
+      "title": "Move Student into its own files",
+      "intro": [
+        "Create Student.h and Student.cpp and move the Student type into them."
+      ],
+      "steps": [
+        {
+          "id": "s21.do.0",
+          "text": "Find out what belongs in a .h file and what belongs in a .cpp file.",
+          "stretch": false
+        },
+        {
+          "id": "s21.do.1",
+          "text": "Tell the build system about the new files (CMakeLists.txt).",
+          "stretch": false
+        },
+        {
+          "id": "s21.do.2",
+          "text": "Fix compile errors one at a time, starting from the TOP of the list.\nThe program must behave exactly the same as before.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "header-source-files",
+          "isNew": true
+        },
+        {
+          "conceptId": "build-system-cmake",
+          "isNew": true
+        },
+        {
+          "conceptId": "refactoring",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Why do C++ projects split code into .h and .cpp files?",
+        "What does #pragma once prevent?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s21.done.0",
+          "text": "Student lives in its own files.",
+          "stretch": false
+        },
+        {
+          "id": "s21.done.1",
+          "text": "Regression check: run everything in bugs.txt - all still behaves the same.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s22",
+      "number": 22,
+      "milestoneId": "w5",
+      "sessionInMilestone": 2,
+      "title": "Turn the rules into a StudentService class",
+      "intro": [
+        "Create a class StudentService that OWNS the student list and offers: add, update, remove, findById, searchByName."
+      ],
+      "steps": [
+        {
+          "id": "s22.do.0",
+          "text": "The list is private: only the service can change it.",
+          "stretch": false
+        },
+        {
+          "id": "s22.do.1",
+          "text": "Your rules function moves in too.",
+          "stretch": false
+        },
+        {
+          "id": "s22.do.2",
+          "text": "The service must NEVER print or read from the console. It returns results and error messages instead.",
+          "stretch": false
+        },
+        {
+          "id": "s22.do.3",
+          "text": "main.cpp now asks the service to do things.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "class",
+          "isNew": true
+        },
+        {
+          "conceptId": "encapsulation",
+          "isNew": true
+        },
+        {
+          "conceptId": "constructor",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Why make the list private?",
+        "If the service can't print, how does it tell main.cpp that something went wrong?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s22.done.0",
+          "text": "No rules or searching left in main.cpp.",
+          "stretch": false
+        },
+        {
+          "id": "s22.done.1",
+          "text": "StudentService.cpp contains no std::cout or std::cin.",
+          "stretch": false
+        },
+        {
+          "id": "s22.done.2",
+          "text": "Everything works as before.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s23",
+      "number": 23,
+      "milestoneId": "w5",
+      "sessionInMilestone": 3,
+      "title": "Move saving/loading into StudentStorage",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s23.do.0",
+          "text": "Create StudentStorage with save and load. Then organize folders:",
+          "stretch": false
+        },
+        {
+          "id": "s23.do.1",
+          "text": "models/ (Student)   services/ (StudentService)   storage/ (StudentStorage)   ui/ (the console menu)",
+          "stretch": false
+        },
+        {
+          "id": "s23.do.2",
+          "text": "You decide: who calls storage - the menu or the service? Write down why.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "layers",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "Who should decide WHEN to save, and who should decide HOW?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s23.done.0",
+          "text": "4 folders, each with the right files. main.cpp is short.",
+          "stretch": false
+        },
+        {
+          "id": "s23.done.1",
+          "text": "Everything works, including save and load.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s24",
+      "number": 24,
+      "milestoneId": "w5",
+      "sessionInMilestone": 4,
+      "title": "Prove it: test the rules without the menu",
+      "intro": [
+        "Because the rules no longer need the console, you can test them automatically."
+      ],
+      "steps": [
+        {
+          "id": "s24.do.0",
+          "text": "Create a second small program, tests.cpp, that uses StudentService directly - no menu.",
+          "stretch": false
+        },
+        {
+          "id": "s24.do.1",
+          "text": "Write at least 8 checks, e.g. 'adding a duplicate ID is rejected', 'searching pri finds Priya'. Print PASS or FAIL for each.",
+          "stretch": false
+        },
+        {
+          "id": "s24.do.2",
+          "text": "Break a rule on purpose inside StudentService. Does a test catch it?",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "unit-test",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What is a unit test?",
+        "How do you add a second program (executable) in CMakeLists.txt?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s24.done.0",
+          "text": "8+ checks run in one go and all pass.",
+          "stretch": false
+        },
+        {
+          "id": "s24.done.1",
+          "text": "A deliberate bug was caught by a test.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s25",
+      "number": 25,
+      "milestoneId": "w5",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s25.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s25.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s25.do.2",
+          "text": "Update README.txt with your architecture drawing and one paragraph on why it's split this way.",
+          "stretch": false
+        },
+        {
+          "id": "s25.do.3",
+          "text": "Make a backup copy of your project folder called StudentManager_V4.",
+          "stretch": false
+        },
+        {
+          "id": "s25.do.4",
+          "text": "Fill in this week's row in the Weekly Reflection tab.\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        },
+        {
+          "conceptId": "documentation",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s25.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s25.done.1",
+          "text": "README explains the structure. Tests pass.",
+          "stretch": false
+        },
+        {
+          "id": "s25.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s26",
+      "number": 26,
+      "milestoneId": "w6",
+      "sessionInMilestone": 1,
+      "title": "Put a window on top of your logic",
+      "intro": [
+        "Time to use your Qt skills. Create a Qt Widgets project that uses your models/, services/ and storage/ folders UNCHANGED."
+      ],
+      "steps": [
+        {
+          "id": "s26.do.0",
+          "text": "Show a window with a table of all students loaded from your file.",
+          "stretch": false
+        },
+        {
+          "id": "s26.do.1",
+          "text": "Rule for this week: only edit files in ui/. If you must change anything else, write down why in Notes.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "gui-events",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "How can a Qt project use source files from other folders?",
+        "In a console app YOU control the order of things. Who controls it in a window app?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s26.done.0",
+          "text": "The window shows the students from your saved file.",
+          "stretch": false
+        },
+        {
+          "id": "s26.done.1",
+          "text": "No files outside ui/ changed (or each change is explained).",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s27",
+      "number": 27,
+      "milestoneId": "w6",
+      "sessionInMilestone": 2,
+      "title": "Add students from the window",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s27.do.0",
+          "text": "A form (ID, name, age, major, GPA) and an Add button.",
+          "stretch": false
+        },
+        {
+          "id": "s27.do.1",
+          "text": "Show the service's error messages in a message box. Refresh the table after each add.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "single-source-of-truth",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "Where should the error message text come from - the window or the service? Why?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s27.done.0",
+          "text": "Adding works, and every rule from week 3 applies without being rewritten.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s28",
+      "number": 28,
+      "milestoneId": "w6",
+      "sessionInMilestone": 3,
+      "title": "Search, update and delete in the window",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s28.do.0",
+          "text": "Bring the other 3 features to the window. Selecting a row should fill the form for editing.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "id-vs-position",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "If the table is filtered by a search, does row 2 still mean the 3rd student in the list?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s28.done.0",
+          "text": "All 5 features work in the window.",
+          "stretch": false
+        },
+        {
+          "id": "s28.done.1",
+          "text": "Check: delete while a search filter is showing - is the RIGHT student deleted?",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s29",
+      "number": 29,
+      "milestoneId": "w6",
+      "sessionInMilestone": 4,
+      "title": "Compare: one brain, two faces",
+      "intro": [
+        "Your console app and your window app now run on the SAME logic."
+      ],
+      "steps": [
+        {
+          "id": "s29.do.0",
+          "text": "Run tests.cpp - still passing?",
+          "stretch": false
+        },
+        {
+          "id": "s29.do.1",
+          "text": "Count how many lines you changed outside ui/ this week.",
+          "stretch": false
+        },
+        {
+          "id": "s29.do.2",
+          "text": "Write a short note: what would have happened if you'd built the window app in week 1 with all the logic inside the window?",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "architecture",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Where do real companies do this? (Think of a bank with a website AND a phone app.)"
+      ],
+      "doneWhen": [
+        {
+          "id": "s29.done.0",
+          "text": "Both apps work. Tests pass. Note written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": false
+    },
+    {
+      "id": "s30",
+      "number": 30,
+      "milestoneId": "w6",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s30.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s30.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s30.do.2",
+          "text": "Write in README.txt how the console and window apps share the same logic.",
+          "stretch": false
+        },
+        {
+          "id": "s30.do.3",
+          "text": "Make a backup copy of your project folder called StudentManager_Final.",
+          "stretch": false
+        },
+        {
+          "id": "s30.do.4",
+          "text": "Fill in the Project Review tab for this project (all 8 questions).\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        },
+        {
+          "conceptId": "documentation",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s30.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s30.done.1",
+          "text": "Both apps work. Project Review for Student Manager filled in.",
+          "stretch": false
+        },
+        {
+          "id": "s30.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s31",
+      "number": 31,
+      "milestoneId": "w7",
+      "sessionInMilestone": 1,
+      "title": "Library: requirements and data design",
+      "intro": [
+        "A small library lends books to members.",
+        "Requirements: add books (ID, title, author) and members (ID, name). Members borrow and return books. A member can have at most 3 books. The app shows who has what."
+      ],
+      "steps": [
+        {
+          "id": "s31.do.0",
+          "text": "List the kinds of things (entities) and their information.",
+          "stretch": false
+        },
+        {
+          "id": "s31.do.1",
+          "text": "Draw how they connect. A borrowing (a 'loan') links a book and a member.",
+          "stretch": false
+        },
+        {
+          "id": "s31.do.2",
+          "text": "Decide: should a loan store the book's ID, or a pointer to the book? Research both, write your decision.",
+          "stretch": false
+        },
+        {
+          "id": "s31.do.3",
+          "text": "Decide: console or Qt? Your call.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "relationships-between-data",
+          "isNew": true
+        },
+        {
+          "conceptId": "pointer",
+          "isNew": true
+        },
+        {
+          "conceptId": "stack-vs-heap-memory",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What is a pointer? What happens to a pointer to an item in a vector when the vector grows?",
+        "Can you save a pointer into a file and load it back?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s31.done.0",
+          "text": "design.txt with entities, a drawing, and the IDs-vs-pointers decision with reasons.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s32",
+      "number": 32,
+      "milestoneId": "w7",
+      "sessionInMilestone": 2,
+      "title": "Library: set up, books and members",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s32.do.0",
+          "text": "Start with the 4 folders from day 1 (models, services, storage, ui). Add and list books and members, with rules (no duplicate IDs, no blank names).",
+          "stretch": false
+        },
+        {
+          "id": "s32.do.1",
+          "text": "Plan your own steps.",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "What did you do in the Student Manager that you'd do differently now?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s32.done.0",
+          "text": "Books and members can be added and listed, with rules. The structure is in place.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s33",
+      "number": 33,
+      "milestoneId": "w7",
+      "sessionInMilestone": 3,
+      "title": "Library: borrow a book",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s33.do.0",
+          "text": "Requirement: a member borrows an available book.",
+          "stretch": false
+        },
+        {
+          "id": "s33.do.1",
+          "text": "Rules: the book exists and isn't already out; the member exists; max 3 books at once.",
+          "stretch": false
+        },
+        {
+          "id": "s33.do.2",
+          "text": "PSEUDOCODE FIRST. Check EVERY rule before changing anything.",
+          "stretch": false
+        },
+        {
+          "id": "s33.do.3",
+          "text": "Decide: does a book remember 'I'm borrowed', or do you work it out from the loans? What if those two ever disagree?",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "state",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What is 'state' in a program?",
+        "What can go wrong when the same fact is stored in two places?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s33.done.0",
+          "text": "Check: borrow an available book; a book already out; a 4th book; unknown member; unknown book.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s34",
+      "number": 34,
+      "milestoneId": "w7",
+      "sessionInMilestone": 4,
+      "title": "Library: returns, history and overdue",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s34.do.0",
+          "text": "Requirement: members return books. Keep old loans as history. Show overdue loans. A loan lasts 14 days.",
+          "stretch": false
+        },
+        {
+          "id": "s34.do.1",
+          "text": "Real dates are complicated, so SIMPLIFY: the app keeps a 'today' day number (starting at 1), and a menu option 'Next day' moves time forward. A loan is overdue if today > due day.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "simplifying-a-problem",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Why is a fake 'today' easier to test than the real clock?",
+        "Why keep returned loans instead of deleting them?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s34.done.0",
+          "text": "Check: return a borrowed book; return one that isn't borrowed; borrow on day 1, then check overdue on day 15 and day 16.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s35",
+      "number": 35,
+      "milestoneId": "w7",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s35.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s35.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s35.do.2",
+          "text": "Make sure every borrowing rule works.",
+          "stretch": false
+        },
+        {
+          "id": "s35.do.3",
+          "text": "Make a backup copy of your project folder called Library_W7.",
+          "stretch": false
+        },
+        {
+          "id": "s35.do.4",
+          "text": "Fill in this week's row in the Weekly Reflection tab.\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s35.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s35.done.1",
+          "text": "Books, members, borrowing and returns work.",
+          "stretch": false
+        },
+        {
+          "id": "s35.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s36",
+      "number": 36,
+      "milestoneId": "w8",
+      "sessionInMilestone": 1,
+      "title": "Library: waitlist",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s36.do.0",
+          "text": "Requirement: if a book is out, members can join its waitlist. When it's returned, it goes to the first person in line.",
+          "stretch": false
+        },
+        {
+          "id": "s36.do.1",
+          "text": "Research which container fits 'first come, first served', and how to keep one line per book.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "queue",
+          "isNew": true
+        },
+        {
+          "conceptId": "map",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What does FIFO mean?",
+        "How would you keep a separate line for EACH book?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s36.done.0",
+          "text": "Check: 3 people wait for one book (order kept); the same person joins twice; someone joins the waitlist for a book that's available.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s37",
+      "number": 37,
+      "milestoneId": "w8",
+      "sessionInMilestone": 2,
+      "title": "Library: DVDs too (similar, not the same)",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s37.do.0",
+          "text": "Requirement: the library also lends DVDs. Books are loaned for 14 days, DVDs for 7. Both have an ID and title; books have an author, DVDs have a running time.",
+          "stretch": false
+        },
+        {
+          "id": "s37.do.1",
+          "text": "Treat them the same where they're the same (borrow, return, list) and differently where they differ - WITHOUT 'if it's a DVD... else...' scattered everywhere.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "inheritance",
+          "isNew": true
+        },
+        {
+          "conceptId": "polymorphism",
+          "isNew": true
+        },
+        {
+          "conceptId": "smart-pointer-unique-ptr",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What is inheritance? What is a virtual function?",
+        "Why can't a plain vector<Item> hold books and DVDs properly? (Search 'object slicing'.)",
+        "What is std::unique_ptr?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s37.done.0",
+          "text": "One list holds both books and DVDs. Borrowing uses the right loan length.",
+          "stretch": false
+        },
+        {
+          "id": "s37.done.1",
+          "text": "Adding a 3rd type (e.g. Magazine) wouldn't change the borrowing code.",
+          "stretch": false
+        }
+      ],
+      "level": 4,
+      "checkpoint": false
+    },
+    {
+      "id": "s38",
+      "number": 38,
+      "milestoneId": "w8",
+      "sessionInMilestone": 3,
+      "title": "Library: save and load everything",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s38.do.0",
+          "text": "Requirement: books, DVDs, members, loans, waitlists and 'today' all survive a restart. A member who still has items can't be deleted.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "data-integrity",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "How do you record 'this is a DVD, not a book' in a text file?",
+        "What should happen if the file has a loan for item 99 but item 99 doesn't exist?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s38.done.0",
+          "text": "Everything survives a restart.",
+          "stretch": false
+        },
+        {
+          "id": "s38.done.1",
+          "text": "Check: hand-edit the file to break a link - the app warns instead of crashing.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s39",
+      "number": 39,
+      "milestoneId": "w8",
+      "sessionInMilestone": 4,
+      "title": "Library: tests for the rules",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s39.do.0",
+          "text": "Write automatic tests (like week 5) for the borrowing rules: max 3 items, can't borrow twice, waitlist order, DVDs last 7 days, overdue on the right day.",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "Which of these are boundary cases? (3rd vs 4th item, day 14 vs day 15...)"
+      ],
+      "doneWhen": [
+        {
+          "id": "s39.done.0",
+          "text": "10+ tests pass. One deliberate bug was caught.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s40",
+      "number": 40,
+      "milestoneId": "w8",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s40.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s40.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s40.do.2",
+          "text": "Write README.txt for the Library including your data drawing.",
+          "stretch": false
+        },
+        {
+          "id": "s40.do.3",
+          "text": "Make a backup copy of your project folder called Library_Final.",
+          "stretch": false
+        },
+        {
+          "id": "s40.do.4",
+          "text": "Fill in the Project Review tab for this project (all 8 questions).\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        },
+        {
+          "conceptId": "documentation",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s40.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s40.done.1",
+          "text": "Library complete and tests pass. Project Review filled in.",
+          "stretch": false
+        },
+        {
+          "id": "s40.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s41",
+      "number": 41,
+      "milestoneId": "w9",
+      "sessionInMilestone": 1,
+      "title": "Expenses: design, and why money is tricky",
+      "intro": [
+        "Requirements: record expenses (date, amount, category, description); list, delete, save; sort; filter; totals per category and per month."
+      ],
+      "steps": [
+        {
+          "id": "s41.do.0",
+          "text": "Design the data and the folders/classes - you know how now.",
+          "stretch": false
+        },
+        {
+          "id": "s41.do.1",
+          "text": "Before choosing a type for 'amount', try this: add 0.1 + 0.2 as doubles and print the result with 17 digits. Research what you see.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "floating-point-numbers",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Why don't banks store money as decimals? What do they store instead?",
+        "How could you store dates so they sort correctly as text? (Hint: YYYY-MM-DD.)"
+      ],
+      "doneWhen": [
+        {
+          "id": "s41.done.0",
+          "text": "design.txt with the data, the structure, and your money-type decision explained.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s42",
+      "number": 42,
+      "milestoneId": "w9",
+      "sessionInMilestone": 2,
+      "title": "Expenses: the core",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s42.do.0",
+          "text": "Add, list, delete and save expenses, with rules. This should feel fast - it's your third time.",
+          "stretch": false
+        },
+        {
+          "id": "s42.do.1",
+          "text": "undo the last add or delete (research 'stack' in the Concepts tab).",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "stack",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What did you copy from earlier projects? What did you improve?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s42.done.0",
+          "text": "Core works.",
+          "stretch": false
+        },
+        {
+          "id": "s42.done.1",
+          "text": "Check: amount 0, negative, 12.345, empty category.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s43",
+      "number": 43,
+      "milestoneId": "w9",
+      "sessionInMilestone": 3,
+      "title": "Expenses: sort and filter",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s43.do.0",
+          "text": "Requirement: sort by date or by amount (both directions); filter by category and by a date range.",
+          "stretch": false
+        },
+        {
+          "id": "s43.do.1",
+          "text": "Use the standard library's sort, and tell it HOW to compare using a lambda.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "sort",
+          "isNew": true
+        },
+        {
+          "conceptId": "lambda",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What is a lambda? What does the [ ] part (capture) mean?",
+        "What must a sort comparison return?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s43.done.0",
+          "text": "Check: empty list; equal amounts; start date after end date; a category with no expenses.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s44",
+      "number": 44,
+      "milestoneId": "w9",
+      "sessionInMilestone": 4,
+      "title": "Expenses: totals",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s44.do.0",
+          "text": "Requirement: total per category for a chosen month, and total per month.",
+          "stretch": false
+        },
+        {
+          "id": "s44.do.1",
+          "text": "Research which container maps a category name to a running total.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "aggregation",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "map vs unordered_map: which keeps keys in order? Which suits a report?",
+        "What does std::accumulate do?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s44.done.0",
+          "text": "Totals match a hand calculation for one month.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s45",
+      "number": 45,
+      "milestoneId": "w9",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s45.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s45.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s45.do.2",
+          "text": "Write README.txt including why money is stored as cents.",
+          "stretch": false
+        },
+        {
+          "id": "s45.do.3",
+          "text": "Make a backup copy of your project folder called Expenses_Final.",
+          "stretch": false
+        },
+        {
+          "id": "s45.do.4",
+          "text": "Fill in the Project Review tab for this project (all 8 questions).\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        },
+        {
+          "conceptId": "documentation",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s45.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s45.done.1",
+          "text": "Expense Tracker complete. Project Review filled in.",
+          "stretch": false
+        },
+        {
+          "id": "s45.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s46",
+      "number": 46,
+      "milestoneId": "w10",
+      "sessionInMilestone": 1,
+      "title": "Research: how does search find things fast?",
+      "intro": [
+        "You have NOT been taught this - that's the point."
+      ],
+      "steps": [
+        {
+          "id": "s46.do.0",
+          "text": "Research how a search engine finds documents containing a word quickly.",
+          "stretch": false
+        },
+        {
+          "id": "s46.do.1",
+          "text": "In research.txt, explain it in your own words with a tiny example you work out by hand (3 short sentences as 'documents').",
+          "stretch": false
+        },
+        {
+          "id": "s46.do.2",
+          "text": "Collect 20-50 .txt files to search (e.g. short stories).\nThis is a console app using std::string.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "research",
+          "isNew": true
+        },
+        {
+          "conceptId": "inverted-index",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What is an 'inverted index'?",
+        "What do O(n) and O(1) mean? (See Big-O in Concepts.)",
+        "Where can you get free text files?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s46.done.0",
+          "text": "research.txt with your explanation and hand-worked example. Text files ready.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s47",
+      "number": 47,
+      "milestoneId": "w10",
+      "sessionInMilestone": 2,
+      "title": "Read files and do a slow search",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s47.do.0",
+          "text": "Console app: read every .txt file in a folder, split into lowercase words without punctuation, and for a query word print which files contain it by checking everything. Print how many milliseconds it took.",
+          "stretch": false
+        },
+        {
+          "id": "s47.do.1",
+          "text": "Design it yourself.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "measuring-performance",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "What do std::ifstream, std::filesystem::directory_iterator and std::chrono do?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s47.done.0",
+          "text": "Check: a word in every file; in no file; uppercase query; a word next to punctuation ('end.'); an empty folder. Time is printed.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s48",
+      "number": 48,
+      "milestoneId": "w10",
+      "sessionInMilestone": 3,
+      "title": "Build the index and compare speed",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s48.do.0",
+          "text": "Build an inverted index once at startup (word -> set of files). Search using it. Print the time for slow search vs index search on the same query.",
+          "stretch": false
+        },
+        {
+          "id": "s48.do.1",
+          "text": "Choose your containers and write down why.",
+          "stretch": false
+        },
+        {
+          "id": "s48.do.2",
+          "text": "copy your files to 500+ and compare again.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "unordered-map",
+          "isNew": true
+        },
+        {
+          "conceptId": "set",
+          "isNew": true
+        },
+        {
+          "conceptId": "copy-vs-move",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Why might unordered_map fit better than map here?",
+        "Why a set for the file list, not a vector?",
+        "For big strings: passing by value vs by const reference - measure the difference."
+      ],
+      "doneWhen": [
+        {
+          "id": "s48.done.0",
+          "text": "Index search gives exactly the same results as slow search, and is faster. Container choices written down.",
+          "stretch": false
+        }
+      ],
+      "level": 4,
+      "checkpoint": false
+    },
+    {
+      "id": "s49",
+      "number": 49,
+      "milestoneId": "w10",
+      "sessionInMilestone": 4,
+      "title": "Multi-word search",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s49.do.0",
+          "text": "A query with several words returns files containing ALL of them, ranked by how often the words appear.",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "What is a set intersection? Is there a standard algorithm for it?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s49.done.0",
+          "text": "Check: 2 words both present; one missing; the same word twice; only spaces. Ranking matches a hand-checked example.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s50",
+      "number": 50,
+      "milestoneId": "w10",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s50.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s50.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s50.do.2",
+          "text": "Add your measured times to research.txt and explain them with Big-O.",
+          "stretch": false
+        },
+        {
+          "id": "s50.do.3",
+          "text": "Make a backup copy of your project folder called Search_Final.",
+          "stretch": false
+        },
+        {
+          "id": "s50.do.4",
+          "text": "Fill in the Project Review tab for this project (all 8 questions).\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s50.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s50.done.1",
+          "text": "Search works. research.txt updated. Project Review filled in.",
+          "stretch": false
+        },
+        {
+          "id": "s50.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s51",
+      "number": 51,
+      "milestoneId": "w11",
+      "sessionInMilestone": 1,
+      "title": "Capstone: choose and scope your project",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s51.do.0",
+          "text": "Write 3 app ideas. Pick one and say why.",
+          "stretch": false
+        },
+        {
+          "id": "s51.do.1",
+          "text": "In capstone.txt: the problem it solves, who uses it, up to 5 must-have features, a nice-to-have list, and what you will NOT build.\nIt must fit in about 8 sessions.\nIdeas if stuck: habit tracker, recipe book, study planner, flashcards, small-shop inventory.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "project-scope",
+          "isNew": true
+        }
+      ],
+      "thinkAbout": [
+        "Look at 2 similar apps. What's the ONE feature that makes them useful?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s51.done.0",
+          "text": "Scope written and agreed with your mentor.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s52",
+      "number": 52,
+      "milestoneId": "w11",
+      "sessionInMilestone": 2,
+      "title": "Capstone: design, and plan your own sessions",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s52.do.0",
+          "text": "design.txt: data, folders/classes, which containers and why, screen sketch.",
+          "stretch": false
+        },
+        {
+          "id": "s52.do.1",
+          "text": "Then fill in YOUR OWN rows for sessions 53, 54 and 56 in this sheet (Task, What to do, Done when).\nYou're writing the plan now, not following it.",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "Look back at your old design notes. What worked? What would you change?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s52.done.0",
+          "text": "Design written. Your own session rows are filled in.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s53",
+      "number": 53,
+      "milestoneId": "w11",
+      "sessionInMilestone": 3,
+      "title": "Capstone: build (your plan)",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s53.do.0",
+          "text": "(Replace this with your own plan from session 52.)",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "(Your own questions.)"
+      ],
+      "doneWhen": [
+        {
+          "id": "s53.done.0",
+          "text": "(Your own 'done when'.)",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s54",
+      "number": 54,
+      "milestoneId": "w11",
+      "sessionInMilestone": 4,
+      "title": "Capstone: build (your plan)",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s54.do.0",
+          "text": "(Replace this with your own plan from session 52.)",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "(Your own questions.)"
+      ],
+      "doneWhen": [
+        {
+          "id": "s54.done.0",
+          "text": "(Your own 'done when'.)",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s55",
+      "number": 55,
+      "milestoneId": "w11",
+      "sessionInMilestone": 5,
+      "title": "Checkpoint: catch up, re-test, reflect",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s55.do.0",
+          "text": "Anything this week not 'Done'? Finish that first.",
+          "stretch": false
+        },
+        {
+          "id": "s55.do.1",
+          "text": "Re-run the checks in 'Done when' for every session this week.",
+          "stretch": false
+        },
+        {
+          "id": "s55.do.2",
+          "text": "Show your mentor what you have so far. Behind? Cut a feature - that's a good decision, not a failure.",
+          "stretch": false
+        },
+        {
+          "id": "s55.do.3",
+          "text": "Make a backup copy of your project folder called Capstone_W11.",
+          "stretch": false
+        },
+        {
+          "id": "s55.do.4",
+          "text": "Fill in this week's row in the Weekly Reflection tab.\nAhead of schedule? Do a ⭐ stretch goal from earlier.",
+          "stretch": false
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "regression-test",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What was the most useful thing you looked up this week? Paste the link in Notes."
+      ],
+      "doneWhen": [
+        {
+          "id": "s55.done.0",
+          "text": "Every session this week is Done (or Notes say why not).",
+          "stretch": false
+        },
+        {
+          "id": "s55.done.1",
+          "text": "Demo done. Plan updated.",
+          "stretch": false
+        },
+        {
+          "id": "s55.done.2",
+          "text": "Backup made. Reflection written.",
+          "stretch": false
+        }
+      ],
+      "level": 1,
+      "checkpoint": true
+    },
+    {
+      "id": "s56",
+      "number": 56,
+      "milestoneId": "w12",
+      "sessionInMilestone": 1,
+      "title": "Capstone: build (your plan)",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s56.do.0",
+          "text": "(Replace this with your own plan from session 52.)",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "(Your own questions.)"
+      ],
+      "doneWhen": [
+        {
+          "id": "s56.done.0",
+          "text": "(Your own 'done when'.)",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s57",
+      "number": 57,
+      "milestoneId": "w12",
+      "sessionInMilestone": 2,
+      "title": "Capstone: save, load and rules",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s57.do.0",
+          "text": "Your app saves and loads its data and rejects bad input with clear messages.",
+          "stretch": false
+        },
+        {
+          "id": "s57.do.1",
+          "text": "Try it WITHOUT looking at old projects first, then compare.",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "What did you have to look up? That list is what to practise next."
+      ],
+      "doneWhen": [
+        {
+          "id": "s57.done.0",
+          "text": "Data survives restart. Check all 7 test types from Start Here.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s58",
+      "number": 58,
+      "milestoneId": "w12",
+      "sessionInMilestone": 3,
+      "title": "Capstone: test and fix",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s58.do.0",
+          "text": "Write a checklist covering all 7 test types for every feature, plus automatic tests for your rules. Fix what you find.",
+          "stretch": false
+        },
+        {
+          "id": "s58.do.1",
+          "text": "let your mentor try to break the app for 10 minutes.",
+          "stretch": true
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [],
+      "doneWhen": [
+        {
+          "id": "s58.done.0",
+          "text": "Checklist complete, tests pass, bugs fixed or listed.",
+          "stretch": false
+        }
+      ],
+      "level": 3,
+      "checkpoint": false
+    },
+    {
+      "id": "s59",
+      "number": 59,
+      "milestoneId": "w12",
+      "sessionInMilestone": 4,
+      "title": "Capstone: tidy up and document",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s59.do.0",
+          "text": "Clean up names, long functions and repeated code (tests must pass before AND after).",
+          "stretch": false
+        },
+        {
+          "id": "s59.do.1",
+          "text": "Write README.txt: what the app does, how to build and run it, how it's organized, and your main design decisions.",
+          "stretch": false
+        }
+      ],
+      "concepts": [],
+      "thinkAbout": [
+        "What makes a README useful to a stranger?"
+      ],
+      "doneWhen": [
+        {
+          "id": "s59.done.0",
+          "text": "README written. Code tidied. Tests pass.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    },
+    {
+      "id": "s60",
+      "number": 60,
+      "milestoneId": "w12",
+      "sessionInMilestone": 5,
+      "title": "Final demo and reflection",
+      "intro": [],
+      "steps": [
+        {
+          "id": "s60.do.0",
+          "text": "Prepare: 3 decisions you're proud of and 1 you'd change.",
+          "stretch": false
+        },
+        {
+          "id": "s60.do.1",
+          "text": "Give a 10-minute demo to your mentor: what it does, how it's organized, why.",
+          "stretch": false
+        },
+        {
+          "id": "s60.do.2",
+          "text": "Fill in the Project Review tab for the capstone.",
+          "stretch": false
+        },
+        {
+          "id": "s60.do.3",
+          "text": "Backup copy named Capstone_Final.",
+          "stretch": false
+        },
+        {
+          "id": "s60.do.4",
+          "text": "write 'What I learned in 12 weeks'. Re-read your week 1 Notes first.",
+          "stretch": true
+        }
+      ],
+      "concepts": [
+        {
+          "conceptId": "documentation",
+          "isNew": false
+        }
+      ],
+      "thinkAbout": [
+        "What would you like to learn next? (Git, web development, databases...)"
+      ],
+      "doneWhen": [
+        {
+          "id": "s60.done.0",
+          "text": "Demo done. Project Review filled in. Backup made.",
+          "stretch": false
+        }
+      ],
+      "level": 2,
+      "checkpoint": false
+    }
+  ],
+  "concepts": [
+    {
+      "id": "requirements",
+      "name": "Requirements",
+      "type": "Thinking",
+      "plain": "A clear list of what the program must do, from the user's point of view.",
+      "example": "A shopping list says 'milk', not 'drive down Main St to the store'.",
+      "why": "If you don't know exactly what to build, you'll build the wrong thing.",
+      "learnMore": "Search: 'software requirements for beginners'"
+    },
+    {
+      "id": "console-program",
+      "name": "Console program",
+      "type": "Design",
+      "plain": "A text-only program: it prints text and reads what you type.",
+      "example": "Texting back and forth with the program.",
+      "why": "Lets you focus on logic without designing screens.",
+      "learnMore": null
+    },
+    {
+      "id": "loop",
+      "name": "Loop",
+      "type": "C++",
+      "plain": "Repeating code while something is true, or once for each item in a list.",
+      "example": "Keep stirring until the sauce thickens.",
+      "why": "Almost every program repeats something.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "condition",
+      "name": "Condition",
+      "type": "C++",
+      "plain": "Running code only if a test is true (if / else / switch).",
+      "example": "If it's raining, take an umbrella.",
+      "why": "Programs make decisions.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "data-model",
+      "name": "Data model",
+      "type": "Design",
+      "plain": "Deciding what information your program stores, and what kind each piece is.",
+      "example": "A contact card: name (text), phone (digits), birthday (date).",
+      "why": "Bad data design makes every later feature harder.",
+      "learnMore": "Search: 'data modeling basics'"
+    },
+    {
+      "id": "variable-type",
+      "name": "Variable & type",
+      "type": "C++",
+      "plain": "A named box holding a value. The type says what kind: whole number (int), decimal (double), text (string)...",
+      "example": "Labelled jars: you don't pour milk into the sugar jar.",
+      "why": "The right type prevents whole groups of bugs.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "struct",
+      "name": "struct",
+      "type": "C++",
+      "plain": "Your own type that groups related values together under one name.",
+      "example": "A form with fields: name, age, major.",
+      "why": "Keeps related data together instead of loose variables.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "std-string",
+      "name": "std::string",
+      "type": "C++",
+      "plain": "C++'s type for text.",
+      "example": "A line of writing.",
+      "why": "Names, messages, file contents - most programs handle lots of text.",
+      "learnMore": "https://en.cppreference.com/w/cpp/string/basic_string"
+    },
+    {
+      "id": "compiler-error",
+      "name": "Compiler error",
+      "type": "C++",
+      "plain": "The compiler telling you your code isn't valid C++. Always read the FIRST error first.",
+      "example": "A spell-checker underlining a word.",
+      "why": "The first error often causes the rest. Reading errors calmly is a core skill.",
+      "learnMore": null
+    },
+    {
+      "id": "single-source-of-truth",
+      "name": "Single source of truth",
+      "type": "Design",
+      "plain": "Keep each fact in exactly ONE place; everything else reads from there.",
+      "example": "One shared family calendar instead of everyone keeping their own copy.",
+      "why": "Two copies of a fact eventually disagree - and that's a bug.",
+      "learnMore": null
+    },
+    {
+      "id": "vector",
+      "name": "vector",
+      "type": "Data structures & algorithms",
+      "plain": "A list that grows as you add items and keeps them in order. Written std::vector<Student>.",
+      "example": "A notebook where you can keep adding pages.",
+      "why": "The go-to C++ container for 'many of something'.",
+      "learnMore": "https://en.cppreference.com/w/cpp/container/vector"
+    },
+    {
+      "id": "breaking-a-problem-down",
+      "name": "Breaking a problem down",
+      "type": "Thinking",
+      "plain": "Splitting a big problem into small problems you can solve one at a time.",
+      "example": "'Cook dinner' -> buy food, chop, cook, serve.",
+      "why": "Every hard problem is a pile of easy ones.",
+      "learnMore": "Search: 'problem decomposition programming'"
+    },
+    {
+      "id": "function",
+      "name": "Function",
+      "type": "Design",
+      "plain": "A named block of code that does one job. You can use (call) it whenever you need that job done.",
+      "example": "The 'make coffee' button on a machine.",
+      "why": "Good names make code readable; one job per function makes it fixable.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "reference-vs-copy",
+      "name": "Reference vs copy",
+      "type": "C++",
+      "plain": "A copy is a separate duplicate. A reference (&) is another name for the original.",
+      "example": "A photocopy of a document vs the original document.",
+      "why": "Change a copy and the original doesn't change - a very common bug.",
+      "learnMore": "https://en.cppreference.com/w/cpp/language/reference"
+    },
+    {
+      "id": "regression-test",
+      "name": "Regression test",
+      "type": "Quality & debugging",
+      "plain": "Re-testing old features to make sure new changes didn't break them.",
+      "example": "After fixing a car's brakes, checking the lights still work.",
+      "why": "New code often breaks old code.",
+      "learnMore": null
+    },
+    {
+      "id": "pseudocode",
+      "name": "Pseudocode",
+      "type": "Thinking",
+      "plain": "Writing the steps in plain English before writing code.",
+      "example": "Writing down a recipe before you start cooking.",
+      "why": "Fixing a mistake in your plan is much cheaper than fixing it in code.",
+      "learnMore": "Search: 'how to write pseudocode'"
+    },
+    {
+      "id": "algorithm",
+      "name": "Algorithm",
+      "type": "Thinking",
+      "plain": "A precise, step-by-step method for solving a problem.",
+      "example": "The way you look up a word in a paper dictionary.",
+      "why": "Code is just an algorithm written for a computer.",
+      "learnMore": "Search: 'what is an algorithm'"
+    },
+    {
+      "id": "linear-search",
+      "name": "Linear search",
+      "type": "Data structures & algorithms",
+      "plain": "Checking items one by one until you find the one you want.",
+      "example": "Checking every pocket for your keys.",
+      "why": "Simple and fine for small lists; slow for huge ones.",
+      "learnMore": "Search: 'linear search explained'"
+    },
+    {
+      "id": "big-o",
+      "name": "Big-O",
+      "type": "Data structures & algorithms",
+      "plain": "A way to describe how work grows as data grows. O(n): double the data, double the work. O(1): same work no matter what.",
+      "example": "Reading every name in a phone book (O(n)) vs jumping straight to the right page.",
+      "why": "Tells you whether your program survives 1000x more data.",
+      "learnMore": "Search: 'Big O notation for beginners'"
+    },
+    {
+      "id": "dry",
+      "name": "DRY",
+      "type": "Design",
+      "plain": "'Don't Repeat Yourself': write a piece of logic once and reuse it.",
+      "example": "Using a stamp instead of hand-drawing a logo every time.",
+      "why": "Repeated code gets fixed in one place and forgotten in the others.",
+      "learnMore": "Search: 'DRY principle example'"
+    },
+    {
+      "id": "id-vs-position",
+      "name": "ID vs position",
+      "type": "Design",
+      "plain": "Identify things by a permanent ID, not by where they sit in a list.",
+      "example": "Your student ID vs 'the 3rd person in line' - the line keeps changing.",
+      "why": "Positions shift when items are added or removed; IDs don't.",
+      "learnMore": null
+    },
+    {
+      "id": "edge-case",
+      "name": "Edge case",
+      "type": "Quality & debugging",
+      "plain": "An unusual situation at the limits: empty, first, last, huge, missing.",
+      "example": "Pressing a vending machine button without inserting money.",
+      "why": "Most bugs hide at the edges.",
+      "learnMore": null
+    },
+    {
+      "id": "documentation",
+      "name": "Documentation",
+      "type": "Quality & debugging",
+      "plain": "Writing that explains what the program does, how to run it, and why it's built this way.",
+      "example": "An instruction manual.",
+      "why": "Future you - and teammates - will need it.",
+      "learnMore": "Search: 'how to write a good README'"
+    },
+    {
+      "id": "testing",
+      "name": "Testing",
+      "type": "Quality & debugging",
+      "plain": "Deliberately trying things to find where the program is wrong.",
+      "example": "Test-driving a car before buying it.",
+      "why": "If you don't find your bugs, your users will.",
+      "learnMore": "See Start Here: the 7 test types"
+    },
+    {
+      "id": "boundary-value",
+      "name": "Boundary value",
+      "type": "Quality & debugging",
+      "plain": "The exact values at a rule's limit. For GPA 0-4: test -0.1, 0, 4 and 4.1.",
+      "example": "A ride's height limit: test someone exactly at the line.",
+      "why": "'Off by one' mistakes live here.",
+      "learnMore": "Search: 'boundary value analysis'"
+    },
+    {
+      "id": "bug-report",
+      "name": "Bug report",
+      "type": "Quality & debugging",
+      "plain": "A note saying: what I did, what happened, what should have happened.",
+      "example": "Telling a mechanic exactly what noise and when.",
+      "why": "A clear report is half the fix.",
+      "learnMore": null
+    },
+    {
+      "id": "exception",
+      "name": "Exception",
+      "type": "C++",
+      "plain": "A way for code to signal 'something went wrong' that must be handled (try / catch).",
+      "example": "A fire alarm: normal work stops until someone deals with it.",
+      "why": "Some errors can't safely be ignored.",
+      "learnMore": "https://en.cppreference.com/w/cpp/language/exceptions"
+    },
+    {
+      "id": "input-validation",
+      "name": "Input validation",
+      "type": "Quality & debugging",
+      "plain": "Checking input before using it, and rejecting bad values with a clear message.",
+      "example": "A form that won't accept letters in a phone number.",
+      "why": "Never trust input: people make mistakes.",
+      "learnMore": null
+    },
+    {
+      "id": "business-rules",
+      "name": "Business rules",
+      "type": "Design",
+      "plain": "Rules about what's allowed in the real-world problem (not about code).",
+      "example": "A library: max 3 books per member.",
+      "why": "Rules must live in one place, or some path will skip them.",
+      "learnMore": null
+    },
+    {
+      "id": "const",
+      "name": "const",
+      "type": "C++",
+      "plain": "A promise that something won't be changed. The compiler enforces it.",
+      "example": "'Read-only' on a shared document.",
+      "why": "Stops accidental changes before they happen.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "debugging",
+      "name": "Debugging",
+      "type": "Quality & debugging",
+      "plain": "Finding a bug by guessing a cause, testing the guess, and repeating.",
+      "example": "A doctor: symptom -> likely cause -> test.",
+      "why": "Random changes waste hours; testing guesses finds bugs.",
+      "learnMore": null
+    },
+    {
+      "id": "debugger",
+      "name": "Debugger",
+      "type": "Quality & debugging",
+      "plain": "A tool that pauses your program at a line (breakpoint) so you can inspect variables and step through line by line.",
+      "example": "Pausing and slow-motion replaying a video.",
+      "why": "Much faster than print statements for tricky bugs.",
+      "learnMore": "https://doc.qt.io/qtcreator/creator-debugging.html"
+    },
+    {
+      "id": "tradeoff",
+      "name": "Tradeoff",
+      "type": "Thinking",
+      "plain": "Every choice gives you something and costs you something.",
+      "example": "A car is faster than a bike but costs more to run.",
+      "why": "Engineers choose on purpose and can explain why.",
+      "learnMore": null
+    },
+    {
+      "id": "persistence",
+      "name": "Persistence",
+      "type": "Data & files",
+      "plain": "Keeping data after the program closes, usually in files or a database.",
+      "example": "Saving a game.",
+      "why": "Almost every real app remembers things.",
+      "learnMore": null
+    },
+    {
+      "id": "file-format",
+      "name": "File format",
+      "type": "Data & files",
+      "plain": "The agreed layout of data inside a file (e.g. CSV: values separated by commas).",
+      "example": "A paper form everyone fills in the same way.",
+      "why": "Saving and loading must agree exactly on the format.",
+      "learnMore": "Search: 'CSV file format'"
+    },
+    {
+      "id": "file-i-o",
+      "name": "File I/O",
+      "type": "C++",
+      "plain": "Reading from and writing to files (ifstream / ofstream).",
+      "example": "Writing in a notebook and reading it later.",
+      "why": "Without it, everything is forgotten when the program closes.",
+      "learnMore": "https://en.cppreference.com/w/cpp/io/basic_ofstream"
+    },
+    {
+      "id": "raii",
+      "name": "RAII",
+      "type": "C++",
+      "plain": "Resources (files, memory) are released automatically when the object that owns them goes away.",
+      "example": "A hotel key card that stops working at checkout without you doing anything.",
+      "why": "No forgotten clean-up = fewer leaks and bugs.",
+      "learnMore": "https://en.cppreference.com/w/cpp/language/raii"
+    },
+    {
+      "id": "fail-loudly",
+      "name": "Fail loudly",
+      "type": "Quality & debugging",
+      "plain": "When something goes wrong, say so clearly - never silently carry on.",
+      "example": "A smoke alarm that beeps rather than staying quiet.",
+      "why": "Silent failures turn into mystery bugs later.",
+      "learnMore": null
+    },
+    {
+      "id": "parsing",
+      "name": "Parsing",
+      "type": "Data & files",
+      "plain": "Turning raw text into structured data.",
+      "example": "Reading '12/05/2026' and knowing which part is day, month and year.",
+      "why": "Files and user input always arrive as text.",
+      "learnMore": "Search: 'parse CSV line C++ getline'"
+    },
+    {
+      "id": "trust-boundary",
+      "name": "Trust boundary",
+      "type": "Data & files",
+      "plain": "Any place data comes in from outside (user, file, network). Check it there.",
+      "example": "Airport security at the entrance, not in every room.",
+      "why": "Files can be edited or broken - treat them like user input.",
+      "learnMore": null
+    },
+    {
+      "id": "separation-of-concerns",
+      "name": "Separation of concerns",
+      "type": "Design",
+      "plain": "Each part of the program handles one kind of job.",
+      "example": "In a restaurant, waiters don't cook and chefs don't take orders.",
+      "why": "You can change one part without breaking the others.",
+      "learnMore": "Search: 'separation of concerns simple example'"
+    },
+    {
+      "id": "layers",
+      "name": "Layers",
+      "type": "Design",
+      "plain": "Organizing code as Screen -> Rules -> Data -> Storage, each part only talking to its neighbour.",
+      "example": "Restaurant: dining room -> kitchen -> pantry.",
+      "why": "Swap the screen (console -> window) or storage (file -> database) without rewriting the rest.",
+      "learnMore": "Search: 'layered architecture explained'"
+    },
+    {
+      "id": "coupling-cohesion",
+      "name": "Coupling & cohesion",
+      "type": "Design",
+      "plain": "Coupling = how much parts depend on each other (want LOW). Cohesion = how well a part's contents belong together (want HIGH).",
+      "example": "A toolbox with one drawer per tool type (high cohesion) that opens without needing the car keys (low coupling).",
+      "why": "Low coupling + high cohesion = code that's easy to change.",
+      "learnMore": "Search: 'coupling and cohesion simple'"
+    },
+    {
+      "id": "refactoring",
+      "name": "Refactoring",
+      "type": "Design",
+      "plain": "Improving the structure of code without changing what it does.",
+      "example": "Reorganizing a closet: same clothes, easier to find.",
+      "why": "Code gets messy as it grows; refactoring keeps it workable.",
+      "learnMore": "Search: 'what is refactoring'"
+    },
+    {
+      "id": "header-source-files",
+      "name": "Header & source files",
+      "type": "C++",
+      "plain": ".h files say WHAT exists; .cpp files say HOW it works.",
+      "example": "A restaurant menu (.h) vs the kitchen's recipes (.cpp).",
+      "why": "Real programs have many files; other files only need to see the 'menu'.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "build-system-cmake",
+      "name": "Build system (CMake)",
+      "type": "C++",
+      "plain": "The file (CMakeLists.txt) that tells the compiler which files make up your program.",
+      "example": "The ingredients list of a recipe.",
+      "why": "Every real project has one; new files must be added to it.",
+      "learnMore": "https://doc.qt.io/qtcreator/creator-project-cmake.html"
+    },
+    {
+      "id": "encapsulation",
+      "name": "Encapsulation",
+      "type": "Design",
+      "plain": "Hiding an object's data so only its own functions can change it.",
+      "example": "You use an ATM's buttons; you can't reach inside for the cash.",
+      "why": "Rules can't be skipped if nobody can touch the data directly.",
+      "learnMore": "Search: 'encapsulation C++'"
+    },
+    {
+      "id": "class",
+      "name": "class",
+      "type": "C++",
+      "plain": "Like a struct, but bundles data WITH the functions that work on it, and can hide its data (private).",
+      "example": "A microwave: its insides plus the buttons you're allowed to press.",
+      "why": "Lets you build parts with clear jobs and protected data.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "constructor",
+      "name": "Constructor",
+      "type": "C++",
+      "plain": "A special function that runs when an object is created, to set it up correctly.",
+      "example": "Filling in the form when you open a bank account.",
+      "why": "Objects start life in a valid state.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "unit-test",
+      "name": "Unit test",
+      "type": "Quality & debugging",
+      "plain": "A small automatic check that one piece of logic gives the right answer.",
+      "example": "A pilot's pre-flight checklist.",
+      "why": "Re-check everything in seconds after any change.",
+      "learnMore": "https://en.cppreference.com/w/cpp/error/assert"
+    },
+    {
+      "id": "gui-events",
+      "name": "GUI & events",
+      "type": "Design",
+      "plain": "A window program waits for the user to do something (click, type) and reacts to it.",
+      "example": "A doorbell: nothing happens until someone presses it.",
+      "why": "Most apps you use every day work this way.",
+      "learnMore": "https://doc.qt.io/qt-6/signalsandslots.html"
+    },
+    {
+      "id": "architecture",
+      "name": "Architecture",
+      "type": "Design",
+      "plain": "The overall plan of a program's parts and how they fit together.",
+      "example": "A building's floor plan.",
+      "why": "Good architecture makes new features easy; bad makes everything hard.",
+      "learnMore": null
+    },
+    {
+      "id": "relationships-between-data",
+      "name": "Relationships between data",
+      "type": "Design",
+      "plain": "How different kinds of data connect, e.g. 'a member has many loans'.",
+      "example": "A class list links students to courses.",
+      "why": "Real problems are rarely one list; they're connected things.",
+      "learnMore": "Search: 'one-to-many relationship example'"
+    },
+    {
+      "id": "pointer",
+      "name": "Pointer",
+      "type": "C++",
+      "plain": "A variable that holds the memory ADDRESS of something, rather than the thing itself.",
+      "example": "A note saying 'the book is on shelf 3' instead of the book.",
+      "why": "Powerful but risky: if the thing moves, the note is wrong.",
+      "learnMore": "https://en.cppreference.com/w/cpp/language/pointer"
+    },
+    {
+      "id": "stack-vs-heap-memory",
+      "name": "Stack vs heap memory",
+      "type": "C++",
+      "plain": "Stack: fast, automatic memory for local variables. Heap: memory you ask for, which lives until released.",
+      "example": "Stack: sticky notes on your desk. Heap: a storage unit you rent.",
+      "why": "Explains object lifetimes, pointers and memory leaks.",
+      "learnMore": "Search: 'stack vs heap C++ beginner'"
+    },
+    {
+      "id": "state",
+      "name": "State",
+      "type": "Design",
+      "plain": "What the program currently remembers, which affects what it does next.",
+      "example": "A traffic light: what happens next depends on its current colour.",
+      "why": "Many bugs are state that's wrong or out of sync.",
+      "learnMore": null
+    },
+    {
+      "id": "simplifying-a-problem",
+      "name": "Simplifying a problem",
+      "type": "Thinking",
+      "plain": "Replacing a hard part with a simpler version so you can make progress.",
+      "example": "Practising a song slowly before playing it at full speed.",
+      "why": "Make it work first; make it realistic later.",
+      "learnMore": null
+    },
+    {
+      "id": "queue",
+      "name": "queue",
+      "type": "Data structures & algorithms",
+      "plain": "A line: first in, first out (FIFO).",
+      "example": "The line at a coffee shop.",
+      "why": "Use when order of arrival matters.",
+      "learnMore": "https://en.cppreference.com/w/cpp/container/queue"
+    },
+    {
+      "id": "map",
+      "name": "map",
+      "type": "Data structures & algorithms",
+      "plain": "Stores pairs of key -> value; look things up by key. Keeps keys sorted.",
+      "example": "A dictionary: word -> meaning.",
+      "why": "Fast lookup by name or ID, and sorted output for reports.",
+      "learnMore": "https://en.cppreference.com/w/cpp/container/map"
+    },
+    {
+      "id": "inheritance",
+      "name": "Inheritance",
+      "type": "C++",
+      "plain": "Making a new class based on an existing one: a DVD IS AN Item.",
+      "example": "Cars and bikes are both vehicles.",
+      "why": "Share what's common, write only what's different.",
+      "learnMore": "https://www.learncpp.com/"
+    },
+    {
+      "id": "polymorphism",
+      "name": "Polymorphism",
+      "type": "C++",
+      "plain": "Different types answering the same question in their own way (virtual functions).",
+      "example": "'Make a sound': a dog barks, a cat meows.",
+      "why": "Add new types without changing the code that uses them.",
+      "learnMore": "https://en.cppreference.com/w/cpp/language/virtual"
+    },
+    {
+      "id": "smart-pointer-unique-ptr",
+      "name": "Smart pointer (unique_ptr)",
+      "type": "C++",
+      "plain": "A pointer that automatically frees what it points to when no longer needed.",
+      "example": "A library book that returns itself when you're done.",
+      "why": "Heap memory without manual delete or leaks.",
+      "learnMore": "https://en.cppreference.com/w/cpp/memory/unique_ptr"
+    },
+    {
+      "id": "data-integrity",
+      "name": "Data integrity",
+      "type": "Data & files",
+      "plain": "Data stays correct and consistent - e.g. no loans for books that don't exist.",
+      "example": "A library card for a person who doesn't exist is useless.",
+      "why": "Broken data breaks everything built on top of it.",
+      "learnMore": null
+    },
+    {
+      "id": "floating-point-numbers",
+      "name": "Floating-point numbers",
+      "type": "C++",
+      "plain": "double/float store decimals APPROXIMATELY, not exactly.",
+      "example": "Writing 1/3 as 0.333 - close, but not exact.",
+      "why": "Money needs exact values: store whole cents instead.",
+      "learnMore": "Search: 'why 0.1 + 0.2 != 0.3'"
+    },
+    {
+      "id": "stack",
+      "name": "stack",
+      "type": "Data structures & algorithms",
+      "plain": "A pile: last in, first out (LIFO).",
+      "example": "A stack of plates.",
+      "why": "Undo buttons work like this - so do function calls.",
+      "learnMore": "https://en.cppreference.com/w/cpp/container/stack"
+    },
+    {
+      "id": "lambda",
+      "name": "Lambda",
+      "type": "C++",
+      "plain": "A small unnamed function written right where you need it.",
+      "example": "A sticky note 'sort by price' handed to a shop assistant.",
+      "why": "Lets you customize standard tools like sort and search.",
+      "learnMore": "https://en.cppreference.com/w/cpp/language/lambda"
+    },
+    {
+      "id": "sort",
+      "name": "sort",
+      "type": "Data structures & algorithms",
+      "plain": "Putting items in order. std::sort does it if you tell it how to compare two items.",
+      "example": "Sorting playing cards by number.",
+      "why": "Don't write your own sort; use the standard one.",
+      "learnMore": "https://en.cppreference.com/w/cpp/algorithm/sort"
+    },
+    {
+      "id": "aggregation",
+      "name": "Aggregation",
+      "type": "Data structures & algorithms",
+      "plain": "Turning many records into summary numbers: totals, counts, averages.",
+      "example": "The total at the bottom of your bank statement.",
+      "why": "Reports and dashboards are all aggregation.",
+      "learnMore": "https://en.cppreference.com/w/cpp/algorithm/accumulate"
+    },
+    {
+      "id": "research",
+      "name": "Research",
+      "type": "Thinking",
+      "plain": "Finding out how something works using docs, articles and small experiments.",
+      "example": "Reading reviews and comparing before buying a phone.",
+      "why": "Nobody knows everything. Developers look things up all day.",
+      "learnMore": "See the Resources tab"
+    },
+    {
+      "id": "inverted-index",
+      "name": "Inverted index",
+      "type": "Data structures & algorithms",
+      "plain": "A lookup table from each word to where it appears.",
+      "example": "The index at the back of a textbook.",
+      "why": "It's how search engines are fast.",
+      "learnMore": "Search: 'inverted index explained'"
+    },
+    {
+      "id": "measuring-performance",
+      "name": "Measuring performance",
+      "type": "Quality & debugging",
+      "plain": "Timing your code instead of guessing what's slow.",
+      "example": "Using a stopwatch instead of 'it feels fast'.",
+      "why": "Guesses about speed are often wrong.",
+      "learnMore": "https://en.cppreference.com/w/cpp/chrono"
+    },
+    {
+      "id": "copy-vs-move",
+      "name": "Copy vs move",
+      "type": "C++",
+      "plain": "Copying duplicates data; moving hands it over without duplicating.",
+      "example": "Photocopying a box of papers vs just handing over the box.",
+      "why": "Moving big data is much faster than copying it.",
+      "learnMore": "https://en.cppreference.com/w/cpp/utility/move"
+    },
+    {
+      "id": "unordered-map",
+      "name": "unordered_map",
+      "type": "Data structures & algorithms",
+      "plain": "Like map, but not sorted and usually faster (uses hashing).",
+      "example": "A coat check: ticket number -> coat. Order doesn't matter.",
+      "why": "Fastest general lookup when you don't need order.",
+      "learnMore": "https://en.cppreference.com/w/cpp/container/unordered_map"
+    },
+    {
+      "id": "set",
+      "name": "set",
+      "type": "Data structures & algorithms",
+      "plain": "A collection with no duplicates.",
+      "example": "The countries you've visited - each counted once.",
+      "why": "Removes duplicates for free and answers 'is X in here?' fast.",
+      "learnMore": "https://en.cppreference.com/w/cpp/container/set"
+    },
+    {
+      "id": "project-scope",
+      "name": "Project scope",
+      "type": "Thinking",
+      "plain": "Deciding what you WILL and WON'T build.",
+      "example": "Planning a 3-day trip: you can't see every city.",
+      "why": "Small and finished beats huge and half-done.",
+      "learnMore": "Search: 'MVP minimum viable product'"
+    }
+  ],
+  "guide": [
+    {
+      "title": "How to do one session",
+      "items": [
+        {
+          "label": "1. Read (5 min)",
+          "text": "Find your next row in Plan. Read Task, What to do and Done when."
+        },
+        {
+          "label": "2. Learn the words (5 min)",
+          "text": "Any concept in the 'Concepts today' column you don't know? Read it in the Concepts tab. 🆕 marks a concept you're meeting for the first time."
+        },
+        {
+          "label": "3. Look things up (5-10 min)",
+          "text": "Answer the 'Think about' questions. Write short answers or links in Notes."
+        },
+        {
+          "label": "4. Plan (5 min)",
+          "text": "For anything tricky, write pseudocode in Notes before coding (template below)."
+        },
+        {
+          "label": "5. Build (20-40 min)",
+          "text": "Do 'What to do'. ⭐ Stretch goals are only for days you have extra time."
+        },
+        {
+          "label": "6. Check (5 min)",
+          "text": "Go through 'Done when'. All true? Set Status to Done and fill in Minutes."
+        }
+      ]
+    },
+    {
+      "title": "Status and colours",
+      "items": [
+        {
+          "label": "Not started / In progress",
+          "text": "It's fine for one row to take 2 sessions."
+        },
+        {
+          "label": "Stuck",
+          "text": "Stuck for 15+ minutes. Fill in the stuck template (below) in Notes, then ask for help."
+        },
+        {
+          "label": "Done",
+          "text": "Everything in 'Done when' is true."
+        },
+        {
+          "label": "Level",
+          "text": "★☆☆☆ easy  ·  ★★☆☆ medium  ·  ★★★☆ hard  ·  ★★★★ challenge (expect 2 sessions)"
+        },
+        {
+          "label": "Yellow rows",
+          "text": "Checkpoints: catch up, re-check, reflect. On track? Do stretch goals instead."
+        }
+      ]
+    },
+    {
+      "title": "The 5 rules",
+      "items": [
+        {
+          "label": "1. Ask good questions",
+          "text": "Before asking for help, answer: What am I trying to do? What have I tried? What's the exact error? What do I think is happening? What did I look up? Can I describe the steps in plain English?"
+        },
+        {
+          "label": "2. Research is the work",
+          "text": "Docs, Stack Overflow, articles, AI tools - all allowed. But if you use code from anywhere, you must be able to explain every line. If you can't yet, don't use it yet."
+        },
+        {
+          "label": "3. Pseudocode first",
+          "text": "Problem -> Input -> Expected output -> Steps in plain English -> Code -> Check."
+        },
+        {
+          "label": "4. Test everything",
+          "text": "Use the 7 test types below for every feature."
+        },
+        {
+          "label": "5. Reflect",
+          "text": "Weekly Reflection every week; Project Review after each project."
+        }
+      ]
+    },
+    {
+      "title": "The 7 test types",
+      "items": [
+        {
+          "label": "Normal",
+          "text": "Typical valid input. Does the basic thing work?"
+        },
+        {
+          "label": "Invalid",
+          "text": "Wrong values: letters in a number, GPA 5.0, negative age."
+        },
+        {
+          "label": "Empty",
+          "text": "Nothing typed. Only spaces. An empty list."
+        },
+        {
+          "label": "Missing",
+          "text": "Search, update or delete something that doesn't exist."
+        },
+        {
+          "label": "Duplicate",
+          "text": "The same ID twice. The same action twice."
+        },
+        {
+          "label": "Boundary",
+          "text": "The exact edges: GPA 0.0 and 4.0, the first and last item."
+        },
+        {
+          "label": "Unexpected",
+          "text": "Weird order of actions, very long text, quitting half-way."
+        }
+      ]
+    },
+    {
+      "title": "Backups (no Git yet)",
+      "items": [
+        {
+          "label": "How",
+          "text": "At each checkpoint, copy your whole project folder and name it as the checkpoint says (e.g. StudentManager_V1). Broke something badly? Go back to the copy."
+        }
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "name": "Stuck",
+      "body": "I'm trying to: ...\nI expected: ...\nInstead: ... (exact error message)\nI think the cause is: ...\nI tried: ...\nI looked up: ..."
+    },
+    {
+      "name": "Pseudocode",
+      "body": "Problem: ...\nInput: ...\nOutput: ...\nSteps:\n  1. ...\n  2. ...\n  3. ...\nWhat could go wrong: ..."
+    }
+  ],
+  "resources": [
+    {
+      "name": "learncpp.com",
+      "link": "https://www.learncpp.com/",
+      "use": "Beginner-friendly C++ lessons. Best first stop when a concept is new."
+    },
+    {
+      "name": "cppreference",
+      "link": "https://en.cppreference.com/w/cpp",
+      "use": "The exact C++ reference. Dense - scroll to the Example at the bottom first."
+    },
+    {
+      "name": "Qt 6 documentation",
+      "link": "https://doc.qt.io/qt-6/",
+      "use": "Every Qt class (from week 6). Search the class name and read 'Detailed Description'."
+    },
+    {
+      "name": "Qt Creator debugging",
+      "link": "https://doc.qt.io/qtcreator/creator-debugging.html",
+      "use": "Breakpoints and stepping (week 3)."
+    },
+    {
+      "name": "Stack Overflow",
+      "link": "https://stackoverflow.com/questions/tagged/c%2b%2b",
+      "use": "Search your exact error message. Read the question AND the top answers."
+    },
+    {
+      "name": "Project Gutenberg",
+      "link": "https://www.gutenberg.org/",
+      "use": "Free text files for the week 10 search engine."
+    },
+    {
+      "name": "AI tools",
+      "link": null,
+      "use": "(ChatGPT, Claude, ...) Great for explaining errors and concepts. Rule: never keep code you can't explain line by line."
+    }
+  ],
+  "searchTips": [
+    "Paste the exact error message (remove your own file paths and variable names).",
+    "Add 'C++' to your search.",
+    "Try learncpp.com first; use cppreference when you need exact details.",
+    "Found something useful? Put the link in the Notes column so you can find it again."
+  ],
+  "roadmapNote": "Guidance shrinks on purpose: step-by-step -> you choose how -> requirements only -> on your own.",
+  "reflection": {
+    "weeklyQuestions": [
+      "What did I build?",
+      "What was hard?",
+      "What did I look up?",
+      "A mistake I made (and how I found it)",
+      "What I learned"
+    ],
+    "reviewQuestions": [
+      "What did I build?",
+      "What was difficult?",
+      "What did I research?",
+      "What mistakes did I make?",
+      "What did I learn?",
+      "What would I change if I rebuilt it?",
+      "Why did I choose this structure / these containers?",
+      "What would happen if the app became 10x larger?"
+    ],
+    "reviewSubjects": [
+      "Student Manager",
+      "Library",
+      "Expense Tracker",
+      "Mini Search Engine",
+      "Capstone"
+    ]
+  }
+}
