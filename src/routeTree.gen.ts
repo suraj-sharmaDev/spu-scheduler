@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrackerRouteImport } from './routes/tracker'
 import { Route as SchedulerRouteImport } from './routes/scheduler'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackerIndexRouteImport } from './routes/tracker/index'
 import { Route as SchedulerIndexRouteImport } from './routes/scheduler/index'
@@ -25,6 +26,11 @@ const TrackerRoute = TrackerRouteImport.update({
 const SchedulerRoute = SchedulerRouteImport.update({
   id: '/scheduler',
   path: '/scheduler',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -55,6 +61,7 @@ const SchedulerPlanRoute = SchedulerPlanRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/scheduler': typeof SchedulerRouteWithChildren
   '/tracker': typeof TrackerRouteWithChildren
   '/scheduler/plan': typeof SchedulerPlanRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/scheduler/plan': typeof SchedulerPlanRoute
   '/scheduler/transferred': typeof SchedulerTransferredRoute
   '/scheduler': typeof SchedulerIndexRoute
@@ -72,6 +80,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/scheduler': typeof SchedulerRouteWithChildren
   '/tracker': typeof TrackerRouteWithChildren
   '/scheduler/plan': typeof SchedulerPlanRoute
@@ -83,6 +92,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
     | '/scheduler'
     | '/tracker'
     | '/scheduler/plan'
@@ -92,6 +102,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
     | '/scheduler/plan'
     | '/scheduler/transferred'
     | '/scheduler'
@@ -99,6 +110,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login'
     | '/scheduler'
     | '/tracker'
     | '/scheduler/plan'
@@ -109,6 +121,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
   SchedulerRoute: typeof SchedulerRouteWithChildren
   TrackerRoute: typeof TrackerRouteWithChildren
 }
@@ -127,6 +140,13 @@ declare module '@tanstack/react-router' {
       path: '/scheduler'
       fullPath: '/scheduler'
       preLoaderRoute: typeof SchedulerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -196,6 +216,7 @@ const TrackerRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
   SchedulerRoute: SchedulerRouteWithChildren,
   TrackerRoute: TrackerRouteWithChildren,
 }

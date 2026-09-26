@@ -15,9 +15,12 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
-    "import-project": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/import-project.ts"
+    "import-project": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/import-project.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-query": "latest",
@@ -27,6 +30,7 @@
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
+    "drizzle-orm": "^0.45.3",
     "lucide-react": "^0.545.0",
     "nitro": "npm:nitro-nightly@latest",
     "react": "^19.2.0",
@@ -45,6 +49,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "drizzle-kit": "^0.31.11",
     "exceljs": "^4.4.0",
     "jsdom": "^28.1.0",
     "typescript": "^6.0.2",
