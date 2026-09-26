@@ -33,7 +33,7 @@ a prerequisite for B. That is our authoritative source for both pathways and (de
 `verified: true`. There is no scrape for them. The recommended pathways below are the raw
 material.
 
-Source: catalog [Computer Science (BS)](https://catalog.spu.edu/undergraduate/college-schools/cas-stem-social-sciences/computer-science/computer-science-bs/),
+Source: catalog [Computer Science (BS)](https://catalog.spu.edu/undergraduate/college-schools/cbt-technology/computer-science/computer-science-bs/),
 [CSC course descriptions](https://catalog.spu.edu/undergraduate/course-descriptions/csc/),
 and the [transfer schedule guide PDF](https://spu.edu/~/media/academics/college-of-arts-sciences/engineering-comp-sci/doc/transfer-cscis-suggested-schedule.ashx).
 
@@ -67,6 +67,11 @@ straight into CSC 2431 — there is **no CSC 1250/1260/2430 at SPU** for this pa
 | **Year 2** | CSC 3310 (4), CSC 3750 (5), CSC 4410 (5), CSC 4896 (3), CSC 4941 (1) | CSC 3430 (4), CSC 4897 (3) | CSC 3099 (1), CSC 3350 (3), CSC 4898 (3) |
 
 Total **86–93 credits** (gen ed covered by DTA — this is the relevant number for our user).
+
+The catalog also lists "any quarter" rows per year: technical electives (3–8 cr Year 1, 3–5 cr
+Year 2) and **TCOR 3100 Christian Theology (5) in Year 2**. They have no fixed quarter, so
+`pathways.json` omits them and `suggestPlan` won't place them. TCOR 3100 still counts in
+`requirements.json`, so it shows as remaining until she places it herself.
 
 ### 2c. Pre-transfer prep (gates the whole transfer path)
 
@@ -126,23 +131,28 @@ specifically in CSC 2330 / 2430 to advance.
 
 Two layers, mirroring §1's two ideas:
 
-1. **Prerequisites = hard validation.** Curated `prereqs` per course; `checkPlan` already walks
-   quarters chronologically and rejects a plan that takes a course before its prereqs are
-   earned. Today this passes everything because the data is empty (1/120 courses). Filling it
-   makes "is this plan valid?" real.
+1. **Prerequisites = hard validation.** Curated `prereqs` per course; `buildPlanView` walks
+   terms chronologically and flags a course placed before its prereqs are earned. 18/120
+   courses have curated prereqs (all still `verified: false`); the rest pass unchecked.
 2. **Pathways = soft suggestion.** Pick entry type → seed a suggested plan from the official
    sequence, adapted to what she's already completed and the days she can attend.
 
-### UX flow (extends the existing guided `/plan`)
+### UX flow (as built in `/plan`)
 
 1. **Pick student type** — `Transfer` (default for our user) or `Freshman`.
 2. We load that pathway template (§2a / §2b).
 3. **Subtract what's done** — remove courses already in `completed` / covered by the DTA.
-4. **Suggest** — for each remaining pathway course, pick a real section from
-   [sections.json](../src/data/sections.json) that fits `startSeason` + `availableDays`; seed
-   `selectedCrns`. Courses with no fitting section are flagged, not silently dropped.
-5. **Validate** — run `checkPlan`; show prereq gaps, time clashes, credit load (already built).
-6. She edits from there (the current table flow). The suggestion is a *starting point*, not a lock.
+4. **Suggest** — `suggestPlan(pathway, completed, start)` lays the remaining pathway courses
+   across *real* terms (rolling the year each Autumn) into `placements`
+   (term key → course ids). No section data is involved, so it covers the whole multi-year plan.
+5. **Decorate + validate** — `buildPlanView` attaches concrete sections from
+   [sections.json](../src/data/sections.json) (fit to `availableDays`, overridable per course via
+   `sectionChoices`) **only for the published schedule year**; later terms fall back to catalog
+   "typically offered" hints. It flags prereq gaps, time clashes and credit load.
+6. She edits from there. The suggestion is a *starting point*, not a lock.
+
+An earlier design seeded one real section (CRN) per pathway course. It was dropped: sections
+exist for ~1 academic year while pathways span 2–4, so it crammed everything into 2026-27.
 
 ---
 
@@ -150,8 +160,8 @@ Two layers, mirroring §1's two ideas:
 
 ### 5a. Prerequisites — richer than a flat list
 
-The current `prereqs: string[]` (implicit AND) can't express "CSC 2430 **or** CSC 2330", grade
-minimums, or corequisites. Proposed:
+*(Implemented.)* The original `prereqs: string[]` (implicit AND) couldn't express "CSC 2430 **or** CSC 2330", grade
+minimums, or corequisites. Now:
 
 ```ts
 type Prereq =
@@ -165,12 +175,10 @@ interface Course {
 }
 ```
 
-`isEligible` ([planner.ts](../src/lib/planner.ts)) becomes a small recursive
-`satisfied(prereq, earned, sameTerm)` instead of the current `.filter`. ~20 in-scope courses,
-so it stays hand-readable. (If the `Prereq` refactor is too big a first step, a flat
-`string[]` covering the common AND chains still makes validation real — OR/grade can follow.)
+`isEligible` ([planner.ts](../src/lib/planner.ts)) uses the recursive
+`prereqSatisfied(prereq, earned, sameTerm)`.
 
-### 5b. Pathways — new static data
+### 5b. Pathways — static data *(implemented)*
 
 ```ts
 type EntryType = "freshman" | "transfer";
@@ -189,20 +197,19 @@ interface Pathway {
 }
 ```
 
-Commit as `src/data/pathways.json`. Add `entryType` to the persisted `AppState`.
+Lives in `src/data/pathways.json`; `entryType` is persisted in `AppState`.
 
 ---
 
 ## 6. Implementation phases
 
-1. **Model + engine (no chart needed).** Add the `Prereq` type and recursive `isEligible`;
-   keep behavior identical when data is empty. Ship `pathways.json` with the two §2 plans and a
-   `suggestPlan(pathway, completed, startSeason, availableDays, sections)` helper.
-2. **Curate prereqs.** Enter §3's edges into `courses.json`, verify against an advisor / the
-   staff chart, flip `verified: true`.
-3. **UI.** Entry-type selector + "Suggest plan" action seeding `selectedCrns`; surface
-   unmatched pathway courses; reuse existing `checkPlan` output.
-4. **Polish.** Optional "what unlocks what" prereq view mirroring the chart.
+1. ✅ **Model + engine.** `Prereq` type, recursive eligibility, `pathways.json`,
+   `suggestPlan(pathway, completed, start)` → `placements`.
+2. ◐ **Curate prereqs.** §3's edges entered into `courses.json` (18 courses). **Not yet
+   verified** against an advisor / the staff chart — every course is still `verified: false`.
+3. ✅ **UI.** Entry-type selector + "Suggest plan" seeding `placements`; `buildPlanView` for
+   section decoration and warnings.
+4. ☐ **Polish.** Optional "what unlocks what" prereq view mirroring the chart.
 
 ---
 
@@ -212,5 +219,8 @@ Commit as `src/data/pathways.json`. Add `entryType` to the persisted `AppState`.
 - [ ] Confirm our user's actual transferred courses → which pathway courses are already done.
 - [ ] CSC numbering: 1250/1260 (freshman) vs 1230/2330 (transfer/guide) — which apply to her?
 - [ ] Does she need CSC 2330 (non-C++ bridge) or did she take C++ → straight to CSC 2431?
-- [ ] Sections data is for 2026–27 only; pathway terms beyond that have no sections to match.
+- [ ] Sections data is for 2026–27 only; later terms show catalog hints, not sections. Re-scrape
+      each year (`TERM_YEAR` in scripts/scrape.ts). spu.edu's WAF currently 403s scripted
+      requests to the time schedule, so the scraper keeps the existing `sections.json` when that
+      happens.
 ```

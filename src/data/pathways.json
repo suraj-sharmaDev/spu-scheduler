@@ -2,7 +2,7 @@
   {
     "entryType": "freshman",
     "degree": "BS-CS",
-    "source": "https://catalog.spu.edu/undergraduate/college-schools/cas-stem-social-sciences/computer-science/computer-science-bs/",
+    "source": "https://catalog.spu.edu/undergraduate/college-schools/cbt-technology/computer-science/computer-science-bs/",
     "totalCreditsRange": [128, 138],
     "steps": [
       { "termOffset": 0, "courseIds": ["CSC1250", "FYS1000", "MAT1234"] },
@@ -22,7 +22,7 @@
   {
     "entryType": "transfer",
     "degree": "BS-CS",
-    "source": "https://catalog.spu.edu/undergraduate/college-schools/cas-stem-social-sciences/computer-science/computer-science-bs/",
+    "source": "https://catalog.spu.edu/undergraduate/college-schools/cbt-technology/computer-science/computer-science-bs/",
     "totalCreditsRange": [86, 93],
     "steps": [
       { "termOffset": 0, "courseIds": ["CSC2330", "GS3001", "TCOR3001"] },
