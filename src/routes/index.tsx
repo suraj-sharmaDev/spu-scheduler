@@ -1,172 +1,154 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Badge, ProgressBar, SectionCard } from "#/components/ui";
-import { dataNeedsVerification, getCourse, requirements } from "#/lib/data";
 import {
-	type RequirementStatus,
-	remainingRequirements,
-	totalCompletedCredits,
-} from "#/lib/planner";
-import { useAppState } from "#/lib/store";
+	ArrowRight,
+	CalendarHeart,
+	GraduationCap,
+	Heart,
+	Sparkles,
+} from "lucide-react";
+import type { ReactNode } from "react";
+import {
+	formatSlot,
+	localHour,
+	nextSlot,
+	openSlot,
+	relativeDay,
+} from "#/lib/tracker/schedule";
+import { useNow } from "#/lib/tracker/useNow";
 
-export const Route = createFileRoute("/")({ component: Overview });
+export const Route = createFileRoute("/")({ component: Home });
 
-const STATUS_DOT: Record<RequirementStatus, string> = {
-	completed: "bg-green-500",
-	planned: "bg-blue-500",
-	remaining: "bg-slate-300",
-};
+// Fixed positions so server and client render the same hearts.
+const HEARTS = [
+	{ left: "6%", size: 18, delay: "0s", duration: "15s" },
+	{ left: "15%", size: 28, delay: "4s", duration: "18s" },
+	{ left: "27%", size: 14, delay: "8s", duration: "13s" },
+	{ left: "38%", size: 22, delay: "2s", duration: "17s" },
+	{ left: "52%", size: 16, delay: "10s", duration: "14s" },
+	{ left: "63%", size: 30, delay: "6s", duration: "20s" },
+	{ left: "74%", size: 18, delay: "1s", duration: "16s" },
+	{ left: "85%", size: 24, delay: "9s", duration: "19s" },
+	{ left: "93%", size: 14, delay: "5s", duration: "12s" },
+];
 
-function Overview() {
-	const { completed, placements, dtaComplete } = useAppState();
-	const completedSet = new Set(completed);
-	const plannedSet = new Set(Object.values(placements).flat());
-	const progress = remainingRequirements(
-		requirements,
-		completedSet,
-		plannedSet,
-	);
+function greetingFor(hour: number): string {
+	if (hour < 5) return "Up late";
+	if (hour < 12) return "Good morning";
+	if (hour < 17) return "Good afternoon";
+	return "Good evening";
+}
 
-	const completedCredits = totalCompletedCredits(completed);
-	const plannedCredits = [...plannedSet].reduce(
-		(sum, id) => sum + (getCourse(id)?.credits ?? 0),
-		0,
-	);
-	const total = progress.totalCreditsForDegree;
-	const remaining = Math.max(0, total - completedCredits - plannedCredits);
+function Home() {
+	const now = useNow();
+	const open = now ? openSlot(now) : null;
+	const next = now ? nextSlot(now) : null;
+
+	let sessionLine = "Five little sessions a week";
+	if (open) sessionLine = "Your session is open now — come check in";
+	else if (next && now)
+		sessionLine = `Next session: ${formatSlot(next)} (${relativeDay(next, now)})`;
 
 	return (
-		<div className="space-y-6">
-			<div>
-				<h1 className="text-2xl font-bold text-slate-900">Degree progress</h1>
-				<p className="mt-1 text-sm text-slate-500">
-					BS in Computer Science · Catalog {requirements.catalogYear}
-				</p>
-			</div>
-
-			{dataNeedsVerification ? (
-				<div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-					<span className="text-base">⚠</span>
-					<p>
-						<strong>Unverified data.</strong> Course requirements and
-						prerequisites were scraped from the catalog and haven't been
-						human-checked yet. Treat this as a planning aid — always confirm
-						with an SPU advisor.
-					</p>
-				</div>
-			) : null}
-
-			<SectionCard
-				title="Credits toward degree"
-				right={
-					<Badge tone={dtaComplete ? "green" : "amber"}>
-						DTA {dtaComplete ? "complete" : "incomplete"}
-					</Badge>
-				}
-			>
-				<div className="space-y-3">
-					<ProgressBar
-						completed={completedCredits}
-						planned={plannedCredits}
-						total={total}
+		<div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-rose-100 via-pink-50 to-amber-50">
+			<div aria-hidden className="pointer-events-none absolute inset-0">
+				{HEARTS.map((h) => (
+					<Heart
+						key={h.left}
+						className="animate-float-up absolute -bottom-10 fill-rose-300 text-rose-300"
+						style={{
+							left: h.left,
+							width: h.size,
+							height: h.size,
+							animationDelay: h.delay,
+							animationDuration: h.duration,
+						}}
 					/>
-					<div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-						<Stat
-							label="Completed"
-							value={completedCredits}
-							tone="text-maroon-700"
-						/>
-						<Stat
-							label="Planned"
-							value={plannedCredits}
-							tone="text-maroon-400"
-						/>
-						<Stat label="Remaining" value={remaining} tone="text-slate-500" />
-						<Stat label="Degree total" value={total} tone="text-slate-900" />
-					</div>
-				</div>
-			</SectionCard>
-
-			<div className="grid gap-4 md:grid-cols-2">
-				{progress.groups.map((group) => (
-					<SectionCard
-						// Group names repeat in the scraped data; key on name + contents.
-						key={`${group.name}|${group.creditsRequired}|${group.courses
-							.map((c) => c.id)
-							.join(",")}`}
-						title={group.name}
-						subtitle={group.selectionRule ?? undefined}
-						right={
-							group.creditsRequired != null ? (
-								<span className="text-sm font-medium text-slate-500">
-									{group.completedCredits + group.plannedCredits}/
-									{group.creditsRequired} cr
-								</span>
-							) : null
-						}
-					>
-						{group.courses.length === 0 ? (
-							<p className="text-sm text-slate-400">
-								{group.creditsRequired != null
-									? `${group.creditsRequired} credits — satisfied by transfer / general courses.`
-									: "No specific courses listed."}
-							</p>
-						) : (
-							<ul className="space-y-1.5">
-								{group.courses.map((c) => {
-									const course = getCourse(c.id);
-									return (
-										<li key={c.id} className="flex items-center gap-2 text-sm">
-											<span
-												className={`h-2 w-2 shrink-0 rounded-full ${STATUS_DOT[c.status]}`}
-												aria-hidden
-											/>
-											<span className="font-medium text-slate-700">{c.id}</span>
-											<span className="truncate text-slate-500">
-												{course?.title ?? "Unknown course"}
-											</span>
-											<span className="ml-auto shrink-0 text-xs text-slate-400">
-												{c.credits} cr
-											</span>
-										</li>
-									);
-								})}
-							</ul>
-						)}
-					</SectionCard>
 				))}
 			</div>
 
-			<div className="flex flex-wrap gap-3 text-sm">
-				<Link
-					to="/plan"
-					className="rounded-lg bg-maroon-700 px-4 py-2 font-medium text-white hover:bg-maroon-800"
-				>
-					Open quarter planner →
-				</Link>
-				<Link
-					to="/transferred"
-					className="rounded-lg border border-slate-300 px-4 py-2 font-medium text-slate-700 hover:bg-slate-100"
-				>
-					Edit transferred courses
-				</Link>
+			<div className="relative mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-12 sm:py-20">
+				<header className="text-center">
+					<span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1 text-xs font-medium tracking-wide text-rose-700 shadow-sm ring-1 ring-rose-200">
+						<Sparkles className="h-3.5 w-3.5" />
+						{now ? `${greetingFor(localHour(now))}, love` : "Hello, love"}
+					</span>
+					<h1 className="mt-6 font-display text-5xl font-semibold text-rose-950 sm:text-7xl">
+						For Samanata
+					</h1>
+					<p className="mx-auto mt-4 max-w-md text-lg text-rose-900/70">
+						Every small step counts. Here's where yours add up.
+					</p>
+				</header>
+
+				<div className="mt-12 grid gap-6 sm:mt-16 md:grid-cols-2">
+					<HomeCard
+						to="/tracker"
+						icon={<CalendarHeart className="h-7 w-7" />}
+						iconClass="bg-rose-500 text-white"
+						title="Learning Tracker"
+						body="Check in to your session, work through today's task, and see how far you've come."
+						footer={sessionLine}
+						highlight={open !== null}
+					/>
+					<HomeCard
+						to="/scheduler"
+						icon={<GraduationCap className="h-7 w-7" />}
+						iconClass="bg-maroon-700 text-white"
+						title="SPU Scheduler"
+						body="Plan your BS in Computer Science quarter by quarter, with prerequisites checked for you."
+						footer="Seattle Pacific University · CS"
+					/>
+				</div>
+
+				<footer className="mt-auto pt-16 text-center text-sm text-rose-900/50">
+					Made with{" "}
+					<Heart className="inline h-3.5 w-3.5 fill-rose-400 text-rose-400" />{" "}
+					by Suraj
+				</footer>
 			</div>
 		</div>
 	);
 }
 
-function Stat({
-	label,
-	value,
-	tone,
+function HomeCard({
+	to,
+	icon,
+	iconClass,
+	title,
+	body,
+	footer,
+	highlight = false,
 }: {
-	label: string;
-	value: number;
-	tone: string;
+	to: "/tracker" | "/scheduler";
+	icon: ReactNode;
+	iconClass: string;
+	title: string;
+	body: string;
+	footer: string;
+	highlight?: boolean;
 }) {
 	return (
-		<div className="rounded-lg bg-slate-50 px-3 py-2">
-			<div className={`text-xl font-bold ${tone}`}>{value}</div>
-			<div className="text-xs text-slate-500">{label}</div>
-		</div>
+		<Link
+			to={to}
+			className={`group flex flex-col rounded-3xl bg-white/75 p-7 shadow-lg shadow-rose-200/50 ring-1 backdrop-blur transition hover:-translate-y-1 hover:bg-white hover:shadow-xl ${highlight ? "ring-2 ring-rose-400" : "ring-rose-100"}`}
+		>
+			<span
+				className={`grid h-14 w-14 place-items-center rounded-2xl ${iconClass}`}
+			>
+				{icon}
+			</span>
+			<h2 className="mt-5 font-display text-2xl font-semibold text-slate-900">
+				{title}
+			</h2>
+			<p className="mt-2 flex-1 text-slate-600">{body}</p>
+			<div className="mt-6 flex items-center justify-between border-t border-rose-100 pt-4 text-sm">
+				<span
+					className={highlight ? "font-medium text-rose-600" : "text-slate-500"}
+				>
+					{footer}
+				</span>
+				<ArrowRight className="h-5 w-5 text-rose-400 transition group-hover:translate-x-1 group-hover:text-rose-600" />
+			</div>
+		</Link>
 	);
 }

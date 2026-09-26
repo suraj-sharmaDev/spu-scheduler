@@ -12,6 +12,36 @@
 	--color-maroon-700: #7d1538;
 	--color-maroon-800: #5f1029;
 	--color-maroon-900: #4a0d20;
+
+	/* Display serif for the home page and tracker headings. */
+	--font-display:
+		"Iowan Old Style", "Palatino Linotype", Palatino, Georgia, ui-serif, serif;
+
+	--animate-float-up: float-up 14s linear infinite;
+}
+
+@keyframes float-up {
+	0% {
+		transform: translateY(0) rotate(-8deg);
+		opacity: 0;
+	}
+	10% {
+		opacity: 0.7;
+	}
+	90% {
+		opacity: 0.5;
+	}
+	100% {
+		transform: translateY(-110vh) rotate(12deg);
+		opacity: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-float-up {
+		animation: none;
+		opacity: 0.35;
+	}
 }
 
 * {

@@ -9,18 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TransferredRouteImport } from './routes/transferred'
-import { Route as PlanRouteImport } from './routes/plan'
+import { Route as TrackerRouteImport } from './routes/tracker'
+import { Route as SchedulerRouteImport } from './routes/scheduler'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TrackerIndexRouteImport } from './routes/tracker/index'
+import { Route as SchedulerIndexRouteImport } from './routes/scheduler/index'
+import { Route as SchedulerTransferredRouteImport } from './routes/scheduler/transferred'
+import { Route as SchedulerPlanRouteImport } from './routes/scheduler/plan'
 
-const TransferredRoute = TransferredRouteImport.update({
-  id: '/transferred',
-  path: '/transferred',
+const TrackerRoute = TrackerRouteImport.update({
+  id: '/tracker',
+  path: '/tracker',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlanRoute = PlanRouteImport.update({
-  id: '/plan',
-  path: '/plan',
+const SchedulerRoute = SchedulerRouteImport.update({
+  id: '/scheduler',
+  path: '/scheduler',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -28,51 +32,101 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrackerIndexRoute = TrackerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TrackerRoute,
+} as any)
+const SchedulerIndexRoute = SchedulerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SchedulerRoute,
+} as any)
+const SchedulerTransferredRoute = SchedulerTransferredRouteImport.update({
+  id: '/transferred',
+  path: '/transferred',
+  getParentRoute: () => SchedulerRoute,
+} as any)
+const SchedulerPlanRoute = SchedulerPlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => SchedulerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/plan': typeof PlanRoute
-  '/transferred': typeof TransferredRoute
+  '/scheduler': typeof SchedulerRouteWithChildren
+  '/tracker': typeof TrackerRouteWithChildren
+  '/scheduler/plan': typeof SchedulerPlanRoute
+  '/scheduler/transferred': typeof SchedulerTransferredRoute
+  '/scheduler/': typeof SchedulerIndexRoute
+  '/tracker/': typeof TrackerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/plan': typeof PlanRoute
-  '/transferred': typeof TransferredRoute
+  '/scheduler/plan': typeof SchedulerPlanRoute
+  '/scheduler/transferred': typeof SchedulerTransferredRoute
+  '/scheduler': typeof SchedulerIndexRoute
+  '/tracker': typeof TrackerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/plan': typeof PlanRoute
-  '/transferred': typeof TransferredRoute
+  '/scheduler': typeof SchedulerRouteWithChildren
+  '/tracker': typeof TrackerRouteWithChildren
+  '/scheduler/plan': typeof SchedulerPlanRoute
+  '/scheduler/transferred': typeof SchedulerTransferredRoute
+  '/scheduler/': typeof SchedulerIndexRoute
+  '/tracker/': typeof TrackerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/plan' | '/transferred'
+  fullPaths:
+    | '/'
+    | '/scheduler'
+    | '/tracker'
+    | '/scheduler/plan'
+    | '/scheduler/transferred'
+    | '/scheduler/'
+    | '/tracker/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/plan' | '/transferred'
-  id: '__root__' | '/' | '/plan' | '/transferred'
+  to:
+    | '/'
+    | '/scheduler/plan'
+    | '/scheduler/transferred'
+    | '/scheduler'
+    | '/tracker'
+  id:
+    | '__root__'
+    | '/'
+    | '/scheduler'
+    | '/tracker'
+    | '/scheduler/plan'
+    | '/scheduler/transferred'
+    | '/scheduler/'
+    | '/tracker/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PlanRoute: typeof PlanRoute
-  TransferredRoute: typeof TransferredRoute
+  SchedulerRoute: typeof SchedulerRouteWithChildren
+  TrackerRoute: typeof TrackerRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/transferred': {
-      id: '/transferred'
-      path: '/transferred'
-      fullPath: '/transferred'
-      preLoaderRoute: typeof TransferredRouteImport
+    '/tracker': {
+      id: '/tracker'
+      path: '/tracker'
+      fullPath: '/tracker'
+      preLoaderRoute: typeof TrackerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/plan': {
-      id: '/plan'
-      path: '/plan'
-      fullPath: '/plan'
-      preLoaderRoute: typeof PlanRouteImport
+    '/scheduler': {
+      id: '/scheduler'
+      path: '/scheduler'
+      fullPath: '/scheduler'
+      preLoaderRoute: typeof SchedulerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -82,13 +136,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tracker/': {
+      id: '/tracker/'
+      path: '/'
+      fullPath: '/tracker/'
+      preLoaderRoute: typeof TrackerIndexRouteImport
+      parentRoute: typeof TrackerRoute
+    }
+    '/scheduler/': {
+      id: '/scheduler/'
+      path: '/'
+      fullPath: '/scheduler/'
+      preLoaderRoute: typeof SchedulerIndexRouteImport
+      parentRoute: typeof SchedulerRoute
+    }
+    '/scheduler/transferred': {
+      id: '/scheduler/transferred'
+      path: '/transferred'
+      fullPath: '/scheduler/transferred'
+      preLoaderRoute: typeof SchedulerTransferredRouteImport
+      parentRoute: typeof SchedulerRoute
+    }
+    '/scheduler/plan': {
+      id: '/scheduler/plan'
+      path: '/plan'
+      fullPath: '/scheduler/plan'
+      preLoaderRoute: typeof SchedulerPlanRouteImport
+      parentRoute: typeof SchedulerRoute
+    }
   }
 }
 
+interface SchedulerRouteChildren {
+  SchedulerPlanRoute: typeof SchedulerPlanRoute
+  SchedulerTransferredRoute: typeof SchedulerTransferredRoute
+  SchedulerIndexRoute: typeof SchedulerIndexRoute
+}
+
+const SchedulerRouteChildren: SchedulerRouteChildren = {
+  SchedulerPlanRoute: SchedulerPlanRoute,
+  SchedulerTransferredRoute: SchedulerTransferredRoute,
+  SchedulerIndexRoute: SchedulerIndexRoute,
+}
+
+const SchedulerRouteWithChildren = SchedulerRoute._addFileChildren(
+  SchedulerRouteChildren,
+)
+
+interface TrackerRouteChildren {
+  TrackerIndexRoute: typeof TrackerIndexRoute
+}
+
+const TrackerRouteChildren: TrackerRouteChildren = {
+  TrackerIndexRoute: TrackerIndexRoute,
+}
+
+const TrackerRouteWithChildren =
+  TrackerRoute._addFileChildren(TrackerRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PlanRoute: PlanRoute,
-  TransferredRoute: TransferredRoute,
+  SchedulerRoute: SchedulerRouteWithChildren,
+  TrackerRoute: TrackerRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

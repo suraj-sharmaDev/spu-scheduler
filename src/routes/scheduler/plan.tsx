@@ -33,7 +33,7 @@ import { DAY_LABEL, formatDays, timeLabel, WEEKDAYS } from "#/lib/schedule";
 import { actions, useAppState } from "#/lib/store";
 import type { Course, Day, EntryType, Season } from "#/lib/types";
 
-export const Route = createFileRoute("/plan")({ component: Planner });
+export const Route = createFileRoute("/scheduler/plan")({ component: Planner });
 
 const SEASONS: Season[] = ["AUT", "WIN", "SPR", "SUM"];
 
@@ -628,7 +628,7 @@ function DegreeProgress({
 					</span>
 				</div>
 				<Link
-					to="/"
+					to="/scheduler"
 					className="mt-1 inline-block text-sm font-medium text-maroon-700 hover:text-maroon-800"
 				>
 					See full requirement breakdown →

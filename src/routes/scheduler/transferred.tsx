@@ -11,7 +11,7 @@ import { totalCompletedCredits } from "#/lib/planner";
 import { actions, useAppState } from "#/lib/store";
 import type { Course, CourseCategory } from "#/lib/types";
 
-export const Route = createFileRoute("/transferred")({
+export const Route = createFileRoute("/scheduler/transferred")({
 	component: Transferred,
 });
 
