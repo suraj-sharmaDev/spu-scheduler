@@ -3,10 +3,12 @@ import {
 	Link,
 	Outlet,
 	redirect,
+	useLocation,
 	useRouter,
 } from "@tanstack/react-router";
 import { Eye, Heart, LogOut } from "lucide-react";
 import { getSession, logout } from "#/lib/tracker/api";
+import { DEFAULT_PROJECT } from "#/lib/tracker/projects";
 
 export const Route = createFileRoute("/tracker")({
 	head: () => ({ meta: [{ title: "Learning Tracker · For Samanata" }] }),
@@ -19,6 +21,60 @@ export const Route = createFileRoute("/tracker")({
 	},
 	component: TrackerLayout,
 });
+
+const project = { project: DEFAULT_PROJECT };
+const base = `/tracker/${DEFAULT_PROJECT}`;
+
+// Active state is computed from the path: task pages belong to "Plan", which
+// the router's prefix matching can't express (concepts/guide share its prefix).
+const NAV = [
+	{ label: "Today", to: "/tracker", match: (p: string) => p === "/tracker" },
+	{
+		label: "Plan",
+		to: "/tracker/$project",
+		params: project,
+		match: (p: string) => p === base || p.startsWith(`${base}/tasks/`),
+	},
+	{
+		label: "Concepts",
+		to: "/tracker/$project/concepts",
+		params: project,
+		match: (p: string) => p.startsWith(`${base}/concepts`),
+	},
+	{
+		label: "Attendance",
+		to: "/tracker/attendance",
+		match: (p: string) => p.startsWith("/tracker/attendance"),
+	},
+	{
+		label: "Guide",
+		to: "/tracker/$project/guide",
+		params: project,
+		match: (p: string) => p.startsWith(`${base}/guide`),
+	},
+] as const;
+
+function Nav() {
+	const pathname = useLocation({
+		select: (l) => l.pathname.replace(/\/$/, "") || "/",
+	});
+	return (
+		<nav className="mx-auto flex max-w-5xl gap-1 overflow-x-auto px-4 pb-2">
+			{NAV.map((item) => (
+				<Link
+					key={item.label}
+					to={item.to}
+					params={"params" in item ? item.params : undefined}
+					// Link sets aria-current itself; exact keeps it off parent routes.
+					activeOptions={{ exact: true }}
+					className={`shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition ${item.match(pathname) ? "bg-rose-100 text-rose-800" : "text-slate-600 hover:bg-rose-50 hover:text-rose-700"}`}
+				>
+					{item.label}
+				</Link>
+			))}
+		</nav>
+	);
+}
 
 function TrackerLayout() {
 	const { session } = Route.useRouteContext();
@@ -59,6 +115,7 @@ function TrackerLayout() {
 						</button>
 					</div>
 				</div>
+				<Nav />
 			</header>
 			<main className="mx-auto max-w-5xl px-4 py-6">
 				<Outlet />

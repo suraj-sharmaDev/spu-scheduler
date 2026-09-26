@@ -24,10 +24,16 @@ function StateIcon({ state }: { state: SlotState }) {
 }
 
 /** The week's scheduled slots as a row of badges, plus the x/5 count. */
-export function WeekStrip({ week }: { week: WeekSummary }) {
+export function WeekStrip({
+	week,
+	showCount = true,
+}: {
+	week: WeekSummary;
+	showCount?: boolean;
+}) {
 	return (
 		<div>
-			<div className="flex flex-wrap items-end gap-3 sm:gap-4">
+			<div className="flex flex-wrap items-end gap-2 sm:gap-4">
 				{week.slots.map(({ slot, state }) => {
 					const [day, ...time] = formatSlot(slot).split(" ");
 					return (
@@ -61,12 +67,14 @@ export function WeekStrip({ week }: { week: WeekSummary }) {
 					</div>
 				) : null}
 			</div>
-			<p className="mt-3 text-sm text-slate-600">
-				<span className="font-semibold text-slate-900">
-					{week.attended} / {week.target}
-				</span>{" "}
-				sessions this week
-			</p>
+			{showCount ? (
+				<p className="mt-3 text-sm text-slate-600">
+					<span className="font-semibold text-slate-900">
+						{week.attended} / {week.target}
+					</span>{" "}
+					sessions this week
+				</p>
+			) : null}
 		</div>
 	);
 }

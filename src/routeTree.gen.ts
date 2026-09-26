@@ -15,8 +15,14 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackerIndexRouteImport } from './routes/tracker/index'
 import { Route as SchedulerIndexRouteImport } from './routes/scheduler/index'
+import { Route as TrackerAttendanceRouteImport } from './routes/tracker/attendance'
+import { Route as TrackerProjectRouteImport } from './routes/tracker/$project'
 import { Route as SchedulerTransferredRouteImport } from './routes/scheduler/transferred'
 import { Route as SchedulerPlanRouteImport } from './routes/scheduler/plan'
+import { Route as TrackerProjectIndexRouteImport } from './routes/tracker/$project/index'
+import { Route as TrackerProjectGuideRouteImport } from './routes/tracker/$project/guide'
+import { Route as TrackerProjectConceptsRouteImport } from './routes/tracker/$project/concepts'
+import { Route as TrackerProjectTasksTaskIdRouteImport } from './routes/tracker/$project/tasks/$taskId'
 
 const TrackerRoute = TrackerRouteImport.update({
   id: '/tracker',
@@ -48,6 +54,16 @@ const SchedulerIndexRoute = SchedulerIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SchedulerRoute,
 } as any)
+const TrackerAttendanceRoute = TrackerAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => TrackerRoute,
+} as any)
+const TrackerProjectRoute = TrackerProjectRouteImport.update({
+  id: '/$project',
+  path: '/$project',
+  getParentRoute: () => TrackerRoute,
+} as any)
 const SchedulerTransferredRoute = SchedulerTransferredRouteImport.update({
   id: '/transferred',
   path: '/transferred',
@@ -58,6 +74,27 @@ const SchedulerPlanRoute = SchedulerPlanRouteImport.update({
   path: '/plan',
   getParentRoute: () => SchedulerRoute,
 } as any)
+const TrackerProjectIndexRoute = TrackerProjectIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TrackerProjectRoute,
+} as any)
+const TrackerProjectGuideRoute = TrackerProjectGuideRouteImport.update({
+  id: '/guide',
+  path: '/guide',
+  getParentRoute: () => TrackerProjectRoute,
+} as any)
+const TrackerProjectConceptsRoute = TrackerProjectConceptsRouteImport.update({
+  id: '/concepts',
+  path: '/concepts',
+  getParentRoute: () => TrackerProjectRoute,
+} as any)
+const TrackerProjectTasksTaskIdRoute =
+  TrackerProjectTasksTaskIdRouteImport.update({
+    id: '/tasks/$taskId',
+    path: '/tasks/$taskId',
+    getParentRoute: () => TrackerProjectRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,16 +103,27 @@ export interface FileRoutesByFullPath {
   '/tracker': typeof TrackerRouteWithChildren
   '/scheduler/plan': typeof SchedulerPlanRoute
   '/scheduler/transferred': typeof SchedulerTransferredRoute
+  '/tracker/$project': typeof TrackerProjectRouteWithChildren
+  '/tracker/attendance': typeof TrackerAttendanceRoute
   '/scheduler/': typeof SchedulerIndexRoute
   '/tracker/': typeof TrackerIndexRoute
+  '/tracker/$project/concepts': typeof TrackerProjectConceptsRoute
+  '/tracker/$project/guide': typeof TrackerProjectGuideRoute
+  '/tracker/$project/': typeof TrackerProjectIndexRoute
+  '/tracker/$project/tasks/$taskId': typeof TrackerProjectTasksTaskIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/scheduler/plan': typeof SchedulerPlanRoute
   '/scheduler/transferred': typeof SchedulerTransferredRoute
+  '/tracker/attendance': typeof TrackerAttendanceRoute
   '/scheduler': typeof SchedulerIndexRoute
   '/tracker': typeof TrackerIndexRoute
+  '/tracker/$project/concepts': typeof TrackerProjectConceptsRoute
+  '/tracker/$project/guide': typeof TrackerProjectGuideRoute
+  '/tracker/$project': typeof TrackerProjectIndexRoute
+  '/tracker/$project/tasks/$taskId': typeof TrackerProjectTasksTaskIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,8 +133,14 @@ export interface FileRoutesById {
   '/tracker': typeof TrackerRouteWithChildren
   '/scheduler/plan': typeof SchedulerPlanRoute
   '/scheduler/transferred': typeof SchedulerTransferredRoute
+  '/tracker/$project': typeof TrackerProjectRouteWithChildren
+  '/tracker/attendance': typeof TrackerAttendanceRoute
   '/scheduler/': typeof SchedulerIndexRoute
   '/tracker/': typeof TrackerIndexRoute
+  '/tracker/$project/concepts': typeof TrackerProjectConceptsRoute
+  '/tracker/$project/guide': typeof TrackerProjectGuideRoute
+  '/tracker/$project/': typeof TrackerProjectIndexRoute
+  '/tracker/$project/tasks/$taskId': typeof TrackerProjectTasksTaskIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,16 +151,27 @@ export interface FileRouteTypes {
     | '/tracker'
     | '/scheduler/plan'
     | '/scheduler/transferred'
+    | '/tracker/$project'
+    | '/tracker/attendance'
     | '/scheduler/'
     | '/tracker/'
+    | '/tracker/$project/concepts'
+    | '/tracker/$project/guide'
+    | '/tracker/$project/'
+    | '/tracker/$project/tasks/$taskId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/scheduler/plan'
     | '/scheduler/transferred'
+    | '/tracker/attendance'
     | '/scheduler'
     | '/tracker'
+    | '/tracker/$project/concepts'
+    | '/tracker/$project/guide'
+    | '/tracker/$project'
+    | '/tracker/$project/tasks/$taskId'
   id:
     | '__root__'
     | '/'
@@ -115,8 +180,14 @@ export interface FileRouteTypes {
     | '/tracker'
     | '/scheduler/plan'
     | '/scheduler/transferred'
+    | '/tracker/$project'
+    | '/tracker/attendance'
     | '/scheduler/'
     | '/tracker/'
+    | '/tracker/$project/concepts'
+    | '/tracker/$project/guide'
+    | '/tracker/$project/'
+    | '/tracker/$project/tasks/$taskId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -170,6 +241,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchedulerIndexRouteImport
       parentRoute: typeof SchedulerRoute
     }
+    '/tracker/attendance': {
+      id: '/tracker/attendance'
+      path: '/attendance'
+      fullPath: '/tracker/attendance'
+      preLoaderRoute: typeof TrackerAttendanceRouteImport
+      parentRoute: typeof TrackerRoute
+    }
+    '/tracker/$project': {
+      id: '/tracker/$project'
+      path: '/$project'
+      fullPath: '/tracker/$project'
+      preLoaderRoute: typeof TrackerProjectRouteImport
+      parentRoute: typeof TrackerRoute
+    }
     '/scheduler/transferred': {
       id: '/scheduler/transferred'
       path: '/transferred'
@@ -183,6 +268,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/scheduler/plan'
       preLoaderRoute: typeof SchedulerPlanRouteImport
       parentRoute: typeof SchedulerRoute
+    }
+    '/tracker/$project/': {
+      id: '/tracker/$project/'
+      path: '/'
+      fullPath: '/tracker/$project/'
+      preLoaderRoute: typeof TrackerProjectIndexRouteImport
+      parentRoute: typeof TrackerProjectRoute
+    }
+    '/tracker/$project/guide': {
+      id: '/tracker/$project/guide'
+      path: '/guide'
+      fullPath: '/tracker/$project/guide'
+      preLoaderRoute: typeof TrackerProjectGuideRouteImport
+      parentRoute: typeof TrackerProjectRoute
+    }
+    '/tracker/$project/concepts': {
+      id: '/tracker/$project/concepts'
+      path: '/concepts'
+      fullPath: '/tracker/$project/concepts'
+      preLoaderRoute: typeof TrackerProjectConceptsRouteImport
+      parentRoute: typeof TrackerProjectRoute
+    }
+    '/tracker/$project/tasks/$taskId': {
+      id: '/tracker/$project/tasks/$taskId'
+      path: '/tasks/$taskId'
+      fullPath: '/tracker/$project/tasks/$taskId'
+      preLoaderRoute: typeof TrackerProjectTasksTaskIdRouteImport
+      parentRoute: typeof TrackerProjectRoute
     }
   }
 }
@@ -203,11 +316,33 @@ const SchedulerRouteWithChildren = SchedulerRoute._addFileChildren(
   SchedulerRouteChildren,
 )
 
+interface TrackerProjectRouteChildren {
+  TrackerProjectConceptsRoute: typeof TrackerProjectConceptsRoute
+  TrackerProjectGuideRoute: typeof TrackerProjectGuideRoute
+  TrackerProjectIndexRoute: typeof TrackerProjectIndexRoute
+  TrackerProjectTasksTaskIdRoute: typeof TrackerProjectTasksTaskIdRoute
+}
+
+const TrackerProjectRouteChildren: TrackerProjectRouteChildren = {
+  TrackerProjectConceptsRoute: TrackerProjectConceptsRoute,
+  TrackerProjectGuideRoute: TrackerProjectGuideRoute,
+  TrackerProjectIndexRoute: TrackerProjectIndexRoute,
+  TrackerProjectTasksTaskIdRoute: TrackerProjectTasksTaskIdRoute,
+}
+
+const TrackerProjectRouteWithChildren = TrackerProjectRoute._addFileChildren(
+  TrackerProjectRouteChildren,
+)
+
 interface TrackerRouteChildren {
+  TrackerProjectRoute: typeof TrackerProjectRouteWithChildren
+  TrackerAttendanceRoute: typeof TrackerAttendanceRoute
   TrackerIndexRoute: typeof TrackerIndexRoute
 }
 
 const TrackerRouteChildren: TrackerRouteChildren = {
+  TrackerProjectRoute: TrackerProjectRouteWithChildren,
+  TrackerAttendanceRoute: TrackerAttendanceRoute,
   TrackerIndexRoute: TrackerIndexRoute,
 }
 
