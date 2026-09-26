@@ -1,13 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { requirements } from "./data";
 import {
+	buildPlanView,
 	checkPlan,
 	creditsForQuarter,
 	isEligible,
 	offeredInSeason,
 	offeringInfo,
 	remainingRequirements,
+	seasonForOffset,
 	sectionsToPlan,
+	suggestPlan,
+	termForOffset,
 	validatePlan,
 } from "./planner";
 import {
@@ -19,7 +23,7 @@ import {
 	termKey,
 } from "./quarters";
 import { findConflicts, sectionsClash } from "./schedule";
-import type { Course, Section } from "./types";
+import type { Course, Pathway, Section } from "./types";
 
 function makeCourse(partial: Partial<Course> & { id: string }): Course {
 	return {
@@ -117,7 +121,7 @@ describe("isEligible", () => {
 	const course = makeCourse({
 		id: "CSC2430",
 		offered: ["AUT", "SPR"],
-		prereqs: ["CSC1230"],
+		prereqs: [{ course: "CSC1230" }],
 	});
 
 	it("is eligible when prereqs are met and offered that season", () => {
@@ -158,6 +162,50 @@ describe("isEligible", () => {
 		});
 		expect(e.offeredThisSeason).toBe(false);
 		expect(e.eligible).toBe(false);
+	});
+
+	it("satisfies an anyOf group with either member", () => {
+		const c = makeCourse({
+			id: "CSC2431",
+			offered: ["WIN"],
+			prereqs: [
+				{
+					anyOf: [
+						{ course: "CSC2430", minGrade: "C+" },
+						{ course: "CSC2330", minGrade: "C+" },
+					],
+				},
+			],
+		});
+		// The transfer case: only the bridge course CSC2330 was taken.
+		const e = isEligible(c, {
+			completed: new Set(["CSC2330"]),
+			plannedBefore: new Set(),
+			season: "WIN",
+		});
+		expect(e.prereqsMet).toBe(true);
+		// With neither, the group is reported as a single "X or Y" gap.
+		const miss = isEligible(c, {
+			completed: new Set(),
+			plannedBefore: new Set(),
+			season: "WIN",
+		});
+		expect(miss.missingPrereqs).toEqual(["CSC2430 (C+) or CSC2330 (C+)"]);
+	});
+
+	it("lets a coreq be satisfied within the same term", () => {
+		const c = makeCourse({
+			id: "CSC3221",
+			offered: ["SPR"],
+			prereqs: [{ coreq: "CSC3220" }],
+		});
+		const e = isEligible(c, {
+			completed: new Set(),
+			plannedBefore: new Set(),
+			sameTerm: new Set(["CSC3220"]),
+			season: "SPR",
+		});
+		expect(e.prereqsMet).toBe(true);
 	});
 });
 
@@ -328,7 +376,8 @@ describe("checkPlan", () => {
 				endMin: 660,
 			}),
 		];
-		const result = checkPlan(sections, new Set());
+		// CSC2430's curated prereq (CSC1260) is already earned.
+		const result = checkPlan(sections, new Set(["CSC1260"]));
 		expect(result.success).toBe(true);
 		expect(result.totalCredits).toBe(10);
 		expect(result.quarters).toHaveLength(1);
@@ -377,5 +426,202 @@ describe("sectionsToPlan", () => {
 			"AUT-2026": ["CSC2430", "MAT1234"],
 			"WIN-2027": ["MAT1235"],
 		});
+	});
+});
+
+describe("seasonForOffset", () => {
+	it("walks Autumn → Winter → Spring, skipping Summer", () => {
+		expect(seasonForOffset("AUT", 0)).toBe("AUT");
+		expect(seasonForOffset("AUT", 1)).toBe("WIN");
+		expect(seasonForOffset("AUT", 2)).toBe("SPR");
+		expect(seasonForOffset("AUT", 3)).toBe("AUT");
+	});
+
+	it("starts the walk from a non-Autumn start quarter", () => {
+		expect(seasonForOffset("WIN", 0)).toBe("WIN");
+		expect(seasonForOffset("WIN", 1)).toBe("SPR");
+		expect(seasonForOffset("WIN", 2)).toBe("AUT");
+	});
+});
+
+describe("termForOffset", () => {
+	it("rolls the calendar year across multiple academic years", () => {
+		const start = { season: "AUT", year: 2026 } as const;
+		expect(termForOffset(start, 0)).toEqual({ season: "AUT", year: 2026 });
+		expect(termForOffset(start, 1)).toEqual({ season: "WIN", year: 2027 });
+		expect(termForOffset(start, 2)).toEqual({ season: "SPR", year: 2027 });
+		// Second academic year — this is what stops a 2-year plan piling into one.
+		expect(termForOffset(start, 3)).toEqual({ season: "AUT", year: 2027 });
+		expect(termForOffset(start, 4)).toEqual({ season: "WIN", year: 2028 });
+		expect(termForOffset(start, 5)).toEqual({ season: "SPR", year: 2028 });
+	});
+
+	it("keeps a Winter start inside its own academic year", () => {
+		const start = { season: "WIN", year: 2027 } as const;
+		expect(termForOffset(start, 0)).toEqual({ season: "WIN", year: 2027 });
+		expect(termForOffset(start, 1)).toEqual({ season: "SPR", year: 2027 });
+		expect(termForOffset(start, 2)).toEqual({ season: "AUT", year: 2027 });
+	});
+});
+
+describe("suggestPlan", () => {
+	const pathway: Pathway = {
+		entryType: "transfer",
+		degree: "BS-CS",
+		source: "test",
+		totalCreditsRange: [86, 93],
+		steps: [
+			{ termOffset: 0, courseIds: ["CSC2330", "TCOR3001"] },
+			{ termOffset: 1, courseIds: ["CSC2431"] },
+			{ termOffset: 3, courseIds: ["CSC4898"] }, // a year out
+		],
+	};
+
+	it("lays courses across real terms and subtracts what's done", () => {
+		const result = suggestPlan(
+			pathway,
+			new Set(["CSC2330"]), // already done — should be subtracted
+			{ season: "AUT", year: 2026 },
+		);
+		expect(result.alreadyDone).toEqual(["CSC2330"]);
+		expect(result.placements).toEqual({
+			"AUT-2026": ["TCOR3001"],
+			"WIN-2027": ["CSC2431"],
+			// termOffset 3 lands in the *next* academic year, not crammed into 2026-27.
+			"AUT-2027": ["CSC4898"],
+		});
+	});
+
+	it("places each course exactly once", () => {
+		const dup: Pathway = {
+			...pathway,
+			steps: [
+				{ termOffset: 0, courseIds: ["CSC2431"] },
+				{ termOffset: 1, courseIds: ["CSC2431"] },
+			],
+		};
+		const result = suggestPlan(dup, new Set(), { season: "AUT", year: 2026 });
+		const placed = Object.values(result.placements).flat();
+		expect(placed.filter((id) => id === "CSC2431")).toHaveLength(1);
+	});
+});
+
+describe("buildPlanView", () => {
+	const allDays = new Set<Section["days"][number]>(["M", "Tu", "W", "Th", "F"]);
+
+	it("attaches a fitting section in the published year and degrades beyond it", () => {
+		const sections = [
+			makeSection({
+				crn: "1",
+				courseId: "CSC2430",
+				season: "AUT",
+				year: 2026,
+				days: ["M", "W"],
+			}),
+		];
+		const view = buildPlanView(
+			// CSC2099 (no prereqs) sits a year out where no sections exist yet.
+			{ "AUT-2026": ["CSC2430"], "AUT-2027": ["CSC2099"] },
+			new Set(["CSC1260"]),
+			allDays,
+			{},
+			sections,
+		);
+		const published = view.terms.find((t) => t.key === "AUT-2026");
+		const future = view.terms.find((t) => t.key === "AUT-2027");
+		expect(published?.schedulable).toBe(true);
+		expect(published?.courses[0].section?.crn).toBe("1");
+		// No sections exist for 2027 — the course still shows, just without a slot.
+		expect(future?.schedulable).toBe(false);
+		expect(future?.courses[0].section).toBeNull();
+		expect(future?.courses[0].credits).toBeGreaterThan(0); // catalog credits
+		expect(view.problems).toBe(0);
+	});
+
+	it("flags a time clash between two sections in the same term", () => {
+		const sections = [
+			makeSection({
+				crn: "1",
+				courseId: "CSC2430",
+				season: "AUT",
+				year: 2026,
+				days: ["M"],
+				startMin: 540,
+				endMin: 600,
+			}),
+			makeSection({
+				crn: "2",
+				courseId: "MAT1234",
+				season: "AUT",
+				year: 2026,
+				days: ["M"],
+				startMin: 570,
+				endMin: 630,
+			}),
+		];
+		const view = buildPlanView(
+			{ "AUT-2026": ["CSC2430", "MAT1234"] },
+			new Set(),
+			allDays,
+			{},
+			sections,
+		);
+		expect(view.terms[0].courses.every((c) => c.clash)).toBe(true);
+		expect(view.problems).toBe(2);
+	});
+
+	it("honors a section override and offers the alternatives", () => {
+		const sections = [
+			makeSection({
+				crn: "early",
+				courseId: "CSC2430",
+				season: "AUT",
+				year: 2026,
+				days: ["M"],
+				startMin: 540,
+				endMin: 600,
+			}),
+			makeSection({
+				crn: "late",
+				courseId: "CSC2430",
+				season: "AUT",
+				year: 2026,
+				days: ["M"],
+				startMin: 720,
+				endMin: 780,
+			}),
+		];
+		const view = buildPlanView(
+			{ "AUT-2026": ["CSC2430"] },
+			new Set(["CSC1260"]),
+			allDays,
+			{ CSC2430: "late" },
+			sections,
+		);
+		const course = view.terms[0].courses[0];
+		expect(course.section?.crn).toBe("late"); // override beats the earlier default
+		expect(course.candidates).toHaveLength(2);
+	});
+
+	it("marks a published-year course with no day-fitting section", () => {
+		const sections = [
+			makeSection({
+				crn: "1",
+				courseId: "CSC2430",
+				season: "AUT",
+				year: 2026,
+				days: ["Sa"], // she isn't free Saturday
+			}),
+		];
+		const view = buildPlanView(
+			{ "AUT-2026": ["CSC2430"] },
+			new Set(["CSC1260"]),
+			allDays,
+			{},
+			sections,
+		);
+		const course = view.terms[0].courses[0];
+		expect(course.noFittingSection).toBe(true);
+		expect(course.section).toBeNull();
 	});
 });

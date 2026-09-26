@@ -1,9 +1,12 @@
 import { courses, getCourse } from "./data";
 import { compareTerms, parseTermKey, termKey, termLabel } from "./quarters";
-import { findConflicts, type SectionConflict } from "./schedule";
+import { findConflicts, fitsDays, type SectionConflict } from "./schedule";
 import type {
 	Course,
+	Day,
+	Pathway,
 	Plan,
+	Prereq,
 	Requirements,
 	Season,
 	Section,
@@ -46,6 +49,50 @@ export function offeredInSeason(
 }
 
 // ---------------------------------------------------------------------------
+// Prerequisites
+// ---------------------------------------------------------------------------
+
+const EMPTY_SET: ReadonlySet<string> = new Set();
+
+/** Is a single prereq satisfied? `earned` is everything completed or taken in
+ *  an earlier term; `sameTerm` is the rest of *this* quarter, which only a
+ *  `coreq` may lean on. Recurses through `anyOf` groups. */
+export function prereqSatisfied(
+	prereq: Prereq,
+	earned: ReadonlySet<string>,
+	sameTerm: ReadonlySet<string> = EMPTY_SET,
+): boolean {
+	if ("anyOf" in prereq) {
+		return prereq.anyOf.some((p) => prereqSatisfied(p, earned, sameTerm));
+	}
+	if ("coreq" in prereq) {
+		return earned.has(prereq.coreq) || sameTerm.has(prereq.coreq);
+	}
+	// We don't track grades, so `minGrade` is advisory: presence satisfies it.
+	return earned.has(prereq.course);
+}
+
+/** Human label for a prereq, e.g. "CSC2430 (C+)" or "CSC2430 or CSC2330". */
+export function prereqLabel(prereq: Prereq): string {
+	if ("anyOf" in prereq) return prereq.anyOf.map(prereqLabel).join(" or ");
+	if ("coreq" in prereq) return `${prereq.coreq} (same quarter)`;
+	return prereq.minGrade
+		? `${prereq.course} (${prereq.minGrade})`
+		: prereq.course;
+}
+
+/** Labels for the top-level prereqs of `course` that aren't yet met. */
+export function unmetPrereqs(
+	course: Course,
+	earned: ReadonlySet<string>,
+	sameTerm: ReadonlySet<string> = EMPTY_SET,
+): string[] {
+	return course.prereqs
+		.filter((p) => !prereqSatisfied(p, earned, sameTerm))
+		.map(prereqLabel);
+}
+
+// ---------------------------------------------------------------------------
 // Eligibility
 // ---------------------------------------------------------------------------
 
@@ -54,6 +101,8 @@ export interface EligibilityContext {
 	completed: ReadonlySet<string>;
 	/** Courses planned in *earlier* terms than the one being checked. */
 	plannedBefore: ReadonlySet<string>;
+	/** Other courses placed in the *same* term — only coreqs use these. */
+	sameTerm?: ReadonlySet<string>;
 	season: Season;
 }
 
@@ -70,9 +119,8 @@ export function isEligible(
 	course: Course,
 	ctx: EligibilityContext,
 ): Eligibility {
-	const satisfied = (id: string) =>
-		ctx.completed.has(id) || ctx.plannedBefore.has(id);
-	const missingPrereqs = course.prereqs.filter((id) => !satisfied(id));
+	const earned = new Set([...ctx.completed, ...ctx.plannedBefore]);
+	const missingPrereqs = unmetPrereqs(course, earned, ctx.sameTerm);
 	const prereqsMet = missingPrereqs.length === 0;
 	const offeredThisSeason = offeredInSeason(course, ctx.season);
 	return {
@@ -163,11 +211,7 @@ export function remainingRequirements(
 	let plannedTotal = 0;
 
 	const statusOf = (id: string): RequirementStatus =>
-		completed.has(id)
-			? "completed"
-			: planned.has(id)
-				? "planned"
-				: "remaining";
+		completed.has(id) ? "completed" : planned.has(id) ? "planned" : "remaining";
 
 	const groups: RequirementGroupProgress[] = requirements.groups.map(
 		(group) => {
@@ -183,7 +227,8 @@ export function remainingRequirements(
 			// Count a course toward this group, respecting the bucket's credit cap.
 			const tally = (status: RequirementStatus, credits: number): void => {
 				if (status === "remaining") return;
-				if (isElectiveBucket && completedCredits + plannedCredits >= cap) return;
+				if (isElectiveBucket && completedCredits + plannedCredits >= cap)
+					return;
 				if (status === "completed") completedCredits += credits;
 				else plannedCredits += credits;
 			};
@@ -404,9 +449,12 @@ export function checkPlan(
 			});
 		}
 
+		// Coreqs may be satisfied by anything else taken this same quarter.
+		const thisTerm = new Set(q.sections.map((s) => s.courseId));
 		for (const s of q.sections) {
 			const course = getCourse(s.courseId);
-			const missing = (course?.prereqs ?? []).filter((id) => !earned.has(id));
+			if (!course) continue;
+			const missing = unmetPrereqs(course, earned, thisTerm);
 			if (missing.length > 0) {
 				problems.push({
 					termKey: q.key,
@@ -437,4 +485,223 @@ export function checkPlan(
 		problems,
 		notes,
 	};
+}
+
+// ---------------------------------------------------------------------------
+// Pathway-seeded suggestions
+// ---------------------------------------------------------------------------
+
+/** Academic-quarter order a pathway walks through. Summer is skipped — the
+ *  published plans only schedule Autumn/Winter/Spring (docs/PATHWAYS.md §2). */
+const ACADEMIC_FLOW: Season[] = ["AUT", "WIN", "SPR"];
+
+/** The season a pathway step lands in, given where the student starts. A start
+ *  in Summer (off the academic walk) just begins at Autumn. */
+export function seasonForOffset(startSeason: Season, offset: number): Season {
+	const base = ACADEMIC_FLOW.indexOf(startSeason);
+	const start = base === -1 ? 0 : base;
+	return ACADEMIC_FLOW[(start + offset) % ACADEMIC_FLOW.length];
+}
+
+/** The real term (season + calendar year) a pathway step lands in. Walks the
+ *  academic flow Autumn→Winter→Spring, rolling the calendar year at each Autumn.
+ *  A Summer start (off the walk) begins at the next Autumn. This is what makes
+ *  a multi-year pathway lay out across multiple years instead of piling into
+ *  the single year the time schedule happens to be published for. */
+export function termForOffset(start: Term, offset: number): Term {
+	const base = ACADEMIC_FLOW.indexOf(start.season);
+	// The academic year the start term belongs to: Autumn opens academic year Y;
+	// the Winter and Spring that follow belong to that same academic year Y.
+	const startAcademicYear =
+		base === -1 || start.season === "AUT" ? start.year : start.year - 1;
+	const idx0 = base === -1 ? 0 : base;
+	const total = idx0 + offset;
+	const season = ACADEMIC_FLOW[total % ACADEMIC_FLOW.length];
+	const academicYear =
+		startAcademicYear + Math.floor(total / ACADEMIC_FLOW.length);
+	return { season, year: season === "AUT" ? academicYear : academicYear + 1 };
+}
+
+export interface PlanSuggestion {
+	/** The recommended sequence laid out across real terms (termKey → courseIds).
+	 *  Spans every year of the plan — it rides on the pathway, not the single
+	 *  year of section data, so nothing gets dropped or crammed. */
+	placements: Plan;
+	/** Pathway courses already completed (or covered by the DTA) — nothing to add. */
+	alreadyDone: string[];
+}
+
+/** Lay an official pathway out across real terms from where she starts: walk the
+ *  academic flow, roll the year each Autumn, and drop courses she's already done.
+ *  Pure pathway→terms — no section data — so it covers the *whole* multi-year
+ *  plan, not just the year the time schedule has been published for. A starting
+ *  point she edits from, not a lock. */
+export function suggestPlan(
+	pathway: Pathway,
+	completed: ReadonlySet<string>,
+	start: Term,
+): PlanSuggestion {
+	const placements: Plan = {};
+	const alreadyDone: string[] = [];
+	const placed = new Set<string>();
+
+	for (const step of pathway.steps) {
+		const key = termKey(termForOffset(start, step.termOffset));
+		for (const courseId of step.courseIds) {
+			if (completed.has(courseId)) {
+				alreadyDone.push(courseId);
+				continue;
+			}
+			if (placed.has(courseId)) continue; // a pathway lists each course once
+			const list = placements[key] ?? [];
+			list.push(courseId);
+			placements[key] = list;
+			placed.add(courseId);
+		}
+	}
+
+	return { placements, alreadyDone };
+}
+
+// ---------------------------------------------------------------------------
+// Plan view — decorate a course-placement plan with real sections
+// ---------------------------------------------------------------------------
+
+/** A single course placed in a term, decorated with everything the UI needs. */
+export interface PlannedCourse {
+	courseId: string;
+	title: string;
+	credits: number;
+	/** Chosen section for a published-year course (best-fit, or her override). */
+	section: Section | null;
+	/** Every section of this course that fits her days this term — lets her swap. */
+	candidates: Section[];
+	/** Its term is in the published schedule year, so concrete sections exist. */
+	schedulable: boolean;
+	/** Schedulable term, but no section fits her available days. */
+	noFittingSection: boolean;
+	/** Catalog offering vs the term's season: true offered, false not, null unknown. */
+	offeredThisSeason: boolean | null;
+	/** Prereqs not satisfied by completed + earlier-term courses. */
+	missingPrereqs: string[];
+	/** Time-clashes with another course chosen in the same term. */
+	clash: boolean;
+}
+
+export interface PlannedTerm {
+	key: string;
+	term: Term;
+	/** The published schedule year covers this term (days/times are knowable). */
+	schedulable: boolean;
+	courses: PlannedCourse[];
+	credits: number;
+}
+
+export interface PlanView {
+	terms: PlannedTerm[];
+	totalCredits: number;
+	/** Hard problems across the whole plan: prereq gaps + time clashes. */
+	problems: number;
+}
+
+/** Resolve a multi-year course-placement plan into a schedulable view: attach
+ *  real sections (days/times, clashes) for the published year, fall back to
+ *  catalog offering hints for future years, and check prereqs in chronological
+ *  order. The plan layer (placements) never needs section data — this is the
+ *  decoration that makes the published year concrete and degrades gracefully
+ *  beyond it. Pure: depends only on its inputs. */
+export function buildPlanView(
+	placements: Plan,
+	completed: ReadonlySet<string>,
+	availableDays: ReadonlySet<Day>,
+	sectionChoices: Readonly<Record<string, string>>,
+	sections: Section[],
+): PlanView {
+	// Terms the published schedule actually covers — anything with a section.
+	const scheduleKeys = new Set(
+		sections.map((s) => termKey({ season: s.season, year: s.year })),
+	);
+
+	const orderedKeys = Object.keys(placements)
+		.filter((k) => (placements[k] ?? []).length > 0)
+		.sort((a, b) => compareTerms(parseTermKey(a), parseTermKey(b)));
+
+	const earned = new Set(completed);
+	const terms: PlannedTerm[] = [];
+	let totalCredits = 0;
+	let problems = 0;
+
+	for (const key of orderedKeys) {
+		const term = parseTermKey(key);
+		const schedulable = scheduleKeys.has(key);
+		// A course marked complete after being placed is earned, not planned.
+		const ids = (placements[key] ?? []).filter((id) => !completed.has(id));
+		if (ids.length === 0) continue;
+		const sameTerm = new Set(ids);
+
+		// Resolve a section per course first — clash detection needs them all.
+		const resolved = new Map<string, Section | null>();
+		const candidatesById = new Map<string, Section[]>();
+		for (const id of ids) {
+			const candidates = sections
+				.filter(
+					(s) =>
+						s.courseId === id &&
+						s.season === term.season &&
+						s.year === term.year &&
+						fitsDays(s, availableDays),
+				)
+				.sort(
+					(a, b) =>
+						(a.startMin ?? Number.POSITIVE_INFINITY) -
+							(b.startMin ?? Number.POSITIVE_INFINITY) ||
+						a.crn.localeCompare(b.crn),
+				);
+			candidatesById.set(id, candidates);
+			const chosen =
+				candidates.find((s) => s.crn === sectionChoices[id]) ??
+				candidates[0] ??
+				null;
+			resolved.set(id, chosen);
+		}
+
+		const chosenSections = [...resolved.values()].filter(
+			(s): s is Section => s != null,
+		);
+		const clashCrns = new Set(
+			findConflicts(chosenSections).flatMap((c) => [c.a.crn, c.b.crn]),
+		);
+
+		let credits = 0;
+		const planned: PlannedCourse[] = ids.map((id) => {
+			const course = getCourse(id);
+			const section = resolved.get(id) ?? null;
+			const candidates = candidatesById.get(id) ?? [];
+			const credit = section?.credits ?? course?.credits ?? 0;
+			credits += credit;
+			const missingPrereqs = course
+				? unmetPrereqs(course, earned, sameTerm)
+				: [];
+			const clash = section ? clashCrns.has(section.crn) : false;
+			if (missingPrereqs.length > 0 || clash) problems++;
+			return {
+				courseId: id,
+				title: course?.title ?? "Unknown course",
+				credits: credit,
+				section,
+				candidates,
+				schedulable,
+				noFittingSection: schedulable && candidates.length === 0,
+				offeredThisSeason: course ? offeredInSeason(course, term.season) : null,
+				missingPrereqs,
+				clash,
+			};
+		});
+
+		totalCredits += credits;
+		terms.push({ key, term, schedulable, courses: planned, credits });
+		for (const id of ids) earned.add(id);
+	}
+
+	return { terms, totalCredits, problems };
 }

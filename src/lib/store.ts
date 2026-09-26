@@ -1,15 +1,17 @@
 import { useSyncExternalStore } from "react";
-import { getSection } from "./data";
-import type { AppState, Day, Season } from "./types";
+import type { AppState, Day, EntryType, Season } from "./types";
 
-const STORAGE_KEY = "spu-scheduler:v2";
+const STORAGE_KEY = "spu-scheduler:v3";
 
 const DEFAULT_STATE: AppState = {
+	// Our user is a DTA transfer; that pathway seeds her suggestions by default.
+	entryType: "transfer",
 	completed: [],
 	dtaComplete: true,
 	startSeason: "AUT",
 	availableDays: ["M", "Tu", "W", "Th", "F"],
-	selectedCrns: [],
+	placements: {},
+	sectionChoices: {},
 };
 
 // --- module-level store -----------------------------------------------------
@@ -60,23 +62,55 @@ function subscribe(callback: () => void): () => void {
 
 // --- actions ----------------------------------------------------------------
 
+/** Remove a course id from every term, dropping any term left empty. Shared by
+ *  add (which first detaches the course so it occupies exactly one term) and
+ *  remove. */
+function withoutCourse(
+	placements: Record<string, string[]>,
+	courseId: string,
+): Record<string, string[]> {
+	const next: Record<string, string[]> = {};
+	for (const [key, ids] of Object.entries(placements)) {
+		const kept = ids.filter((id) => id !== courseId);
+		if (kept.length > 0) next[key] = kept;
+	}
+	return next;
+}
+
 export const actions = {
-	/** Pick (or unpick) a section. Selecting a section for a course that already
-	 *  has one chosen swaps it — a course occupies exactly one slot. */
-	toggleSection(crn: string): void {
+	/** Place a course in a term. A course lives in exactly one term, so this also
+	 *  moves it if it was already placed elsewhere. */
+	addCourse(courseId: string, termKey: string): void {
 		setState((prev) => {
-			if (prev.selectedCrns.includes(crn)) {
-				return {
-					...prev,
-					selectedCrns: prev.selectedCrns.filter((c) => c !== crn),
-				};
-			}
-			const courseId = getSection(crn)?.courseId;
-			const kept = prev.selectedCrns.filter(
-				(c) => getSection(c)?.courseId !== courseId,
-			);
-			return { ...prev, selectedCrns: [...kept, crn] };
+			const placements = withoutCourse(prev.placements, courseId);
+			placements[termKey] = [...(placements[termKey] ?? []), courseId];
+			return { ...prev, placements };
 		});
+	},
+
+	/** Drop a course from the plan and forget any section override for it. */
+	removeCourse(courseId: string): void {
+		setState((prev) => {
+			const { [courseId]: _dropped, ...sectionChoices } = prev.sectionChoices;
+			return {
+				...prev,
+				placements: withoutCourse(prev.placements, courseId),
+				sectionChoices,
+			};
+		});
+	},
+
+	/** Replace the whole plan — used to seed a suggested pathway. */
+	setPlacements(placements: Record<string, string[]>): void {
+		setState((prev) => ({ ...prev, placements, sectionChoices: {} }));
+	},
+
+	/** Pin a specific section (CRN) for a course in the published year. */
+	chooseSection(courseId: string, crn: string): void {
+		setState((prev) => ({
+			...prev,
+			sectionChoices: { ...prev.sectionChoices, [courseId]: crn },
+		}));
 	},
 
 	toggleCompleted(courseId: string): void {
@@ -100,6 +134,10 @@ export const actions = {
 		setState((prev) => ({ ...prev, startSeason: season }));
 	},
 
+	setEntryType(entryType: EntryType): void {
+		setState((prev) => ({ ...prev, entryType }));
+	},
+
 	toggleDay(day: Day): void {
 		setState((prev) => {
 			const has = prev.availableDays.includes(day);
@@ -110,8 +148,8 @@ export const actions = {
 		});
 	},
 
-	clearSelection(): void {
-		setState((prev) => ({ ...prev, selectedCrns: [] }));
+	clearPlan(): void {
+		setState((prev) => ({ ...prev, placements: {}, sectionChoices: {} }));
 	},
 
 	resetAll(): void {

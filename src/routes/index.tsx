@@ -1,11 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Badge, ProgressBar, SectionCard } from "#/components/ui";
-import {
-	dataNeedsVerification,
-	getCourse,
-	getSection,
-	requirements,
-} from "#/lib/data";
+import { dataNeedsVerification, getCourse, requirements } from "#/lib/data";
 import {
 	type RequirementStatus,
 	remainingRequirements,
@@ -22,13 +17,9 @@ const STATUS_DOT: Record<RequirementStatus, string> = {
 };
 
 function Overview() {
-	const { completed, selectedCrns, dtaComplete } = useAppState();
+	const { completed, placements, dtaComplete } = useAppState();
 	const completedSet = new Set(completed);
-	const plannedSet = new Set(
-		selectedCrns
-			.map((crn) => getSection(crn)?.courseId)
-			.filter((id): id is string => Boolean(id)),
-	);
+	const plannedSet = new Set(Object.values(placements).flat());
 	const progress = remainingRequirements(
 		requirements,
 		completedSet,
