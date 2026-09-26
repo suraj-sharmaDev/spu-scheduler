@@ -89,7 +89,7 @@ export const getSession = createServerFn({ method: "GET" }).handler(async () =>
 );
 
 export const login = createServerFn({ method: "POST" })
-	.inputValidator((input: unknown) => ({
+	.validator((input: unknown) => ({
 		passcode: v.string(v.object(input).passcode, "Passcode", 200),
 	}))
 	.handler(async ({ data }) => {
@@ -110,7 +110,7 @@ export const logout = createServerFn({ method: "POST" }).handler(async () => {
 // --- reads ----------------------------------------------------------------------
 
 export const getTrackerState = createServerFn({ method: "GET" })
-	.inputValidator((input: unknown) => ({
+	.validator((input: unknown) => ({
 		project: projectFrom(v.object(input).project).slug,
 	}))
 	.handler(async ({ data }): Promise<TrackerState> => {
@@ -170,7 +170,7 @@ export const getTrackerState = createServerFn({ method: "GET" })
 // --- task progress ------------------------------------------------------------------
 
 export const updateTask = createServerFn({ method: "POST" })
-	.inputValidator((input: unknown) => {
+	.validator((input: unknown) => {
 		const o = v.object(input);
 		const project = projectFrom(o.project);
 		const taskId = v.string(o.taskId, "Task", 50);
@@ -215,7 +215,7 @@ export const updateTask = createServerFn({ method: "POST" })
 	});
 
 export const toggleChecklist = createServerFn({ method: "POST" })
-	.inputValidator((input: unknown) => {
+	.validator((input: unknown) => {
 		const o = v.object(input);
 		const project = projectFrom(o.project);
 		const itemId = v.string(o.itemId, "Item", 60);
@@ -279,7 +279,7 @@ export const checkIn = createServerFn({ method: "POST" }).handler(
 
 /** Log an extra session outside the schedule (max one per day). */
 export const logMakeup = createServerFn({ method: "POST" })
-	.inputValidator((input: unknown) => {
+	.validator((input: unknown) => {
 		const note = v.object(input).note;
 		return {
 			note: note === undefined ? null : v.string(note, "Note", 500) || null,
@@ -314,7 +314,7 @@ export const logMakeup = createServerFn({ method: "POST" })
 // --- reflections ------------------------------------------------------------------
 
 export const saveWeeklyReflection = createServerFn({ method: "POST" })
-	.inputValidator((input: unknown) => {
+	.validator((input: unknown) => {
 		const o = v.object(input);
 		const project = projectFrom(o.project);
 		const week = v.integer(o.week, "Week", 1, project.milestones.length);
@@ -349,7 +349,7 @@ export const saveWeeklyReflection = createServerFn({ method: "POST" })
 	});
 
 export const saveProjectReview = createServerFn({ method: "POST" })
-	.inputValidator((input: unknown) => {
+	.validator((input: unknown) => {
 		const o = v.object(input);
 		const project = projectFrom(o.project);
 		const subject = v.oneOf(
