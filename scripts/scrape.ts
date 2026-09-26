@@ -8,9 +8,10 @@
  *   src/data/courses.json       — durable course facts from the catalog
  *   src/data/requirements.json  — what the BS-CS degree demands
  *
- * It scrapes the *stable* catalog only (course-descriptions pages + the BS-CS
- * program page). The volatile quarterly time schedule is intentionally ignored
- * because quarter-of-offering already lives in the catalog (see docs/PLAN.md §3).
+ *   src/data/sections.json      — meeting days/times from the quarterly time schedule
+ *
+ * The catalog (course-descriptions pages + the BS-CS program page) is stable; the
+ * time schedule is volatile and scoped to one academic year (`TERM_YEAR`).
  *
  * IMPORTANT: prerequisites and requirement groups are inconsistently formatted on
  * the source pages. Everything this script emits has `verified: false`. A human
@@ -463,8 +464,8 @@ async function main(): Promise<void> {
       console.log(`→ Fetching ${subject} course descriptions …`)
       parsed = parseCourses(await fetchHtml(url))
     } catch (err) {
-      console.warn(`  ⚠ could not scrape ${subject} (${url}): ${(err as Error).message}`)
-      continue
+      // A partial catalog would silently drop courses (and their curated prereqs).
+      throw new Error(`could not scrape ${subject} (${url}): ${(err as Error).message}`)
     }
     const isFull = FULL_SUBJECTS.includes(subject)
     for (const c of parsed) {
@@ -480,6 +481,7 @@ async function main(): Promise<void> {
   // ---- Time schedule: meeting days/times for the courses we kept ----------
   const keepIds = new Set(courses.map((c) => c.id))
   const sections: Section[] = []
+  const scheduleFailures: string[] = []
   for (const subject of [...subjects].sort()) {
     const url = `${TIME_SCHEDULE_BASE}${subject}?term_year=${TERM_YEAR}&cat_year=${TERM_YEAR}`
     try {
@@ -487,6 +489,7 @@ async function main(): Promise<void> {
       sections.push(...parseSections(await fetchHtml(url), keepIds))
     } catch (err) {
       console.warn(`  ⚠ could not scrape ${subject} schedule (${url}): ${(err as Error).message}`)
+      scheduleFailures.push(subject)
     }
   }
   sections.sort(
@@ -497,7 +500,11 @@ async function main(): Promise<void> {
   mkdirSync(fileURLToPath(new URL("../src/data/", import.meta.url)), { recursive: true })
   writeFileSync(dataPath("courses.json"), `${JSON.stringify(courses, null, 2)}\n`)
   writeFileSync(dataPath("requirements.json"), `${JSON.stringify(requirements, null, 2)}\n`)
-  writeFileSync(dataPath("sections.json"), `${JSON.stringify(sections, null, 2)}\n`)
+  // spu.edu sits behind a WAF that can 403 scripted requests; writing a partial
+  // schedule would erase sections, so keep the previous file instead.
+  if (scheduleFailures.length === 0) {
+    writeFileSync(dataPath("sections.json"), `${JSON.stringify(sections, null, 2)}\n`)
+  }
 
   // ---- Verification report ----------------------------------------------
   const missing = [...referencedIds].filter((id) => !byId.has(id)).sort()
@@ -511,11 +518,18 @@ async function main(): Promise<void> {
   console.log(`catalog year        : ${requirements.catalogYear}`)
   console.log(`courses written     : ${courses.length}  → src/data/courses.json`)
   console.log(`requirement groups  : ${requirements.groups.length}  → src/data/requirements.json`)
-  console.log(
-    `sections written    : ${sections.length}  → src/data/sections.json  (${ACADEMIC_YEAR_START}-${ACADEMIC_YEAR_START + 1})`,
-  )
-  const coursesWithSections = new Set(sections.map((s) => s.courseId)).size
-  console.log(`courses with a section this year: ${coursesWithSections}/${courses.length}`)
+  if (scheduleFailures.length) {
+    console.log(
+      `✗ sections.json NOT updated — schedule failed for: ${scheduleFailures.join(", ")}`,
+    )
+    process.exitCode = 1
+  } else {
+    console.log(
+      `sections written    : ${sections.length}  → src/data/sections.json  (${ACADEMIC_YEAR_START}-${ACADEMIC_YEAR_START + 1})`,
+    )
+    const coursesWithSections = new Set(sections.map((s) => s.courseId)).size
+    console.log(`courses with a section this year: ${coursesWithSections}/${courses.length}`)
+  }
   console.log(`total degree credits: ${requirements.totalCreditsForDegree ?? "?"}`)
   if (missing.length)
     console.log(`⚠ required courses with NO catalog entry: ${missing.join(", ")}`)
