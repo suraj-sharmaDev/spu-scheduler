@@ -14,7 +14,7 @@ import {
 	toggleChecklist,
 	updateTask,
 } from "./api";
-import type { TaskStatus } from "./db/schema";
+import type { TaskStatus } from "./status";
 
 export const trackerQuery = (project: string) =>
 	queryOptions({

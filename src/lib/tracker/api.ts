@@ -13,14 +13,13 @@ import {
 	attendance,
 	checklistChecks,
 	projectReviews,
-	TASK_STATUSES,
-	type TaskStatus,
 	taskProgress,
 	weeklyReflections,
 } from "./db/schema";
 import * as v from "./input";
 import { getProject } from "./projects";
 import { classifyCheckIn, localDate, openSlot } from "./schedule";
+import { TASK_STATUSES, type TaskStatus } from "./status";
 import type { Project } from "./types";
 
 const MAX_NOTES = 20_000;

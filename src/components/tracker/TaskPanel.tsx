@@ -2,10 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Flag, LifeBuoy } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 import type { TrackerState } from "#/lib/tracker/api";
-import { TASK_STATUSES } from "#/lib/tracker/db/schema";
 import { checklistProgress, learnedConcepts } from "#/lib/tracker/progress";
 import { conceptMap } from "#/lib/tracker/projects";
 import { useToggleChecklist, useUpdateTask } from "#/lib/tracker/queries";
+import { TASK_STATUSES } from "#/lib/tracker/status";
 import type { Project, Task } from "#/lib/tracker/types";
 import {
 	Checklist,

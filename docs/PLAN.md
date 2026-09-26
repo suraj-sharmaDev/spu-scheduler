@@ -28,6 +28,10 @@ useful (a focused planner) rather than a generic course browser.
 - General-education / Common Curriculum tracking (DTA covers it).
 - Multi-user, accounts, or any backend.
 
+> Update 2026-09-26: the scheduler itself is still client-only, but the app now also
+> hosts the Learning Tracker, which has a backend (Neon Postgres + passcode login).
+> See [TRACKER.md](TRACKER.md).
+
 ---
 
 ## 2. Key decisions (locked)

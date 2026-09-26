@@ -47,6 +47,18 @@ const NAV = [
 		match: (p: string) => p.startsWith("/tracker/attendance"),
 	},
 	{
+		label: "Progress",
+		to: "/tracker/$project/progress",
+		params: project,
+		match: (p: string) => p.startsWith(`${base}/progress`),
+	},
+	{
+		label: "Reflect",
+		to: "/tracker/$project/reflect",
+		params: project,
+		match: (p: string) => p.startsWith(`${base}/reflect`),
+	},
+	{
 		label: "Guide",
 		to: "/tracker/$project/guide",
 		params: project,

@@ -10,17 +10,7 @@ import {
 	timestamp,
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
-
-export const TASK_STATUSES = [
-	"not_started",
-	"in_progress",
-	"stuck",
-	"done",
-] as const;
-export type TaskStatus = (typeof TASK_STATUSES)[number];
-
-export const ATTENDANCE_STATUSES = ["present", "late", "makeup"] as const;
-export type AttendanceStatus = (typeof ATTENDANCE_STATUSES)[number];
+import type { AttendanceStatus, TaskStatus } from "../status";
 
 const updatedAt = () =>
 	timestamp("updated_at", { withTimezone: true }).notNull().defaultNow();

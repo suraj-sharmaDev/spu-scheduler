@@ -3,8 +3,9 @@
  * workbook's Progress sheet (sessions / done / stuck / % / minutes per week)
  * and adds concept and confidence views. Pure functions, no I/O.
  */
-import type { TaskStatus } from "./db/schema";
+
 import type { AttendanceLike } from "./schedule";
+import type { TaskStatus } from "./status";
 import type { ChecklistItem, Milestone, Project, Task } from "./types";
 
 export interface ProgressInput {

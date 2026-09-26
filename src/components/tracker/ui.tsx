@@ -1,6 +1,6 @@
 import { Check, ExternalLink, Sparkles, Star } from "lucide-react";
 import { type ReactNode, useState } from "react";
-import type { TaskStatus } from "#/lib/tracker/db/schema";
+import type { TaskStatus } from "#/lib/tracker/status";
 import type { ChecklistItem, Concept, ConceptRef } from "#/lib/tracker/types";
 
 export function Card({
@@ -258,9 +258,7 @@ export function StatTile({
 }) {
 	return (
 		<div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-rose-100">
-			<div className="text-2xl font-semibold text-slate-900 tabular-nums">
-				{value}
-			</div>
+			<div className="text-2xl font-semibold text-slate-900">{value}</div>
 			<div className="text-sm text-slate-600">{label}</div>
 			{hint ? <div className="mt-1 text-xs text-slate-400">{hint}</div> : null}
 		</div>
