@@ -17,7 +17,7 @@
  * MUST review the output before the planner is allowed to trust it.
  */
 
-import { writeFileSync, mkdirSync } from "node:fs"
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { JSDOM } from "jsdom"
 
@@ -61,6 +61,14 @@ const USER_AGENT =
 type Term = "AUT" | "WIN" | "SPR" | "SUM" | "ALT"
 type Category = "CS_CORE" | "CS_ELECTIVE" | "MATH" | "OTHER"
 
+// The catalog publishes almost no course-level prereqs (see docs/PATHWAYS.md §1),
+// so these are hand-curated in courses.json and intentionally NOT scraped. We
+// only carry the shape here so we can preserve existing curation across re-runs.
+type Prereq =
+  | { course: string; minGrade?: string }
+  | { anyOf: Prereq[] }
+  | { coreq: string }
+
 interface Course {
   id: string // "CSC2430"
   subject: string // "CSC"
@@ -70,8 +78,8 @@ interface Course {
   creditsRaw: string // original parenthetical, e.g. "(1-5 Credits)"
   offered: Term[]
   offeredRaw: string // original "Typically offered: ..." text
-  prereqs: string[] // course ids parsed from prereqsRaw (AND logic; verify!)
-  prereqsRaw: string // original "Prerequisite: ..." sentence(s)
+  prereqs: Prereq[] // hand-curated; preserved across scrapes, never auto-filled
+  prereqsRaw: string // original "Prerequisite: ..." sentence(s) — the curation hint
   category: Category
   verified: false
 }
@@ -125,7 +133,35 @@ interface Section {
 // Small helpers
 // ---------------------------------------------------------------------------
 
-const COURSE_CODE = /\b([A-Z]{2,4})\s(\d{4})\b/g
+/** Absolute path to a committed data file. */
+function dataPath(name: string): string {
+  return fileURLToPath(new URL(`../src/data/${name}`, import.meta.url))
+}
+
+/** Carry hand-curated prereqs from the existing courses.json into the freshly
+ *  scraped set. The catalog has no usable prereqs (docs/PATHWAYS.md §1), so this
+ *  is the only source — a scrape must never wipe them. Mutates `courses`,
+ *  returns how many it restored. */
+function preserveCuratedPrereqs(courses: Course[], existingPath: string): number {
+  let prior: Course[]
+  try {
+    prior = JSON.parse(readFileSync(existingPath, "utf8")) as Course[]
+  } catch {
+    return 0 // first run — nothing to preserve
+  }
+  const curated = new Map(
+    prior.filter((c) => c.prereqs?.length).map((c) => [c.id, c.prereqs]),
+  )
+  let restored = 0
+  for (const c of courses) {
+    const keep = curated.get(c.id)
+    if (keep) {
+      c.prereqs = keep
+      restored++
+    }
+  }
+  return restored
+}
 
 async function fetchHtml(url: string): Promise<string> {
   const res = await fetch(url, { headers: { "user-agent": USER_AGENT } })
@@ -197,10 +233,6 @@ function parseCourses(html: string): Course[] {
       .filter((s) => /^Prerequisites?\b/.test(s) && !/^Prerequisites? to\b/i.test(s))
     const prereqsRaw = prereqSentences.join(" ")
 
-    const prereqs = [...new Set([...prereqsRaw.matchAll(COURSE_CODE)].map((x) => toId(x[1], x[2])))]
-      // a course can't be its own prereq (guards against odd self-references)
-      .filter((id) => id !== toId(subject, number))
-
     courses.push({
       id: toId(subject, number),
       subject,
@@ -210,7 +242,8 @@ function parseCourses(html: string): Course[] {
       creditsRaw,
       offered,
       offeredRaw,
-      prereqs,
+      // Never auto-filled — curated by hand and merged back in below (preserveCuratedPrereqs).
+      prereqs: [],
       prereqsRaw,
       category: "OTHER", // assigned later from requirements
       verified: false,
@@ -442,6 +475,7 @@ async function main(): Promise<void> {
 
   const courses = [...byId.values()].sort((a, b) => a.id.localeCompare(b.id))
   categorize(courses, requirements)
+  const curatedCount = preserveCuratedPrereqs(courses, dataPath("courses.json"))
 
   // ---- Time schedule: meeting days/times for the courses we kept ----------
   const keepIds = new Set(courses.map((c) => c.id))
@@ -460,18 +494,17 @@ async function main(): Promise<void> {
   )
 
   // ---- Write -------------------------------------------------------------
-  const dataDir = fileURLToPath(new URL("../src/data/", import.meta.url))
-  mkdirSync(dataDir, { recursive: true })
-  writeFileSync(`${dataDir}courses.json`, `${JSON.stringify(courses, null, 2)}\n`)
-  writeFileSync(`${dataDir}requirements.json`, `${JSON.stringify(requirements, null, 2)}\n`)
-  writeFileSync(`${dataDir}sections.json`, `${JSON.stringify(sections, null, 2)}\n`)
+  mkdirSync(fileURLToPath(new URL("../src/data/", import.meta.url)), { recursive: true })
+  writeFileSync(dataPath("courses.json"), `${JSON.stringify(courses, null, 2)}\n`)
+  writeFileSync(dataPath("requirements.json"), `${JSON.stringify(requirements, null, 2)}\n`)
+  writeFileSync(dataPath("sections.json"), `${JSON.stringify(sections, null, 2)}\n`)
 
   // ---- Verification report ----------------------------------------------
   const missing = [...referencedIds].filter((id) => !byId.has(id)).sort()
   const noOffered = courses.filter((c) => c.offered.length === 0)
   const noPrereqs = courses.filter((c) => c.prereqs.length === 0)
-  // Prereq prose the catalog gave us but no course code was extractable from —
-  // these need a human to translate the prose into prereqs[] by hand.
+  // The catalog printed prereq prose but no one has curated it into prereqs[]
+  // yet — a human's to-do list for translating the sentence into structure.
   const prosePrereqs = courses.filter((c) => c.prereqsRaw && c.prereqs.length === 0)
 
   console.log("\n────────────────────── SCRAPE SUMMARY ──────────────────────")
@@ -487,10 +520,11 @@ async function main(): Promise<void> {
   if (missing.length)
     console.log(`⚠ required courses with NO catalog entry: ${missing.join(", ")}`)
   console.log(`⚠ courses with no parsed quarter offered : ${noOffered.length}`)
-  console.log(`⚠ courses with no parsed prerequisites   : ${noPrereqs.length}`)
+  console.log(`hand-curated prereqs preserved  : ${curatedCount}/${courses.length}`)
+  console.log(`⚠ courses with no curated prereqs: ${noPrereqs.length}`)
   if (prosePrereqs.length)
     console.log(
-      `⚠ prereq prose found but no code parsed (fix by hand): ${prosePrereqs.map((c) => c.id).join(", ")}`,
+      `⚠ catalog prereq prose not yet curated by hand: ${prosePrereqs.map((c) => c.id).join(", ")}`,
     )
   console.log(
     "\n⚠ ALL output is verified:false. Hand-review src/data/*.json (especially\n" +

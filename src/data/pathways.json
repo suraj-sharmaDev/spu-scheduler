@@ -1,0 +1,36 @@
+[
+  {
+    "entryType": "freshman",
+    "degree": "BS-CS",
+    "source": "https://catalog.spu.edu/undergraduate/college-schools/cas-stem-social-sciences/computer-science/computer-science-bs/",
+    "totalCreditsRange": [128, 138],
+    "steps": [
+      { "termOffset": 0, "courseIds": ["CSC1250", "FYS1000", "MAT1234"] },
+      { "termOffset": 1, "courseIds": ["CSC1260", "MAT1235"] },
+      { "termOffset": 2, "courseIds": ["CSC2430", "MAT2401"] },
+      { "termOffset": 3, "courseIds": [] },
+      { "termOffset": 4, "courseIds": ["CSC2431", "MAT1720"] },
+      { "termOffset": 5, "courseIds": ["CSC2099", "MAT2360"] },
+      { "termOffset": 6, "courseIds": ["CSC3310", "GS3001"] },
+      { "termOffset": 7, "courseIds": ["CSC3011", "CSC3220", "CSC3430"] },
+      { "termOffset": 8, "courseIds": ["CSC3099", "CSC3150", "CSC3221"] },
+      { "termOffset": 9, "courseIds": ["CSC3750", "CSC4410", "CSC4896", "CSC4941"] },
+      { "termOffset": 10, "courseIds": ["CSC4897"] },
+      { "termOffset": 11, "courseIds": ["CSC3350", "CSC4898"] }
+    ]
+  },
+  {
+    "entryType": "transfer",
+    "degree": "BS-CS",
+    "source": "https://catalog.spu.edu/undergraduate/college-schools/cas-stem-social-sciences/computer-science/computer-science-bs/",
+    "totalCreditsRange": [86, 93],
+    "steps": [
+      { "termOffset": 0, "courseIds": ["CSC2330", "GS3001", "TCOR3001"] },
+      { "termOffset": 1, "courseIds": ["CSC2431", "CSC3011", "CSC3220", "MAT1720"] },
+      { "termOffset": 2, "courseIds": ["CSC2099", "CSC3150", "CSC3221", "MAT2401"] },
+      { "termOffset": 3, "courseIds": ["CSC3310", "CSC3750", "CSC4410", "CSC4896", "CSC4941"] },
+      { "termOffset": 4, "courseIds": ["CSC3430", "CSC4897"] },
+      { "termOffset": 5, "courseIds": ["CSC3099", "CSC3350", "CSC4898"] }
+    ]
+  }
+]

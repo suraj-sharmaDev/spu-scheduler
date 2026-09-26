@@ -1,11 +1,26 @@
 import coursesJson from "#/data/courses.json" with { type: "json" };
+import pathwaysJson from "#/data/pathways.json" with { type: "json" };
 import requirementsJson from "#/data/requirements.json" with { type: "json" };
 import sectionsJson from "#/data/sections.json" with { type: "json" };
-import type { Course, Requirements, Season, Section, Term } from "./types";
+import type {
+	Course,
+	EntryType,
+	Pathway,
+	Requirements,
+	Season,
+	Section,
+	Term,
+} from "./types";
 
 export const courses = coursesJson as Course[];
 export const requirements = requirementsJson as Requirements;
 export const sections = sectionsJson as Section[];
+export const pathways = pathwaysJson as Pathway[];
+
+/** The official recommended sequence for an entry type, if we have one. */
+export function getPathway(entryType: EntryType): Pathway | undefined {
+	return pathways.find((p) => p.entryType === entryType);
+}
 
 /** Academic year the published time schedule covers (Autumn 2026 → Summer 2027). */
 export const SCHEDULE_YEAR_START = 2026;

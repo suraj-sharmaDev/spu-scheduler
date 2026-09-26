@@ -10,6 +10,21 @@ export type OfferedTag = Season | "ALT";
 
 export type CourseCategory = "CS_CORE" | "CS_ELECTIVE" | "MATH" | "OTHER";
 
+/** A single prerequisite condition. The catalog publishes almost none of these
+ *  (see docs/PATHWAYS.md §1), so they're curated by hand and stay
+ *  `verified: false` until an advisor confirms them.
+ *
+ *  - `{ course }`     a course that must be earned beforehand. `minGrade` is
+ *                     advisory only — we don't track grades, so satisfaction
+ *                     checks presence, not the grade.
+ *  - `{ anyOf }`      an OR group: any one member satisfies it (e.g. CSC2431
+ *                     needs CSC2430 *or* the transfer bridge CSC2330).
+ *  - `{ coreq }`      may be taken in the same quarter, not strictly before. */
+export type Prereq =
+	| { course: string; minGrade?: string }
+	| { anyOf: Prereq[] }
+	| { coreq: string };
+
 export interface Course {
 	id: string;
 	subject: string;
@@ -19,7 +34,8 @@ export interface Course {
 	creditsRaw: string;
 	offered: OfferedTag[];
 	offeredRaw: string;
-	prereqs: string[];
+	/** Implicit AND across the array. See `Prereq`. */
+	prereqs: Prereq[];
 	prereqsRaw: string;
 	category: CourseCategory;
 	/** Flips to true after a human reviews the scraped row. */
@@ -79,6 +95,29 @@ export interface Section {
 	instructor: string;
 }
 
+// ---------------------------------------------------------------------------
+// Pathways — the official recommended quarter-by-quarter sequence.
+// SPU publishes one per entry type for BS-CS (docs/PATHWAYS.md §2).
+// ---------------------------------------------------------------------------
+
+export type EntryType = "freshman" | "transfer";
+
+export interface PathwayStep {
+	/** 0 = first quarter, 1 = the next, … in academic-quarter order
+	 *  (Autumn → Winter → Spring, skipping Summer). */
+	termOffset: number;
+	courseIds: string[];
+}
+
+export interface Pathway {
+	entryType: EntryType;
+	degree: "BS-CS";
+	/** Catalog Plan of Study URL the sequence was transcribed from. */
+	source: string;
+	totalCreditsRange: [number, number];
+	steps: PathwayStep[];
+}
+
 /** A plan maps a term key (see `termKey`) to the course ids placed in it.
  *  Derived from the chosen sections; still the unit the requirements/credit
  *  helpers operate on. */
@@ -86,14 +125,23 @@ export type Plan = Record<string, string[]>;
 
 /** Everything we persist to localStorage. */
 export interface AppState {
+	/** Which official pathway seeds suggestions (docs/PATHWAYS.md §2). Our user
+	 *  is the transfer case, so that's the default. */
+	entryType: EntryType;
 	/** Course ids the student has already completed (incl. transfer credit). */
 	completed: string[];
 	/** Whether the DTA / Common Curriculum is considered satisfied. */
 	dtaComplete: boolean;
 	/** Quarter she begins attending (within the published schedule year). */
 	startSeason: Season;
-	/** Weekdays she's willing to be on campus — the offering filter. */
+	/** Weekdays she's willing to be on campus — the section-fit filter. */
 	availableDays: Day[];
-	/** CRNs of the sections she's chosen — the working plan. */
-	selectedCrns: string[];
+	/** The working plan: a term key (see `termKey`) → the course ids placed in
+	 *  it, across every year. The durable unit — independent of section data, so
+	 *  it spans the whole degree, not just the published schedule year. */
+	placements: Record<string, string[]>;
+	/** Per-course override of which concrete section to use (courseId → CRN).
+	 *  Only meaningful for courses placed in the published year; absent means
+	 *  "use the best-fitting section". */
+	sectionChoices: Record<string, string>;
 }

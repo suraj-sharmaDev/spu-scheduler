@@ -116,7 +116,11 @@
       "SPR"
     ],
     "offeredRaw": "Typically offered: Winter, Spring.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC1250"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -221,7 +225,11 @@
       "SPR"
     ],
     "offeredRaw": "Typically offered: Autumn, Spring.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC1260"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -237,7 +245,20 @@
       "WIN"
     ],
     "offeredRaw": "Typically offered: Winter.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "anyOf": [
+          {
+            "course": "CSC2430",
+            "minGrade": "C+"
+          },
+          {
+            "course": "CSC2330",
+            "minGrade": "C+"
+          }
+        ]
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -283,7 +304,11 @@
       "WIN"
     ],
     "offeredRaw": "Typically offered: Winter.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC2431"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -299,7 +324,11 @@
       "SPR"
     ],
     "offeredRaw": "Typically offered: Spring.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC2099"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -315,7 +344,11 @@
       "SPR"
     ],
     "offeredRaw": "Typically offered: Spring.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC2431"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -331,7 +364,11 @@
       "WIN"
     ],
     "offeredRaw": "Typically offered: Winter.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC2431"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -347,7 +384,11 @@
       "SPR"
     ],
     "offeredRaw": "Typically offered: Spring.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC3220"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -363,7 +404,11 @@
       "AUT"
     ],
     "offeredRaw": "Typically offered: Autumn.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC2431"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -395,7 +440,11 @@
       "WIN"
     ],
     "offeredRaw": "Typically offered: Winter.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC2431"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -409,7 +458,11 @@
     "creditsRaw": "(5 Credits)",
     "offered": [],
     "offeredRaw": "",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC2431"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_ELECTIVE",
     "verified": false
@@ -518,7 +571,11 @@
       "AUT"
     ],
     "offeredRaw": "Typically offered: Autumn.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC2431"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -608,7 +665,11 @@
       "WIN"
     ],
     "offeredRaw": "Typically offered: Winter.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC4896"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -624,7 +685,11 @@
       "SPR"
     ],
     "offeredRaw": "Typically offered: Spring.",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "CSC4897"
+      }
+    ],
     "prereqsRaw": "",
     "category": "CS_CORE",
     "verified": false
@@ -1236,7 +1301,11 @@
     "creditsRaw": "(5 Credits)",
     "offered": [],
     "offeredRaw": "",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "MAT1234"
+      }
+    ],
     "prereqsRaw": "",
     "category": "MATH",
     "verified": false
@@ -1334,7 +1403,11 @@
     "creditsRaw": "(5 Credits)",
     "offered": [],
     "offeredRaw": "",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "course": "MAT1234"
+      }
+    ],
     "prereqsRaw": "",
     "category": "MATH",
     "verified": false
@@ -1348,7 +1421,18 @@
     "creditsRaw": "(3 Credits)",
     "offered": [],
     "offeredRaw": "",
-    "prereqs": [],
+    "prereqs": [
+      {
+        "anyOf": [
+          {
+            "course": "MAT1235"
+          },
+          {
+            "course": "MAT1234"
+          }
+        ]
+      }
+    ],
     "prereqsRaw": "",
     "category": "MATH",
     "verified": false
