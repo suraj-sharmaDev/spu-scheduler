@@ -12,6 +12,8 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AttendanceStatus, TaskStatus } from "../status";
 
+const timestamptz = (name: string) => timestamp(name, { withTimezone: true });
+
 const updatedAt = () =>
 	timestamp("updated_at", { withTimezone: true }).notNull().defaultNow();
 
@@ -117,4 +119,34 @@ export const projectReviews = pgTable(
 		updatedAt: updatedAt(),
 	},
 	(t) => [primaryKey({ columns: [t.projectSlug, t.subject] })],
+);
+
+/**
+ * Guided study sessions. At most one may be active (ended_at is null) at a
+ * time, enforced by a partial unique index so two devices can't both start one.
+ * Timer: elapsed = banked_ms + (now - running_since) while running.
+ */
+export const studySessions = pgTable(
+	"study_sessions",
+	{
+		id: serial("id").primaryKey(),
+		projectSlug: text("project_slug").notNull(),
+		taskId: text("task_id").notNull(),
+		startedAt: timestamptz("started_at").notNull().defaultNow(),
+		/** Null while paused. */
+		runningSince: timestamptz("running_since").defaultNow(),
+		bankedMs: integer("banked_ms").notNull().default(0),
+		step: integer("step").notNull().default(0),
+		endedAt: timestamptz("ended_at"),
+		/** Minutes logged and the outcome chosen at wrap-up. */
+		minutes: integer("minutes"),
+		outcome: text("outcome").$type<TaskStatus>(),
+	},
+	(t) => [
+		uniqueIndex("study_sessions_one_active")
+			.on(sql`(${t.endedAt} is null)`)
+			.where(sql`${t.endedAt} is null`),
+		check("study_sessions_banked_ms", sql`${t.bankedMs} >= 0`),
+		check("study_sessions_step", sql`${t.step} >= 0`),
+	],
 );

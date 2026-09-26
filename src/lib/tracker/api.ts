@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { and, eq } from "drizzle-orm";
+import { and, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import {
 	endSession,
 	type Role,
@@ -13,6 +13,7 @@ import {
 	attendance,
 	checklistChecks,
 	projectReviews,
+	studySessions,
 	taskProgress,
 	weeklyReflections,
 } from "./db/schema";
@@ -61,6 +62,33 @@ export interface TrackerState {
 		string,
 		{ answers: Record<string, string>; updatedAt: string }
 	>;
+	/** The one unfinished guided session, from any project. */
+	activeSession: ActiveSession | null;
+	/** Server clock at read time, so the client can correct its timer for skew. */
+	serverNow: string;
+}
+
+export interface ActiveSession {
+	id: number;
+	projectSlug: string;
+	taskId: string;
+	startedAt: string;
+	/** Null while paused. */
+	runningSince: string | null;
+	bankedMs: number;
+	step: number;
+}
+
+function toActiveSession(r: typeof studySessions.$inferSelect): ActiveSession {
+	return {
+		id: r.id,
+		projectSlug: r.projectSlug,
+		taskId: r.taskId,
+		startedAt: r.startedAt.toISOString(),
+		runningSince: r.runningSince?.toISOString() ?? null,
+		bankedMs: r.bankedMs,
+		step: r.step,
+	};
 }
 
 function projectFrom(value: unknown): Project {
@@ -117,22 +145,31 @@ export const getTrackerState = createServerFn({ method: "GET" })
 		const role = requireRole("learner", "admin");
 		const db = getDb();
 		const slug = data.project;
-		const [progress, checks, rows, reflections, reviews] = await Promise.all([
-			db.select().from(taskProgress).where(eq(taskProgress.projectSlug, slug)),
-			db
-				.select()
-				.from(checklistChecks)
-				.where(eq(checklistChecks.projectSlug, slug)),
-			db.select().from(attendance).orderBy(attendance.checkedInAt),
-			db
-				.select()
-				.from(weeklyReflections)
-				.where(eq(weeklyReflections.projectSlug, slug)),
-			db
-				.select()
-				.from(projectReviews)
-				.where(eq(projectReviews.projectSlug, slug)),
-		]);
+		const [progress, checks, rows, reflections, reviews, active] =
+			await Promise.all([
+				db
+					.select()
+					.from(taskProgress)
+					.where(eq(taskProgress.projectSlug, slug)),
+				db
+					.select()
+					.from(checklistChecks)
+					.where(eq(checklistChecks.projectSlug, slug)),
+				db.select().from(attendance).orderBy(attendance.checkedInAt),
+				db
+					.select()
+					.from(weeklyReflections)
+					.where(eq(weeklyReflections.projectSlug, slug)),
+				db
+					.select()
+					.from(projectReviews)
+					.where(eq(projectReviews.projectSlug, slug)),
+				db
+					.select()
+					.from(studySessions)
+					.where(isNull(studySessions.endedAt))
+					.limit(1),
+			]);
 		return {
 			role,
 			progress: Object.fromEntries(
@@ -164,6 +201,8 @@ export const getTrackerState = createServerFn({ method: "GET" })
 					{ answers: r.answers, updatedAt: r.updatedAt.toISOString() },
 				]),
 			),
+			activeSession: active[0] ? toActiveSession(active[0]) : null,
+			serverNow: new Date().toISOString(),
 		};
 	});
 
@@ -377,4 +416,170 @@ export const saveProjectReview = createServerFn({ method: "POST" })
 				target: [projectReviews.projectSlug, projectReviews.subject],
 				set: values,
 			});
+	});
+
+// --- guided study sessions --------------------------------------------------------
+
+function taskFrom(project: Project, value: unknown): string {
+	const taskId = v.string(value, "Task", 50);
+	if (!project.tasks.some((t) => t.id === taskId)) {
+		throw new Error(`Unknown task "${taskId}"`);
+	}
+	return taskId;
+}
+
+const sessionId = (value: unknown) =>
+	v.integer(value, "Session", 1, 2_147_483_647);
+
+export type StartSessionResult =
+	| { started: true; session: ActiveSession }
+	/** Another task's session is still open; it must be continued first. */
+	| { started: false; session: ActiveSession };
+
+/**
+ * Start a session for a task, or return the open one. Only one session may be
+ * open at a time (partial unique index), so a second device can't start another.
+ */
+export const startStudySession = createServerFn({ method: "POST" })
+	.validator((input: unknown) => {
+		const o = v.object(input);
+		const project = projectFrom(o.project);
+		return { project: project.slug, taskId: taskFrom(project, o.taskId) };
+	})
+	.handler(async ({ data }): Promise<StartSessionResult> => {
+		requireRole("learner");
+		const db = getDb();
+		const [inserted] = await db
+			.insert(studySessions)
+			.values({ projectSlug: data.project, taskId: data.taskId })
+			.onConflictDoNothing()
+			.returning();
+		const row =
+			inserted ??
+			(
+				await db
+					.select()
+					.from(studySessions)
+					.where(isNull(studySessions.endedAt))
+					.limit(1)
+			)[0];
+		if (!row) throw new Error("Couldn't start the session. Please try again.");
+
+		const sameTask =
+			row.projectSlug === data.project && row.taskId === data.taskId;
+		if (inserted) {
+			// Starting a session means the task is under way (unless already further along).
+			await db
+				.insert(taskProgress)
+				.values({
+					projectSlug: data.project,
+					taskId: data.taskId,
+					status: "in_progress",
+				})
+				.onConflictDoUpdate({
+					target: [taskProgress.projectSlug, taskProgress.taskId],
+					set: { status: "in_progress", updatedAt: new Date() },
+					setWhere: sql`${taskProgress.status} = 'not_started'`,
+				});
+		}
+		return { started: sameTask, session: toActiveSession(row) };
+	});
+
+/** Pause, resume or move to a step. Uses the database clock for the timer. */
+export const updateStudySession = createServerFn({ method: "POST" })
+	.validator((input: unknown) => {
+		const o = v.object(input);
+		const action = v.oneOf(o.action, "Action", [
+			"pause",
+			"resume",
+			"step",
+		] as const);
+		return {
+			id: sessionId(o.id),
+			action,
+			step: action === "step" ? v.integer(o.step, "Step", 0, 50) : 0,
+		};
+	})
+	.handler(async ({ data }): Promise<ActiveSession> => {
+		requireRole("learner");
+		const db = getDb();
+		const s = studySessions;
+		const open = and(eq(s.id, data.id), isNull(s.endedAt));
+		if (data.action === "pause") {
+			await db
+				.update(s)
+				.set({
+					bankedMs: sql`${s.bankedMs} + greatest(0, floor(extract(epoch from (now() - ${s.runningSince})) * 1000))::int`,
+					runningSince: null,
+				})
+				.where(and(open, isNotNull(s.runningSince)));
+		} else if (data.action === "resume") {
+			await db
+				.update(s)
+				.set({ runningSince: sql`now()` })
+				.where(and(open, isNull(s.runningSince)));
+		} else {
+			await db.update(s).set({ step: data.step }).where(open);
+		}
+		const [row] = await db.select().from(s).where(open);
+		if (!row) throw new Error("This session has already ended.");
+		return toActiveSession(row);
+	});
+
+/**
+ * Wrap up: close the session and log its outcome and minutes on the task, in
+ * one statement so a double submit (or a second device) can't add minutes twice.
+ */
+export const finishStudySession = createServerFn({ method: "POST" })
+	.validator((input: unknown) => {
+		const o = v.object(input);
+		const project = projectFrom(o.project);
+		return {
+			id: sessionId(o.id),
+			project: project.slug,
+			taskId: taskFrom(project, o.taskId),
+			outcome: v.oneOf(o.outcome, "Outcome", TASK_STATUSES),
+			minutes: v.integer(o.minutes, "Minutes", 0, 1440),
+		};
+	})
+	.handler(async ({ data }) => {
+		requireRole("learner");
+		const result = await getDb().execute(sql`
+			with ended as (
+				update study_sessions
+				set ended_at = now(),
+					minutes = ${data.minutes},
+					outcome = ${data.outcome},
+					banked_ms = banked_ms + case when running_since is null then 0
+						else greatest(0, floor(extract(epoch from (now() - running_since)) * 1000))::int end,
+					running_since = null
+				where id = ${data.id} and ended_at is null
+					and project_slug = ${data.project} and task_id = ${data.taskId}
+				returning task_id
+			)
+			insert into task_progress (project_slug, task_id, status, minutes, updated_at)
+			select ${data.project}, task_id, ${data.outcome}, ${data.minutes}, now() from ended
+			on conflict (project_slug, task_id) do update set
+				status = excluded.status,
+				minutes = least(1440, coalesce(task_progress.minutes, 0) + excluded.minutes),
+				updated_at = now()
+			returning task_id
+		`);
+		if (result.rows.length === 0) {
+			throw new Error("This session was already finished or discarded.");
+		}
+	});
+
+/** Throw away the open session (started by mistake). Ticks and notes are kept. */
+export const discardStudySession = createServerFn({ method: "POST" })
+	.validator((input: unknown) => ({ id: sessionId(v.object(input).id) }))
+	.handler(async ({ data }) => {
+		requireRole("learner");
+		const deleted = await getDb()
+			.delete(studySessions)
+			.where(and(eq(studySessions.id, data.id), isNull(studySessions.endedAt)))
+			.returning({ id: studySessions.id });
+		if (deleted.length === 0) {
+			throw new Error("This session was already finished or discarded.");
+		}
 	});

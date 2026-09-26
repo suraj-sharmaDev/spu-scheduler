@@ -7,7 +7,7 @@ import {
 	Plus,
 } from "lucide-react";
 import { type FormEvent, useState } from "react";
-import { TaskPanel } from "#/components/tracker/TaskPanel";
+import { SessionLauncher, TaskHeader } from "#/components/tracker/TaskPanel";
 import { Card, ErrorNote, StatTile } from "#/components/tracker/ui";
 import { WeekStrip } from "#/components/tracker/WeekStrip";
 import type { TrackerState } from "#/lib/tracker/api";
@@ -113,7 +113,11 @@ function Today() {
 						</Link>
 					}
 				>
-					<TaskPanel project={project} task={next} state={state} compact />
+					{state.role === "learner" ? (
+						<SessionLauncher project={project} task={next} state={state} />
+					) : (
+						<TaskHeader project={project} task={next} state={state} />
+					)}
 				</Card>
 			) : (
 				<Card>

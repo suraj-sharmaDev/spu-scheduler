@@ -38,8 +38,16 @@ pnpm db:generate   # after editing schema.ts: write a new migration, then review
 ```
 
 Tables: `task_progress`, `checklist_checks`, `attendance`, `weekly_reflections`,
-`project_reviews`. Missed sessions are never stored; they're scheduled slots with no
-`attendance` row.
+`project_reviews`, `study_sessions`. Missed sessions are never stored; they're
+scheduled slots with no `attendance` row.
+
+**Guided sessions (`study_sessions`).** Only one session can be open at a time, across
+all devices. A partial unique index on `ended_at is null` enforces this, so two
+phones tapping Start at the same moment still get one session. The timer (banked
+time plus a start time while running) and the current step live in the row, so she
+can pause on her laptop and carry on from her phone. Finishing closes the session
+and adds its minutes to the task in one SQL statement, so a second device can't
+count them twice. Discarding deletes the open row; ticks and notes aren't touched.
 
 ## Adding a project
 

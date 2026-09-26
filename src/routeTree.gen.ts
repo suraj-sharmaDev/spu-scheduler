@@ -25,6 +25,7 @@ import { Route as TrackerProjectProgressRouteImport } from './routes/tracker/$pr
 import { Route as TrackerProjectGuideRouteImport } from './routes/tracker/$project/guide'
 import { Route as TrackerProjectConceptsRouteImport } from './routes/tracker/$project/concepts'
 import { Route as TrackerProjectTasksTaskIdRouteImport } from './routes/tracker/$project/tasks/$taskId'
+import { Route as TrackerProjectTasksTaskIdSessionRouteImport } from './routes/tracker/$project/tasks/$taskId_.session'
 
 const TrackerRoute = TrackerRouteImport.update({
   id: '/tracker',
@@ -107,6 +108,12 @@ const TrackerProjectTasksTaskIdRoute =
     path: '/tasks/$taskId',
     getParentRoute: () => TrackerProjectRoute,
   } as any)
+const TrackerProjectTasksTaskIdSessionRoute =
+  TrackerProjectTasksTaskIdSessionRouteImport.update({
+    id: '/tasks/$taskId_/session',
+    path: '/tasks/$taskId/session',
+    getParentRoute: () => TrackerProjectRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/tracker/$project/reflect': typeof TrackerProjectReflectRoute
   '/tracker/$project/': typeof TrackerProjectIndexRoute
   '/tracker/$project/tasks/$taskId': typeof TrackerProjectTasksTaskIdRoute
+  '/tracker/$project/tasks/$taskId/session': typeof TrackerProjectTasksTaskIdSessionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -140,6 +148,7 @@ export interface FileRoutesByTo {
   '/tracker/$project/reflect': typeof TrackerProjectReflectRoute
   '/tracker/$project': typeof TrackerProjectIndexRoute
   '/tracker/$project/tasks/$taskId': typeof TrackerProjectTasksTaskIdRoute
+  '/tracker/$project/tasks/$taskId/session': typeof TrackerProjectTasksTaskIdSessionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -159,6 +168,7 @@ export interface FileRoutesById {
   '/tracker/$project/reflect': typeof TrackerProjectReflectRoute
   '/tracker/$project/': typeof TrackerProjectIndexRoute
   '/tracker/$project/tasks/$taskId': typeof TrackerProjectTasksTaskIdRoute
+  '/tracker/$project/tasks/$taskId_/session': typeof TrackerProjectTasksTaskIdSessionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/tracker/$project/reflect'
     | '/tracker/$project/'
     | '/tracker/$project/tasks/$taskId'
+    | '/tracker/$project/tasks/$taskId/session'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/tracker/$project/reflect'
     | '/tracker/$project'
     | '/tracker/$project/tasks/$taskId'
+    | '/tracker/$project/tasks/$taskId/session'
   id:
     | '__root__'
     | '/'
@@ -212,6 +224,7 @@ export interface FileRouteTypes {
     | '/tracker/$project/reflect'
     | '/tracker/$project/'
     | '/tracker/$project/tasks/$taskId'
+    | '/tracker/$project/tasks/$taskId_/session'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -335,6 +348,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackerProjectTasksTaskIdRouteImport
       parentRoute: typeof TrackerProjectRoute
     }
+    '/tracker/$project/tasks/$taskId_/session': {
+      id: '/tracker/$project/tasks/$taskId_/session'
+      path: '/tasks/$taskId/session'
+      fullPath: '/tracker/$project/tasks/$taskId/session'
+      preLoaderRoute: typeof TrackerProjectTasksTaskIdSessionRouteImport
+      parentRoute: typeof TrackerProjectRoute
+    }
   }
 }
 
@@ -361,6 +381,7 @@ interface TrackerProjectRouteChildren {
   TrackerProjectReflectRoute: typeof TrackerProjectReflectRoute
   TrackerProjectIndexRoute: typeof TrackerProjectIndexRoute
   TrackerProjectTasksTaskIdRoute: typeof TrackerProjectTasksTaskIdRoute
+  TrackerProjectTasksTaskIdSessionRoute: typeof TrackerProjectTasksTaskIdSessionRoute
 }
 
 const TrackerProjectRouteChildren: TrackerProjectRouteChildren = {
@@ -370,6 +391,7 @@ const TrackerProjectRouteChildren: TrackerProjectRouteChildren = {
   TrackerProjectReflectRoute: TrackerProjectReflectRoute,
   TrackerProjectIndexRoute: TrackerProjectIndexRoute,
   TrackerProjectTasksTaskIdRoute: TrackerProjectTasksTaskIdRoute,
+  TrackerProjectTasksTaskIdSessionRoute: TrackerProjectTasksTaskIdSessionRoute,
 }
 
 const TrackerProjectRouteWithChildren = TrackerProjectRoute._addFileChildren(

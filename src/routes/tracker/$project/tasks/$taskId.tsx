@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { TaskPanel } from "#/components/tracker/TaskPanel";
+import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
+import { SessionLauncher, TaskPanel } from "#/components/tracker/TaskPanel";
 import { Card } from "#/components/tracker/ui";
 import { getProject } from "#/lib/tracker/projects";
 import { useTracker } from "#/lib/tracker/queries";
@@ -54,9 +54,33 @@ function TaskPage() {
 					) : null}
 				</div>
 			</nav>
-			<Card>
-				<TaskPanel project={project} task={task} state={state} />
-			</Card>
+			{state.role === "learner" ? (
+				<>
+					<Card>
+						<SessionLauncher project={project} task={task} state={state} />
+					</Card>
+					{/* Everything the session covers, for quick fixes outside a session. */}
+					<details className="group rounded-2xl bg-white shadow-sm ring-1 ring-rose-100">
+						<summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-medium text-slate-600 [&::-webkit-details-marker]:hidden">
+							See everything for this session (checklists, status, minutes,
+							notes)
+							<ChevronDown className="h-4 w-4 shrink-0 transition group-open:rotate-180" />
+						</summary>
+						<div className="border-t border-rose-100 p-5 sm:p-6">
+							<TaskPanel
+								project={project}
+								task={task}
+								state={state}
+								showHeader={false}
+							/>
+						</div>
+					</details>
+				</>
+			) : (
+				<Card>
+					<TaskPanel project={project} task={task} state={state} />
+				</Card>
+			)}
 		</div>
 	);
 }

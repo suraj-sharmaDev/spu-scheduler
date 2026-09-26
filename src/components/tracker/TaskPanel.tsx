@@ -1,12 +1,20 @@
-import { Link } from "@tanstack/react-router";
-import { ArrowRight, Flag, LifeBuoy } from "lucide-react";
-import { type ReactNode, useEffect, useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Flag, LifeBuoy, Play } from "lucide-react";
+import { type ReactNode, useState } from "react";
 import type { TrackerState } from "#/lib/tracker/api";
 import { checklistProgress, learnedConcepts } from "#/lib/tracker/progress";
-import { conceptMap } from "#/lib/tracker/projects";
-import { useToggleChecklist, useUpdateTask } from "#/lib/tracker/queries";
+import { conceptMap, getProject } from "#/lib/tracker/projects";
+import {
+	useClockSkew,
+	useStartSession,
+	useToggleChecklist,
+	useUpdateTask,
+} from "#/lib/tracker/queries";
+import { formatElapsed } from "#/lib/tracker/session";
 import { TASK_STATUSES } from "#/lib/tracker/status";
 import type { Project, Task } from "#/lib/tracker/types";
+import { useAutosaveNotes, useSessionElapsed } from "#/lib/tracker/useSession";
+import { NotesBox } from "./NotesBox";
 import {
 	Checklist,
 	ConceptChips,
@@ -34,15 +42,14 @@ export function TaskPanel({
 	project,
 	task,
 	state,
-	compact = false,
+	showHeader = true,
 }: {
 	project: Project;
 	task: Task;
 	state: TrackerState;
-	compact?: boolean;
+	showHeader?: boolean;
 }) {
 	const readOnly = state.role !== "learner";
-	const milestone = project.milestones.find((m) => m.id === task.milestoneId);
 	const saved = state.progress[task.id];
 	const status = saved?.status ?? "not_started";
 	const checked = new Set(state.checkedItems);
@@ -57,30 +64,9 @@ export function TaskPanel({
 
 	return (
 		<div className="space-y-6">
-			<header>
-				<p className="text-sm text-slate-500">
-					Week {milestone?.number} · Session {task.sessionInMilestone} ·{" "}
-					{milestone?.subproject} · #{task.number}
-				</p>
-				<div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
-					<h2 className="font-display text-2xl font-semibold text-slate-900">
-						{task.title}
-					</h2>
-					<StatusPill status={status} />
-					{task.checkpoint ? (
-						<span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
-							<Flag className="h-3 w-3" /> Checkpoint
-						</span>
-					) : null}
-				</div>
-				<div className="mt-2 flex items-center gap-3 text-sm text-slate-500">
-					<LevelStars level={task.level} />
-					<span>
-						{done}/{total} ticked
-					</span>
-					<Meter value={total ? done / total : 0} className="max-w-40" />
-				</div>
-			</header>
+			{showHeader ? (
+				<TaskHeader project={project} task={task} state={state} />
+			) : null}
 
 			{task.intro.length > 0 ? (
 				<p className="whitespace-pre-line rounded-xl bg-amber-50/70 px-4 py-3 text-sm text-slate-700">
@@ -107,7 +93,7 @@ export function TaskPanel({
 				</Section>
 			) : null}
 
-			{!compact && task.thinkAbout.length > 0 ? (
+			{task.thinkAbout.length > 0 ? (
 				<Section title="Think about / look up">
 					<ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
 						{task.thinkAbout.map((q) => (
@@ -163,24 +149,15 @@ export function TaskPanel({
 				onSave={(minutes) => update.mutate({ taskId: task.id, minutes })}
 			/>
 
-			{compact ? (
-				<Link
-					to="/tracker/$project/tasks/$taskId"
-					params={{ project: project.slug, taskId: task.id }}
-					className="inline-flex items-center gap-1 font-medium text-rose-600 hover:text-rose-700"
-				>
-					Open full task, notes and questions <ArrowRight className="h-4 w-4" />
-				</Link>
-			) : (
-				<NotesField
+			<Section title="Notes · pseudocode · where I got stuck">
+				<TaskNotes
 					key={task.id}
-					initial={saved?.notes ?? ""}
-					templates={project.templates}
+					project={project}
+					taskId={task.id}
+					serverNotes={saved?.notes ?? ""}
 					readOnly={readOnly}
-					saving={update.isPending}
-					onSave={(notes) => update.mutate({ taskId: task.id, notes })}
 				/>
-			)}
+			</Section>
 			<ErrorNote error={update.error} />
 		</div>
 	);
@@ -245,82 +222,168 @@ function MinutesField({
 	);
 }
 
-function NotesField({
-	initial,
-	templates,
-	readOnly,
-	saving,
-	onSave,
+/** Where the task sits in the plan, its title, status, level and tick progress. */
+export function TaskHeader({
+	project,
+	task,
+	state,
 }: {
-	initial: string;
-	templates: Project["templates"];
-	readOnly: boolean;
-	saving: boolean;
-	onSave: (notes: string) => void;
+	project: Project;
+	task: Task;
+	state: TrackerState;
 }) {
-	const [text, setText] = useState(initial);
-	const [lastSaved, setLastSaved] = useState(initial);
-	const dirty = text !== lastSaved;
+	const milestone = project.milestones.find((m) => m.id === task.milestoneId);
+	const status = state.progress[task.id]?.status ?? "not_started";
+	const { done, total } = checklistProgress(task, new Set(state.checkedItems));
+	return (
+		<header>
+			<p className="text-sm text-slate-500">
+				Week {milestone?.number} · Session {task.sessionInMilestone} ·{" "}
+				{milestone?.subproject} · #{task.number}
+			</p>
+			<div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+				<h2 className="font-display text-2xl font-semibold text-slate-900">
+					{task.title}
+				</h2>
+				<StatusPill status={status} />
+				{task.checkpoint ? (
+					<span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+						<Flag className="h-3 w-3" /> Checkpoint
+					</span>
+				) : null}
+			</div>
+			<div className="mt-2 flex items-center gap-3 text-sm text-slate-500">
+				<LevelStars level={task.level} />
+				<span>
+					{done}/{total} ticked
+				</span>
+				<Meter value={total ? done / total : 0} className="max-w-40" />
+			</div>
+		</header>
+	);
+}
 
-	// Pick up server changes (e.g. saved from another device) when not editing.
-	// biome-ignore lint/correctness/useExhaustiveDependencies: react only to new server values
-	useEffect(() => {
-		if (!dirty) {
-			setText(initial);
-			setLastSaved(initial);
-		}
-	}, [initial]);
+/** Task summary plus one big button into the guided session. */
+export function SessionLauncher({
+	project,
+	task,
+	state,
+}: {
+	project: Project;
+	task: Task;
+	state: TrackerState;
+}) {
+	return (
+		<div className="space-y-5">
+			<TaskHeader project={project} task={task} state={state} />
+			<SessionButton project={project} task={task} state={state} />
+			<p className="text-center text-sm text-slate-500">
+				It walks you through the whole session step by step and times it for
+				you.
+			</p>
+		</div>
+	);
+}
 
-	const save = () => {
-		if (!dirty) return;
-		onSave(text);
-		setLastSaved(text);
-	};
+function TaskNotes({
+	project,
+	taskId,
+	serverNotes,
+	readOnly,
+}: {
+	project: Project;
+	taskId: string;
+	serverNotes: string;
+	readOnly: boolean;
+}) {
+	const notes = useAutosaveNotes(project.slug, taskId, serverNotes, !readOnly);
+	return (
+		<NotesBox
+			text={notes.text}
+			onChange={notes.setText}
+			onBlur={notes.flush}
+			status={notes.status}
+			templates={project.templates}
+			readOnly={readOnly}
+		/>
+	);
+}
+
+/**
+ * Primary call to action. Starts the guided session, or continues the open one.
+ * Only one session can be open, so if another task's session is open this
+ * button leads there instead.
+ */
+export function SessionButton({
+	project,
+	task,
+	state,
+}: {
+	project: Project;
+	task: Task;
+	state: TrackerState;
+}) {
+	const active = state.activeSession;
+	const elapsed = useSessionElapsed(active, useClockSkew(project.slug));
+	const start = useStartSession(project.slug);
+	const navigate = useNavigate();
+	const big =
+		"flex w-full items-center justify-center gap-3 rounded-2xl bg-rose-500 px-6 py-5 text-xl font-semibold text-white shadow-lg shadow-rose-200 transition hover:bg-rose-600 active:scale-[0.99] disabled:opacity-60";
+
+	if (active) {
+		const same =
+			active.projectSlug === project.slug && active.taskId === task.id;
+		const openTask = getProject(active.projectSlug)?.tasks.find(
+			(t) => t.id === active.taskId,
+		);
+		return (
+			<div className="space-y-2">
+				<Link
+					to="/tracker/$project/tasks/$taskId/session"
+					params={{ project: active.projectSlug, taskId: active.taskId }}
+					className={big}
+				>
+					<Play className="h-6 w-6 fill-white" />
+					{same
+						? "Continue session"
+						: `Continue session #${openTask?.number ?? "?"}`}
+					<span className="font-mono text-lg font-medium opacity-80">
+						{formatElapsed(elapsed)}
+					</span>
+				</Link>
+				{same ? null : (
+					<p className="rounded-xl bg-amber-50 px-4 py-2 text-center text-sm text-amber-900">
+						You have a session open for #{openTask?.number} {openTask?.title}.
+						Finish or discard it before starting a new one.
+					</p>
+				)}
+			</div>
+		);
+	}
 
 	return (
-		<Section title="Notes · pseudocode · where I got stuck">
-			{!readOnly && templates.length > 0 ? (
-				<div className="mb-2 flex flex-wrap gap-2">
-					{templates.map((t) => (
-						<button
-							key={t.name}
-							type="button"
-							onClick={() =>
-								setText((prev) =>
-									prev.trim() ? `${prev}\n\n${t.body}` : t.body,
-								)
+		<div>
+			<button
+				type="button"
+				disabled={start.isPending}
+				onClick={() =>
+					start.mutate(task.id, {
+						onSuccess: (r) => {
+							if (r.started) {
+								navigate({
+									to: "/tracker/$project/tasks/$taskId/session",
+									params: { project: project.slug, taskId: task.id },
+								});
 							}
-							className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 hover:bg-slate-200"
-						>
-							+ {t.name} template
-						</button>
-					))}
-				</div>
-			) : null}
-			<textarea
-				value={text}
-				readOnly={readOnly}
-				onChange={(e) => setText(e.target.value)}
-				onBlur={save}
-				rows={8}
-				placeholder="Write short answers, links you found, pseudocode…"
-				className="w-full rounded-xl border border-rose-200 px-3 py-2 font-mono text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-rose-300"
-			/>
-			<div className="mt-2 flex items-center gap-3 text-sm">
-				{!readOnly ? (
-					<button
-						type="button"
-						onClick={save}
-						disabled={!dirty}
-						className="rounded-lg bg-rose-500 px-3 py-1.5 font-medium text-white hover:bg-rose-600 disabled:opacity-40"
-					>
-						Save notes
-					</button>
-				) : null}
-				<span className="text-slate-400">
-					{dirty ? "Unsaved changes" : saving ? "Saving…" : "Saved"}
-				</span>
-			</div>
-		</Section>
+						},
+					})
+				}
+				className={big}
+			>
+				<Play className="h-6 w-6 fill-white" />
+				{start.isPending ? "Starting…" : "Start session"}
+			</button>
+			<ErrorNote error={start.error} />
+		</div>
 	);
 }
