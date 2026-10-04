@@ -107,7 +107,9 @@ export const CV: Cv = {
 		},
 	],
 	honors: [
-		"Phi Theta Kappa Scholarship, Seattle Pacific University ($3,000)",
+		"Merit Scholarship, Seattle Pacific University ($23,000)",
+		"DTA Scholarship, Seattle Pacific University ($3,000)",
+		"Phi Theta Kappa Scholarship, Seattle Pacific University ($2,000)",
 		"North Seattle College Commitment Scholarship ($3,400)",
 		"Phi Theta Kappa Honor Society, Member",
 	],
