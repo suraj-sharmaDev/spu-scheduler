@@ -9,32 +9,33 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TrackerRouteImport } from './routes/tracker'
-import { Route as SchedulerRouteImport } from './routes/scheduler'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TrackerIndexRouteImport } from './routes/tracker/index'
+import { Route as CvRouteImport } from './routes/cv'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as SchedulerRouteImport } from './routes/scheduler'
+import { Route as TrackerRouteImport } from './routes/tracker'
 import { Route as SchedulerIndexRouteImport } from './routes/scheduler/index'
-import { Route as TrackerAttendanceRouteImport } from './routes/tracker/attendance'
-import { Route as TrackerProjectRouteImport } from './routes/tracker/$project'
-import { Route as SchedulerTransferredRouteImport } from './routes/scheduler/transferred'
 import { Route as SchedulerPlanRouteImport } from './routes/scheduler/plan'
+import { Route as SchedulerTransferredRouteImport } from './routes/scheduler/transferred'
+import { Route as TrackerIndexRouteImport } from './routes/tracker/index'
+import { Route as TrackerProjectRouteImport } from './routes/tracker/$project'
+import { Route as TrackerAttendanceRouteImport } from './routes/tracker/attendance'
 import { Route as TrackerProjectIndexRouteImport } from './routes/tracker/$project/index'
-import { Route as TrackerProjectReflectRouteImport } from './routes/tracker/$project/reflect'
-import { Route as TrackerProjectProgressRouteImport } from './routes/tracker/$project/progress'
-import { Route as TrackerProjectGuideRouteImport } from './routes/tracker/$project/guide'
 import { Route as TrackerProjectConceptsRouteImport } from './routes/tracker/$project/concepts'
+import { Route as TrackerProjectGuideRouteImport } from './routes/tracker/$project/guide'
+import { Route as TrackerProjectProgressRouteImport } from './routes/tracker/$project/progress'
+import { Route as TrackerProjectReflectRouteImport } from './routes/tracker/$project/reflect'
 import { Route as TrackerProjectTasksTaskIdRouteImport } from './routes/tracker/$project/tasks/$taskId'
 import { Route as TrackerProjectTasksTaskIdSessionRouteImport } from './routes/tracker/$project/tasks/$taskId_.session'
 
-const TrackerRoute = TrackerRouteImport.update({
-  id: '/tracker',
-  path: '/tracker',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SchedulerRoute = SchedulerRouteImport.update({
-  id: '/scheduler',
-  path: '/scheduler',
+const CvRoute = CvRouteImport.update({
+  id: '/cv',
+  path: '/cv',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -42,34 +43,19 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const SchedulerRoute = SchedulerRouteImport.update({
+  id: '/scheduler',
+  path: '/scheduler',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TrackerIndexRoute = TrackerIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => TrackerRoute,
+const TrackerRoute = TrackerRouteImport.update({
+  id: '/tracker',
+  path: '/tracker',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const SchedulerIndexRoute = SchedulerIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => SchedulerRoute,
-} as any)
-const TrackerAttendanceRoute = TrackerAttendanceRouteImport.update({
-  id: '/attendance',
-  path: '/attendance',
-  getParentRoute: () => TrackerRoute,
-} as any)
-const TrackerProjectRoute = TrackerProjectRouteImport.update({
-  id: '/$project',
-  path: '/$project',
-  getParentRoute: () => TrackerRoute,
-} as any)
-const SchedulerTransferredRoute = SchedulerTransferredRouteImport.update({
-  id: '/transferred',
-  path: '/transferred',
   getParentRoute: () => SchedulerRoute,
 } as any)
 const SchedulerPlanRoute = SchedulerPlanRouteImport.update({
@@ -77,19 +63,34 @@ const SchedulerPlanRoute = SchedulerPlanRouteImport.update({
   path: '/plan',
   getParentRoute: () => SchedulerRoute,
 } as any)
+const SchedulerTransferredRoute = SchedulerTransferredRouteImport.update({
+  id: '/transferred',
+  path: '/transferred',
+  getParentRoute: () => SchedulerRoute,
+} as any)
+const TrackerIndexRoute = TrackerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TrackerRoute,
+} as any)
+const TrackerProjectRoute = TrackerProjectRouteImport.update({
+  id: '/$project',
+  path: '/$project',
+  getParentRoute: () => TrackerRoute,
+} as any)
+const TrackerAttendanceRoute = TrackerAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => TrackerRoute,
+} as any)
 const TrackerProjectIndexRoute = TrackerProjectIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => TrackerProjectRoute,
 } as any)
-const TrackerProjectReflectRoute = TrackerProjectReflectRouteImport.update({
-  id: '/reflect',
-  path: '/reflect',
-  getParentRoute: () => TrackerProjectRoute,
-} as any)
-const TrackerProjectProgressRoute = TrackerProjectProgressRouteImport.update({
-  id: '/progress',
-  path: '/progress',
+const TrackerProjectConceptsRoute = TrackerProjectConceptsRouteImport.update({
+  id: '/concepts',
+  path: '/concepts',
   getParentRoute: () => TrackerProjectRoute,
 } as any)
 const TrackerProjectGuideRoute = TrackerProjectGuideRouteImport.update({
@@ -97,9 +98,14 @@ const TrackerProjectGuideRoute = TrackerProjectGuideRouteImport.update({
   path: '/guide',
   getParentRoute: () => TrackerProjectRoute,
 } as any)
-const TrackerProjectConceptsRoute = TrackerProjectConceptsRouteImport.update({
-  id: '/concepts',
-  path: '/concepts',
+const TrackerProjectProgressRoute = TrackerProjectProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => TrackerProjectRoute,
+} as any)
+const TrackerProjectReflectRoute = TrackerProjectReflectRouteImport.update({
+  id: '/reflect',
+  path: '/reflect',
   getParentRoute: () => TrackerProjectRoute,
 } as any)
 const TrackerProjectTasksTaskIdRoute =
@@ -117,6 +123,7 @@ const TrackerProjectTasksTaskIdSessionRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cv': typeof CvRoute
   '/login': typeof LoginRoute
   '/scheduler': typeof SchedulerRouteWithChildren
   '/tracker': typeof TrackerRouteWithChildren
@@ -136,6 +143,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cv': typeof CvRoute
   '/login': typeof LoginRoute
   '/scheduler/plan': typeof SchedulerPlanRoute
   '/scheduler/transferred': typeof SchedulerTransferredRoute
@@ -153,6 +161,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cv': typeof CvRoute
   '/login': typeof LoginRoute
   '/scheduler': typeof SchedulerRouteWithChildren
   '/tracker': typeof TrackerRouteWithChildren
@@ -174,6 +183,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cv'
     | '/login'
     | '/scheduler'
     | '/tracker'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cv'
     | '/login'
     | '/scheduler/plan'
     | '/scheduler/transferred'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/cv'
     | '/login'
     | '/scheduler'
     | '/tracker'
@@ -229,6 +241,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CvRoute: typeof CvRoute
   LoginRoute: typeof LoginRoute
   SchedulerRoute: typeof SchedulerRouteWithChildren
   TrackerRoute: typeof TrackerRouteWithChildren
@@ -236,18 +249,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tracker': {
-      id: '/tracker'
-      path: '/tracker'
-      fullPath: '/tracker'
-      preLoaderRoute: typeof TrackerRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/scheduler': {
-      id: '/scheduler'
-      path: '/scheduler'
-      fullPath: '/scheduler'
-      preLoaderRoute: typeof SchedulerRouteImport
+    '/cv': {
+      id: '/cv'
+      path: '/cv'
+      fullPath: '/cv'
+      preLoaderRoute: typeof CvRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -257,46 +270,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/scheduler': {
+      id: '/scheduler'
+      path: '/scheduler'
+      fullPath: '/scheduler'
+      preLoaderRoute: typeof SchedulerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tracker/': {
-      id: '/tracker/'
-      path: '/'
-      fullPath: '/tracker/'
-      preLoaderRoute: typeof TrackerIndexRouteImport
-      parentRoute: typeof TrackerRoute
+    '/tracker': {
+      id: '/tracker'
+      path: '/tracker'
+      fullPath: '/tracker'
+      preLoaderRoute: typeof TrackerRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/scheduler/': {
       id: '/scheduler/'
       path: '/'
       fullPath: '/scheduler/'
       preLoaderRoute: typeof SchedulerIndexRouteImport
-      parentRoute: typeof SchedulerRoute
-    }
-    '/tracker/attendance': {
-      id: '/tracker/attendance'
-      path: '/attendance'
-      fullPath: '/tracker/attendance'
-      preLoaderRoute: typeof TrackerAttendanceRouteImport
-      parentRoute: typeof TrackerRoute
-    }
-    '/tracker/$project': {
-      id: '/tracker/$project'
-      path: '/$project'
-      fullPath: '/tracker/$project'
-      preLoaderRoute: typeof TrackerProjectRouteImport
-      parentRoute: typeof TrackerRoute
-    }
-    '/scheduler/transferred': {
-      id: '/scheduler/transferred'
-      path: '/transferred'
-      fullPath: '/scheduler/transferred'
-      preLoaderRoute: typeof SchedulerTransferredRouteImport
       parentRoute: typeof SchedulerRoute
     }
     '/scheduler/plan': {
@@ -306,6 +298,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchedulerPlanRouteImport
       parentRoute: typeof SchedulerRoute
     }
+    '/scheduler/transferred': {
+      id: '/scheduler/transferred'
+      path: '/transferred'
+      fullPath: '/scheduler/transferred'
+      preLoaderRoute: typeof SchedulerTransferredRouteImport
+      parentRoute: typeof SchedulerRoute
+    }
+    '/tracker/': {
+      id: '/tracker/'
+      path: '/'
+      fullPath: '/tracker/'
+      preLoaderRoute: typeof TrackerIndexRouteImport
+      parentRoute: typeof TrackerRoute
+    }
+    '/tracker/$project': {
+      id: '/tracker/$project'
+      path: '/$project'
+      fullPath: '/tracker/$project'
+      preLoaderRoute: typeof TrackerProjectRouteImport
+      parentRoute: typeof TrackerRoute
+    }
+    '/tracker/attendance': {
+      id: '/tracker/attendance'
+      path: '/attendance'
+      fullPath: '/tracker/attendance'
+      preLoaderRoute: typeof TrackerAttendanceRouteImport
+      parentRoute: typeof TrackerRoute
+    }
     '/tracker/$project/': {
       id: '/tracker/$project/'
       path: '/'
@@ -313,18 +333,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackerProjectIndexRouteImport
       parentRoute: typeof TrackerProjectRoute
     }
-    '/tracker/$project/reflect': {
-      id: '/tracker/$project/reflect'
-      path: '/reflect'
-      fullPath: '/tracker/$project/reflect'
-      preLoaderRoute: typeof TrackerProjectReflectRouteImport
-      parentRoute: typeof TrackerProjectRoute
-    }
-    '/tracker/$project/progress': {
-      id: '/tracker/$project/progress'
-      path: '/progress'
-      fullPath: '/tracker/$project/progress'
-      preLoaderRoute: typeof TrackerProjectProgressRouteImport
+    '/tracker/$project/concepts': {
+      id: '/tracker/$project/concepts'
+      path: '/concepts'
+      fullPath: '/tracker/$project/concepts'
+      preLoaderRoute: typeof TrackerProjectConceptsRouteImport
       parentRoute: typeof TrackerProjectRoute
     }
     '/tracker/$project/guide': {
@@ -334,11 +347,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackerProjectGuideRouteImport
       parentRoute: typeof TrackerProjectRoute
     }
-    '/tracker/$project/concepts': {
-      id: '/tracker/$project/concepts'
-      path: '/concepts'
-      fullPath: '/tracker/$project/concepts'
-      preLoaderRoute: typeof TrackerProjectConceptsRouteImport
+    '/tracker/$project/progress': {
+      id: '/tracker/$project/progress'
+      path: '/progress'
+      fullPath: '/tracker/$project/progress'
+      preLoaderRoute: typeof TrackerProjectProgressRouteImport
+      parentRoute: typeof TrackerProjectRoute
+    }
+    '/tracker/$project/reflect': {
+      id: '/tracker/$project/reflect'
+      path: '/reflect'
+      fullPath: '/tracker/$project/reflect'
+      preLoaderRoute: typeof TrackerProjectReflectRouteImport
       parentRoute: typeof TrackerProjectRoute
     }
     '/tracker/$project/tasks/$taskId': {
@@ -415,6 +435,7 @@ const TrackerRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CvRoute: CvRoute,
   LoginRoute: LoginRoute,
   SchedulerRoute: SchedulerRouteWithChildren,
   TrackerRoute: TrackerRouteWithChildren,

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
 	ArrowRight,
 	CalendarHeart,
+	FileText,
 	GraduationCap,
 	Heart,
 	Sparkles,
@@ -98,6 +99,14 @@ function Home() {
 						body="Plan your BS in Computer Science quarter by quarter, with prerequisites checked for you."
 						footer="Seattle Pacific University · CS"
 					/>
+					<HomeCard
+						to="/cv"
+						icon={<FileText className="h-7 w-7" />}
+						iconClass="bg-slate-800 text-white"
+						title="Resume"
+						body="Your one-page internship resume, ready to save as a PDF and send."
+						footer="ATS-friendly · Letter size"
+					/>
 				</div>
 
 				<footer className="mt-auto pt-16 text-center text-sm text-rose-900/50">
@@ -119,7 +128,7 @@ function HomeCard({
 	footer,
 	highlight = false,
 }: {
-	to: "/tracker" | "/scheduler";
+	to: "/tracker" | "/scheduler" | "/cv";
 	icon: ReactNode;
 	iconClass: string;
 	title: string;

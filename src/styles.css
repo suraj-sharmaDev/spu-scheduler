@@ -61,3 +61,25 @@ body {
 	background-color: var(--color-slate-50);
 	color: var(--color-slate-800);
 }
+
+/* Resume (/cv) printing: Letter paper, margins owned by @page. */
+@media print {
+	@page {
+		size: letter;
+		margin: 0.5in;
+	}
+
+	html,
+	body {
+		background: white;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
+	/* TanStack devtools trigger renders in dev and would print. */
+	.tsqd-parent-container,
+	[class*="tanstack-devtools"],
+	#tanstack-devtools-root {
+		display: none !important;
+	}
+}
