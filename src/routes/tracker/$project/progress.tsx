@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ResetTracker } from "#/components/tracker/ResetTracker";
 import { Card, Meter, StatTile } from "#/components/tracker/ui";
 import { WeekChart } from "#/components/tracker/WeekChart";
 import {
@@ -200,6 +201,10 @@ function Progress() {
 					</table>
 				</div>
 			</Card>
+
+			{state.role === "admin" ? (
+				<ResetTracker project={project.slug} state={state} />
+			) : null}
 		</div>
 	);
 }

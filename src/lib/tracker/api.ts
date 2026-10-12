@@ -694,3 +694,30 @@ export const reviewRecallCard = createServerFn({ method: "POST" })
 				setWhere: sql`${recallReviews.reviewedAt} < ${done}`,
 			});
 	});
+
+// --- admin ------------------------------------------------------------------------
+
+/**
+ * Start over: delete all progress, sessions, recall answers, reflections and
+ * attendance, for every project, in one transaction. Admin only, and the caller
+ * must send the typed confirmation so a stray request can't wipe anything.
+ */
+export const resetTracker = createServerFn({ method: "POST" })
+	.validator((input: unknown) => {
+		const confirm = v.string(v.object(input).confirm, "Confirmation", 20);
+		if (confirm !== "reset") throw new Error('Type "reset" to confirm.');
+		return { confirm };
+	})
+	.handler(async () => {
+		requireRole("admin");
+		const db = getDb();
+		await db.batch([
+			db.delete(taskProgress),
+			db.delete(checklistChecks),
+			db.delete(studySessions),
+			db.delete(recallReviews),
+			db.delete(weeklyReflections),
+			db.delete(projectReviews),
+			db.delete(attendance),
+		]);
+	});

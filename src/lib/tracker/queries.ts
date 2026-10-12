@@ -11,6 +11,7 @@ import {
 	finishStudySession,
 	getTrackerState,
 	logMakeup,
+	resetTracker,
 	reviewRecallCard,
 	saveProjectReview,
 	saveWeeklyReflection,
@@ -220,5 +221,11 @@ export function useReviewCard(project: string) {
 				},
 			},
 		}),
+	);
+}
+
+export function useResetTracker(project: string) {
+	return useTrackerMutation(project, (confirm: string) =>
+		resetTracker({ data: { confirm } }),
 	);
 }

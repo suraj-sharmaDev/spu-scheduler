@@ -26,7 +26,7 @@ everything in the browser.
 |---|---|
 | `DATABASE_URL` | Neon connection string (set by the Vercel Neon integration) |
 | `TRACKER_LEARNER_PASSCODE` | Samanata's passcode: full access |
-| `TRACKER_ADMIN_PASSCODE` | Your passcode: sees everything, can't change anything |
+| `TRACKER_ADMIN_PASSCODE` | Your passcode: sees everything; the only thing it can change is "Reset everything" |
 | `SESSION_SECRET` | Signs the session cookie. At least 32 characters: `openssl rand -hex 32` |
 
 Changing `SESSION_SECRET` signs everyone out. Changing a passcode doesn't end
@@ -50,6 +50,12 @@ time plus a start time while running) and the current step live in the row, so s
 can pause on her laptop and carry on from her phone. Finishing closes the session
 and adds its minutes to the task in one SQL statement, so a second device can't
 count them twice. Discarding deletes the open row; ticks and notes aren't touched.
+
+**Starting over.** Signed in as admin, the bottom of the Progress page has
+"Reset everything". After you type `reset` in its modal, it deletes all
+progress, ticks, notes, sessions, recall answers, reflections, reviews and
+attendance, for every project, in one transaction. There's no undo, so export
+the tables first if you might want them back.
 
 ## Lessons and recall
 
