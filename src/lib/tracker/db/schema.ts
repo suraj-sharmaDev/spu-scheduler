@@ -141,6 +141,8 @@ export const studySessions = pgTable(
 		/** Minutes logged and the outcome chosen at wrap-up. */
 		minutes: integer("minutes"),
 		outcome: text("outcome").$type<TaskStatus>(),
+		/** Her one-sentence summary at wrap-up; shown at the start of the next session. */
+		takeaway: text("takeaway"),
 	},
 	(t) => [
 		uniqueIndex("study_sessions_one_active")
@@ -148,5 +150,25 @@ export const studySessions = pgTable(
 			.where(sql`${t.endedAt} is null`),
 		check("study_sessions_banked_ms", sql`${t.bankedMs} >= 0`),
 		check("study_sessions_step", sql`${t.step} >= 0`),
+	],
+);
+
+/**
+ * Spaced recall answers, one row per card she has answered. `reviewed_at` is
+ * the number of finished sessions at the time, so spacing counts sessions.
+ */
+export const recallReviews = pgTable(
+	"recall_reviews",
+	{
+		projectSlug: text("project_slug").notNull(),
+		cardId: text("card_id").notNull(),
+		box: integer("box").notNull(),
+		reviewedAt: integer("reviewed_at").notNull(),
+		updatedAt: updatedAt(),
+	},
+	(t) => [
+		primaryKey({ columns: [t.projectSlug, t.cardId] }),
+		check("recall_reviews_box", sql`${t.box} between 0 and 4`),
+		check("recall_reviews_reviewed_at", sql`${t.reviewedAt} >= 0`),
 	],
 );

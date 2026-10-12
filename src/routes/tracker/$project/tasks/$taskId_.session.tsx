@@ -18,22 +18,26 @@ import {
 	X,
 } from "lucide-react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import {
+	ExampleButton,
+	ExampleView,
+	HintButton,
+	OrderPuzzleView,
+	RecallDeck,
+} from "#/components/tracker/lesson";
 import { NotesBox } from "#/components/tracker/NotesBox";
 import { SessionLauncher } from "#/components/tracker/TaskPanel";
 import {
 	Card,
 	Checklist,
 	ConceptCard,
+	ConceptChips,
 	ErrorNote,
 	LevelStars,
 	Meter,
 } from "#/components/tracker/ui";
 import type { ActiveSession, TrackerState } from "#/lib/tracker/api";
-import {
-	checklistProgress,
-	learnedConcepts,
-	nextTask,
-} from "#/lib/tracker/progress";
+import { learnedConcepts, nextTask } from "#/lib/tracker/progress";
 import { conceptMap, getProject } from "#/lib/tracker/projects";
 import {
 	type SessionAction,
@@ -41,10 +45,16 @@ import {
 	useClockSkew,
 	useDiscardSession,
 	useFinishSession,
+	useReviewCard,
 	useSessionControl,
 	useToggleChecklist,
 	useTracker,
 } from "#/lib/tracker/queries";
+import {
+	CARDS_PER_REVIEW,
+	CARDS_PER_SESSION,
+	dueCards,
+} from "#/lib/tracker/recall";
 import { formatSlot, formatTime, openSlot } from "#/lib/tracker/schedule";
 import {
 	formatElapsed,
@@ -69,7 +79,7 @@ export const Route = createFileRoute(
 	component: SessionPage,
 });
 
-type Result = { minutes: number; status: TaskStatus };
+type Result = { minutes: number; status: TaskStatus; takeaway: string };
 
 function SessionPage() {
 	const project = useProject();
@@ -184,7 +194,9 @@ function SessionFlow({
 	session: ActiveSession;
 	onFinished: (result: Result) => void;
 }) {
-	const steps = sessionSteps(task);
+	const steps = sessionSteps(task, {
+		isFirst: project.tasks[0]?.id === task.id,
+	});
 	const finishIndex = steps.length;
 	const index = Math.min(session.step, finishIndex);
 	const paused = session.runningSince === null;
@@ -563,6 +575,49 @@ function StepBody({
 	const pseudocode = project.templates.filter((t) => /pseudo/i.test(t.name));
 
 	switch (step.kind) {
+		case "remember":
+			return <RememberStep project={project} task={task} state={state} />;
+
+		case "watch": {
+			const lesson = task.lesson;
+			if (!lesson?.example) return null;
+			const fresh = task.concepts.filter((c) => c.isNew);
+			return (
+				<div className="space-y-6">
+					<p className="text-slate-600 italic">{lesson.why}</p>
+					{fresh.length > 0 ? (
+						<div>
+							<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-rose-700/70">
+								New today (tap to read)
+							</p>
+							<ConceptChips refs={fresh} concepts={concepts} />
+						</div>
+					) : null}
+					<ExampleView
+						example={lesson.example}
+						stepwise
+						footer={
+							<p className="rounded-xl bg-rose-50/70 px-4 py-3 text-slate-700">
+								Now type it into a new file and run it. Did it do what you
+								guessed?
+							</p>
+						}
+					/>
+				</div>
+			);
+		}
+
+		case "order":
+			if (!task.lesson?.order) return null;
+			return (
+				<div className="space-y-5">
+					<OrderPuzzleView puzzle={task.lesson.order} seed={task.id} />
+					{task.lesson.example ? (
+						<ExampleButton example={task.lesson.example} />
+					) : null}
+				</div>
+			);
+
 		case "read":
 			return (
 				<div className="space-y-5">
@@ -663,22 +718,14 @@ function StepBody({
 				/>
 			);
 
-		case "build": {
-			const items = task.steps.filter((s) => !s.stretch);
-			const done = items.filter((s) => checked.has(s.id)).length;
+		case "build":
 			return (
-				<div className="space-y-4">
-					<ProgressLine done={done} total={items.length} label="steps done" />
-					<Checklist
-						items={task.steps}
-						checked={checked}
-						onToggle={onToggle}
-						readOnly={false}
-					/>
+				<div className="space-y-6">
+					<BuildSteps task={task} checked={checked} onToggle={onToggle} />
 					<ErrorNote error={toggle.error} />
 					<details className="rounded-xl bg-slate-50 px-4 py-3">
 						<summary className="cursor-pointer text-sm font-medium text-slate-600">
-							Notes (for anything you want to remember or where you got stuck)
+							Notes (anything to remember, or where you got stuck)
 						</summary>
 						<div className="mt-3">
 							<NotesBox
@@ -694,7 +741,6 @@ function StepBody({
 					</details>
 				</div>
 			);
-		}
 
 		case "check": {
 			const done = task.doneWhen.filter((s) => checked.has(s.id)).length;
@@ -722,6 +768,141 @@ function StepBody({
 			);
 		}
 	}
+}
+
+/**
+ * "Last time" plus the recall cards due now. Cards are picked once when the
+ * step opens, so answering one doesn't reshuffle the rest.
+ */
+function RememberStep({
+	project,
+	task,
+	state,
+}: {
+	project: Project;
+	task: Task;
+	state: TrackerState;
+}) {
+	const review = useReviewCard(project.slug);
+	const [cards] = useState(() =>
+		dueCards(
+			project,
+			{
+				seenTaskIds: new Set(state.history.map((h) => h.taskId)),
+				reviews: state.recall,
+				sessionsDone: state.history.length,
+			},
+			task.checkpoint ? CARDS_PER_REVIEW : CARDS_PER_SESSION,
+		),
+	);
+	const last = state.history[0];
+	const lastTask = last
+		? project.tasks.find((t) => t.id === last.taskId)
+		: undefined;
+
+	return (
+		<div className="space-y-8">
+			{lastTask ? (
+				<div className="rounded-2xl bg-rose-50/70 px-5 py-4">
+					<p className="text-xs font-semibold uppercase tracking-wide text-rose-700/70">
+						Last time · #{lastTask.number} {lastTask.title}
+					</p>
+					{last?.takeaway ? (
+						<p className="mt-2 text-lg text-slate-800">“{last.takeaway}”</p>
+					) : null}
+				</div>
+			) : null}
+			{cards.length > 0 ? (
+				<RecallDeck
+					cards={cards}
+					onAnswer={(cardId, gotIt) => review.mutate({ cardId, gotIt })}
+					readOnly={state.role !== "learner"}
+				/>
+			) : (
+				<p className="text-slate-600">Nothing to review today. On you go!</p>
+			)}
+			<ErrorNote error={review.error} />
+		</div>
+	);
+}
+
+/**
+ * Build steps one at a time: the first unticked step, big, with its hint and
+ * the example behind buttons. The full list is one tap away for unticking.
+ */
+function BuildSteps({
+	task,
+	checked,
+	onToggle,
+}: {
+	task: Task;
+	checked: ReadonlySet<string>;
+	onToggle: (itemId: string, value: boolean) => void;
+}) {
+	const required = task.steps.filter((s) => !s.stretch);
+	const extras = task.steps.filter((s) => s.stretch);
+	const current = required.find((s) => !checked.has(s.id));
+	const done =
+		required.length - required.filter((s) => !checked.has(s.id)).length;
+	const example = task.lesson?.example;
+
+	return (
+		<div className="space-y-6">
+			<ProgressLine done={done} total={required.length} label="steps done" />
+			{current ? (
+				<div className="space-y-5 rounded-2xl bg-rose-50/60 p-5 sm:p-6">
+					<p className="text-sm font-semibold text-rose-700">
+						Step {required.indexOf(current) + 1}
+					</p>
+					<p className="text-xl leading-relaxed text-slate-900">
+						{current.text}
+					</p>
+					<div className="flex flex-wrap items-center gap-3">
+						<button
+							type="button"
+							onClick={() => onToggle(current.id, true)}
+							className="inline-flex items-center gap-2 rounded-xl bg-rose-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-rose-600"
+						>
+							<CheckCircle2 className="h-5 w-5" /> Done
+						</button>
+						{current.hint ? <HintButton hint={current.hint} /> : null}
+						{example ? <ExampleButton example={example} /> : null}
+					</div>
+				</div>
+			) : (
+				<p className="flex items-center gap-2 rounded-2xl bg-emerald-50 px-5 py-4 text-lg text-emerald-800">
+					<CheckCircle2 className="h-6 w-6" /> All steps done. Tap Next to check
+					your work.
+				</p>
+			)}
+			{!current && extras.length > 0 ? (
+				<div>
+					<p className="mb-2 text-sm font-medium text-violet-700">
+						Extra, only if you have time
+					</p>
+					<Checklist
+						items={extras}
+						checked={checked}
+						onToggle={onToggle}
+						readOnly={false}
+					/>
+				</div>
+			) : null}
+			<details className="text-sm">
+				<summary className="cursor-pointer text-slate-500 hover:text-slate-800">
+					See all steps
+				</summary>
+				<div className="mt-3">
+					<Checklist
+						items={required}
+						checked={checked}
+						onToggle={onToggle}
+						readOnly={false}
+					/>
+				</div>
+			</details>
+		</div>
+	);
 }
 
 function ReadList({
@@ -831,17 +1012,18 @@ function FinishScreen({
 	elapsed: number;
 	notes: ReturnType<typeof useAutosaveNotes>;
 	flushNotes: () => void;
-	onSaved: (result: { minutes: number; status: TaskStatus }) => void;
+	onSaved: (result: Result) => void;
 }) {
 	const saved = state.progress[task.id];
+	const [takeaway, setTakeaway] = useState("");
 	const [minutesText, setMinutesText] = useState(() =>
 		String(sessionMinutes(elapsed)),
 	);
+	const [editingMinutes, setEditingMinutes] = useState(false);
 	const [outcome, setOutcome] = useState<TaskStatus | null>(null);
 	const finish = useFinishSession(project.slug);
 	const checked = new Set(state.checkedItems);
 	const unchecked = task.doneWhen.filter((i) => !checked.has(i.id)).length;
-	const { done, total } = checklistProgress(task, checked);
 
 	const minutes = Number(minutesText);
 	const minutesValid =
@@ -851,107 +1033,156 @@ function FinishScreen({
 		minutes <= 1440;
 	const previous = saved?.minutes ?? 0;
 	const stuckTemplate = project.templates.filter((t) => /stuck/i.test(t.name));
+	// Saying it back is the point of the wrap-up, except on a stuck day.
+	const needsTakeaway = outcome !== "stuck" && takeaway.trim() === "";
 
 	function save() {
-		if (!outcome || !minutesValid) return;
+		if (!outcome || !minutesValid || needsTakeaway) return;
 		flushNotes();
 		// The server closes the session and adds the minutes to the task in one step.
-		finish.mutate(
-			{ id: session.id, taskId: task.id, outcome, minutes },
-			{ onSuccess: () => onSaved({ minutes, status: outcome }) },
-		);
+		// Not mutate's onSuccess: the refetch after it settles ends the session,
+		// which unmounts this screen first, and that callback is then skipped.
+		finish
+			.mutateAsync({
+				id: session.id,
+				taskId: task.id,
+				outcome,
+				minutes,
+				takeaway,
+			})
+			.then(
+				() => onSaved({ minutes, status: outcome, takeaway: takeaway.trim() }),
+				// Shown by ErrorNote via finish.error.
+				() => {},
+			);
 	}
 
 	return (
 		<Card>
-			<h2 className="font-display text-2xl font-semibold text-slate-900">
-				How did it go?
-			</h2>
-			<p className="mt-1 text-slate-600">
-				{done} of {total} ticked so far. Pick what's true right now.
-			</p>
-
-			<div className="mt-5 grid gap-3 sm:grid-cols-3">
-				{OUTCOMES.map((o) => (
-					<button
-						key={o.status}
-						type="button"
-						aria-pressed={outcome === o.status}
-						onClick={() => setOutcome(o.status)}
-						className={`flex flex-col items-start gap-1 rounded-2xl p-4 text-left transition ${outcome === o.status ? o.selected : "bg-slate-50 text-slate-800 ring-1 ring-slate-200 hover:bg-slate-100"}`}
-					>
-						{o.icon}
-						<span className="font-semibold">{o.title}</span>
-						<span className="text-sm opacity-80">{o.detail}</span>
-					</button>
-				))}
-			</div>
-
-			{outcome === "done" && unchecked > 0 ? (
-				<p className="mt-3 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
-					{unchecked} {unchecked === 1 ? "check isn't" : "checks aren't"} ticked
-					yet. You can still mark it Done, but go back to Check if you're not
-					sure.
-				</p>
-			) : null}
-
-			{outcome === "stuck" ? (
-				<div className="mt-4">
-					<NotesBox
-						label="What's blocking you?"
-						text={notes.text}
-						onChange={notes.setText}
-						onBlur={notes.flush}
-						status={notes.status}
-						templates={stuckTemplate}
-						readOnly={false}
-						rows={8}
-						placeholder="I'm trying to… I expected… Instead… (exact error) … I think the cause is…"
+			<div className="space-y-8">
+				<div>
+					<h2 className="font-display text-2xl font-semibold text-slate-900">
+						Say it back
+					</h2>
+					<p className="mt-1 text-slate-600">
+						Without looking: what did you learn today? One sentence is perfect.
+						Your next session starts with it.
+					</p>
+					<textarea
+						value={takeaway}
+						onChange={(e) => setTakeaway(e.target.value)}
+						maxLength={1000}
+						rows={3}
+						aria-label="What I learned today"
+						placeholder="Today I learned that…"
+						className="mt-4 w-full rounded-2xl border border-rose-200 bg-white px-4 py-3 text-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-300"
 					/>
 				</div>
-			) : null}
 
-			<div className="mt-6 rounded-2xl bg-rose-50/70 p-4">
-				<label className="flex flex-wrap items-center gap-3">
-					<span className="text-sm font-medium text-slate-800">
-						Minutes this session
-					</span>
-					<input
-						type="number"
-						inputMode="numeric"
-						min={0}
-						max={1440}
-						value={minutesText}
-						onChange={(e) => setMinutesText(e.target.value)}
-						className="w-24 rounded-lg border border-rose-200 bg-white px-3 py-1.5 text-sm tabular-nums focus:outline-none focus:ring-2 focus:ring-rose-300"
-					/>
-					<span className="text-sm text-slate-500">
-						from the timer
-						{previous > 0 && minutesValid
-							? ` · total for this task becomes ${Math.min(1440, previous + minutes)}`
-							: ""}
-					</span>
-				</label>
-				{!minutesValid ? (
-					<p className="mt-2 text-sm text-red-600">
-						Enter a whole number from 0 to 1440.
-					</p>
-				) : null}
+				<div>
+					<h2 className="font-display text-xl font-semibold text-slate-900">
+						How did it go?
+					</h2>
+					<div className="mt-4 grid gap-3 sm:grid-cols-3">
+						{OUTCOMES.map((o) => (
+							<button
+								key={o.status}
+								type="button"
+								aria-pressed={outcome === o.status}
+								onClick={() => setOutcome(o.status)}
+								className={`flex flex-col items-start gap-1 rounded-2xl p-4 text-left transition ${outcome === o.status ? o.selected : "bg-slate-50 text-slate-800 ring-1 ring-slate-200 hover:bg-slate-100"}`}
+							>
+								{o.icon}
+								<span className="font-semibold">{o.title}</span>
+								<span className="text-sm opacity-80">{o.detail}</span>
+							</button>
+						))}
+					</div>
+
+					{outcome === "done" && unchecked > 0 ? (
+						<p className="mt-3 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
+							{unchecked} {unchecked === 1 ? "check isn't" : "checks aren't"}{" "}
+							ticked yet. You can still mark it Done, but go back to Check if
+							you're not sure.
+						</p>
+					) : null}
+
+					{outcome === "stuck" ? (
+						<div className="mt-4">
+							<NotesBox
+								label="What's blocking you?"
+								text={notes.text}
+								onChange={notes.setText}
+								onBlur={notes.flush}
+								status={notes.status}
+								templates={stuckTemplate}
+								readOnly={false}
+								rows={8}
+								placeholder="I'm trying to… I expected… Instead… (exact error) … I think the cause is…"
+							/>
+						</div>
+					) : null}
+				</div>
+
+				<div className="text-sm text-slate-600">
+					{editingMinutes ? (
+						<label className="flex flex-wrap items-center gap-3">
+							<span>Minutes this session</span>
+							<input
+								type="number"
+								inputMode="numeric"
+								min={0}
+								max={1440}
+								value={minutesText}
+								onChange={(e) => setMinutesText(e.target.value)}
+								className="w-24 rounded-lg border border-rose-200 bg-white px-3 py-1.5 tabular-nums focus:outline-none focus:ring-2 focus:ring-rose-300"
+							/>
+							{previous > 0 && minutesValid ? (
+								<span className="text-slate-500">
+									total for this task becomes{" "}
+									{Math.min(1440, previous + minutes)}
+								</span>
+							) : null}
+						</label>
+					) : (
+						<p>
+							Time: {minutesValid ? minutes : "?"} min ·{" "}
+							<button
+								type="button"
+								onClick={() => setEditingMinutes(true)}
+								className="font-medium text-rose-600 hover:underline"
+							>
+								change
+							</button>
+						</p>
+					)}
+					{!minutesValid ? (
+						<p className="mt-2 text-red-600">
+							Enter a whole number from 0 to 1440.
+						</p>
+					) : null}
+				</div>
+
+				<div>
+					<button
+						type="button"
+						onClick={save}
+						disabled={
+							!outcome || !minutesValid || needsTakeaway || finish.isPending
+						}
+						className="w-full rounded-2xl bg-rose-500 px-6 py-4 text-lg font-semibold text-white shadow-lg shadow-rose-200 hover:bg-rose-600 disabled:opacity-50"
+					>
+						{finish.isPending
+							? "Saving…"
+							: needsTakeaway
+								? "Write your sentence first"
+								: outcome
+									? "Save and finish"
+									: "Pick how it went"}
+					</button>
+					<ErrorNote error={finish.error} />
+				</div>
 			</div>
-
-			<button
-				type="button"
-				onClick={save}
-				disabled={!outcome || !minutesValid || finish.isPending}
-				className="mt-6 w-full rounded-2xl bg-rose-500 px-6 py-4 text-lg font-semibold text-white shadow-lg shadow-rose-200 hover:bg-rose-600 disabled:opacity-50"
-			>
-				{finish.isPending
-					? "Saving…"
-					: outcome
-						? "Save and finish"
-						: "Pick how it went"}
-			</button>
-			<ErrorNote error={finish.error} />
 		</Card>
 	);
 }
@@ -973,7 +1204,7 @@ function Celebration({
 	project: Project;
 	task: Task;
 	state: TrackerState;
-	result: { minutes: number; status: TaskStatus };
+	result: Result;
 }) {
 	const next = nextTask(project, state);
 	return (
@@ -988,6 +1219,11 @@ function Celebration({
 				#{task.number} · {result.minutes} min
 			</p>
 			<p className="mt-4 text-lg text-slate-800">{CHEERS[result.status]}</p>
+			{result.takeaway ? (
+				<p className="mt-6 rounded-2xl bg-white px-5 py-4 text-slate-700 shadow-sm ring-1 ring-rose-100">
+					You learned: “{result.takeaway}”
+				</p>
+			) : null}
 			<div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
 				<Link
 					to="/tracker"

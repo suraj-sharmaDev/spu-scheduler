@@ -56,6 +56,49 @@ export interface Task {
 	/** 1 (easy) … 4 (challenge). */
 	level: number;
 	checkpoint: boolean;
+	/** Teaching content for rewritten sessions; older tasks don't have it. */
+	lesson?: Lesson;
+}
+
+/**
+ * A worked-example lesson: show how first (example), practise the pattern
+ * (order), then build. Recall cards come back in later sessions.
+ */
+export interface Lesson {
+	/** One line: why this is worth learning. */
+	why: string;
+	/** Null for review sessions. */
+	example: Example | null;
+	/** "Put the lines in order" practice. */
+	order: OrderPuzzle | null;
+	/** Questions asked in later sessions. */
+	recall: RecallItem[];
+}
+
+export interface Example {
+	title: string;
+	/** Code split into labelled chunks; labels repeat across lessons. */
+	blocks: { label: string; code: string }[];
+	/** Asked before she runs it. */
+	predict: { question: string; answer: string } | null;
+}
+
+export interface OrderPuzzle {
+	/** Says enough that only one order is right. */
+	prompt: string;
+	/** In the correct order; shown shuffled. */
+	lines: string[];
+}
+
+export interface RecallItem {
+	q: string;
+	a: string;
+}
+
+/** A nudge for one build step: some words, some code, or both. */
+export interface Hint {
+	text?: string;
+	code?: string;
 }
 
 export interface ChecklistItem {
@@ -63,6 +106,7 @@ export interface ChecklistItem {
 	text: string;
 	/** Optional extra, only for days with spare time. */
 	stretch: boolean;
+	hint?: Hint;
 }
 
 export interface ConceptRef {

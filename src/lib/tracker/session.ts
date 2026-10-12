@@ -5,6 +5,9 @@
 import type { Task } from "./types";
 
 export type StepKind =
+	| "remember"
+	| "watch"
+	| "order"
 	| "read"
 	| "words"
 	| "research"
@@ -20,8 +23,23 @@ export interface SessionStep {
 	hint: string;
 }
 
-// Mirrors the "How to do one session" routine in the plan's Start Here guide.
+// Mirrors the "How to do one session" routine in the guide.
 const STEPS: Record<StepKind, Omit<SessionStep, "kind">> = {
+	remember: {
+		title: "Remember",
+		minutes: "5 min",
+		hint: "Guess first, then look. Wrong answers are fine: they come back later, and that's how they stick.",
+	},
+	watch: {
+		title: "Watch",
+		minutes: "10 min",
+		hint: "Read it one piece at a time. Then type it in and run it.",
+	},
+	order: {
+		title: "Put it in order",
+		minutes: "5 min",
+		hint: "Tap the lines in the right order. It's practice; nothing is saved.",
+	},
 	read: {
 		title: "Read",
 		minutes: "5 min",
@@ -45,7 +63,7 @@ const STEPS: Record<StepKind, Omit<SessionStep, "kind">> = {
 	build: {
 		title: "Build",
 		minutes: "20–40 min",
-		hint: "Work through the steps. Tick each one as you finish it. Stretch goals are only for days with extra time.",
+		hint: "One step at a time. Tick it when it works.",
 	},
 	check: {
 		title: "Check",
@@ -54,12 +72,26 @@ const STEPS: Record<StepKind, Omit<SessionStep, "kind">> = {
 	},
 };
 
-/** The steps for a task, skipping ones with nothing to show. */
-export function sessionSteps(task: Task): SessionStep[] {
-	const kinds: StepKind[] = ["read"];
-	if (task.concepts.length > 0) kinds.push("words");
-	if (task.thinkAbout.length > 0) kinds.push("research");
-	kinds.push("plan", "build");
+/**
+ * The steps for a task, skipping ones with nothing to show. Lessons show how
+ * first (watch, order); older tasks keep the read/look-up routine. Every
+ * session but the very first starts by remembering earlier ones.
+ */
+export function sessionSteps(
+	task: Task,
+	{ isFirst }: { isFirst: boolean },
+): SessionStep[] {
+	const kinds: StepKind[] = isFirst ? [] : ["remember"];
+	if (task.lesson) {
+		if (task.lesson.example) kinds.push("watch");
+		if (task.lesson.order) kinds.push("order");
+		kinds.push("build");
+	} else {
+		kinds.push("read");
+		if (task.concepts.length > 0) kinds.push("words");
+		if (task.thinkAbout.length > 0) kinds.push("research");
+		kinds.push("plan", "build");
+	}
 	if (task.doneWhen.length > 0) kinds.push("check");
 	return kinds.map((kind) => ({ kind, ...STEPS[kind] }));
 }

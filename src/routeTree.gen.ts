@@ -23,6 +23,7 @@ import { Route as TrackerAttendanceRouteImport } from './routes/tracker/attendan
 import { Route as TrackerProjectIndexRouteImport } from './routes/tracker/$project/index'
 import { Route as TrackerProjectConceptsRouteImport } from './routes/tracker/$project/concepts'
 import { Route as TrackerProjectGuideRouteImport } from './routes/tracker/$project/guide'
+import { Route as TrackerProjectNotebookRouteImport } from './routes/tracker/$project/notebook'
 import { Route as TrackerProjectProgressRouteImport } from './routes/tracker/$project/progress'
 import { Route as TrackerProjectReflectRouteImport } from './routes/tracker/$project/reflect'
 import { Route as TrackerProjectTasksTaskIdRouteImport } from './routes/tracker/$project/tasks/$taskId'
@@ -98,6 +99,11 @@ const TrackerProjectGuideRoute = TrackerProjectGuideRouteImport.update({
   path: '/guide',
   getParentRoute: () => TrackerProjectRoute,
 } as any)
+const TrackerProjectNotebookRoute = TrackerProjectNotebookRouteImport.update({
+  id: '/notebook',
+  path: '/notebook',
+  getParentRoute: () => TrackerProjectRoute,
+} as any)
 const TrackerProjectProgressRoute = TrackerProjectProgressRouteImport.update({
   id: '/progress',
   path: '/progress',
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/tracker/': typeof TrackerIndexRoute
   '/tracker/$project/concepts': typeof TrackerProjectConceptsRoute
   '/tracker/$project/guide': typeof TrackerProjectGuideRoute
+  '/tracker/$project/notebook': typeof TrackerProjectNotebookRoute
   '/tracker/$project/progress': typeof TrackerProjectProgressRoute
   '/tracker/$project/reflect': typeof TrackerProjectReflectRoute
   '/tracker/$project/': typeof TrackerProjectIndexRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/tracker': typeof TrackerIndexRoute
   '/tracker/$project/concepts': typeof TrackerProjectConceptsRoute
   '/tracker/$project/guide': typeof TrackerProjectGuideRoute
+  '/tracker/$project/notebook': typeof TrackerProjectNotebookRoute
   '/tracker/$project/progress': typeof TrackerProjectProgressRoute
   '/tracker/$project/reflect': typeof TrackerProjectReflectRoute
   '/tracker/$project': typeof TrackerProjectIndexRoute
@@ -173,6 +181,7 @@ export interface FileRoutesById {
   '/tracker/': typeof TrackerIndexRoute
   '/tracker/$project/concepts': typeof TrackerProjectConceptsRoute
   '/tracker/$project/guide': typeof TrackerProjectGuideRoute
+  '/tracker/$project/notebook': typeof TrackerProjectNotebookRoute
   '/tracker/$project/progress': typeof TrackerProjectProgressRoute
   '/tracker/$project/reflect': typeof TrackerProjectReflectRoute
   '/tracker/$project/': typeof TrackerProjectIndexRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/tracker/'
     | '/tracker/$project/concepts'
     | '/tracker/$project/guide'
+    | '/tracker/$project/notebook'
     | '/tracker/$project/progress'
     | '/tracker/$project/reflect'
     | '/tracker/$project/'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/tracker'
     | '/tracker/$project/concepts'
     | '/tracker/$project/guide'
+    | '/tracker/$project/notebook'
     | '/tracker/$project/progress'
     | '/tracker/$project/reflect'
     | '/tracker/$project'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/tracker/'
     | '/tracker/$project/concepts'
     | '/tracker/$project/guide'
+    | '/tracker/$project/notebook'
     | '/tracker/$project/progress'
     | '/tracker/$project/reflect'
     | '/tracker/$project/'
@@ -347,6 +359,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackerProjectGuideRouteImport
       parentRoute: typeof TrackerProjectRoute
     }
+    '/tracker/$project/notebook': {
+      id: '/tracker/$project/notebook'
+      path: '/notebook'
+      fullPath: '/tracker/$project/notebook'
+      preLoaderRoute: typeof TrackerProjectNotebookRouteImport
+      parentRoute: typeof TrackerProjectRoute
+    }
     '/tracker/$project/progress': {
       id: '/tracker/$project/progress'
       path: '/progress'
@@ -397,6 +416,7 @@ const SchedulerRouteWithChildren = SchedulerRoute._addFileChildren(
 interface TrackerProjectRouteChildren {
   TrackerProjectConceptsRoute: typeof TrackerProjectConceptsRoute
   TrackerProjectGuideRoute: typeof TrackerProjectGuideRoute
+  TrackerProjectNotebookRoute: typeof TrackerProjectNotebookRoute
   TrackerProjectProgressRoute: typeof TrackerProjectProgressRoute
   TrackerProjectReflectRoute: typeof TrackerProjectReflectRoute
   TrackerProjectIndexRoute: typeof TrackerProjectIndexRoute
@@ -407,6 +427,7 @@ interface TrackerProjectRouteChildren {
 const TrackerProjectRouteChildren: TrackerProjectRouteChildren = {
   TrackerProjectConceptsRoute: TrackerProjectConceptsRoute,
   TrackerProjectGuideRoute: TrackerProjectGuideRoute,
+  TrackerProjectNotebookRoute: TrackerProjectNotebookRoute,
   TrackerProjectProgressRoute: TrackerProjectProgressRoute,
   TrackerProjectReflectRoute: TrackerProjectReflectRoute,
   TrackerProjectIndexRoute: TrackerProjectIndexRoute,

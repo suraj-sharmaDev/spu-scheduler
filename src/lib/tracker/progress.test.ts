@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import cppWorkbook from "#/data/projects/cpp-developer.json" with {
+	type: "json",
+};
 import {
 	checklistProgress,
 	learnedConcepts,
@@ -9,10 +12,11 @@ import {
 	subprojects,
 	totals,
 } from "./progress";
-import { getProject } from "./projects";
+import type { Project } from "./types";
 
-const project = getProject("cpp-developer");
-if (!project) throw new Error("cpp-developer missing");
+// The workbook plan as imported (before lessons replace weeks 1–2), since
+// these checks mirror the workbook's Progress sheet.
+const project = cppWorkbook as Project;
 
 const input: ProgressInput = {
 	progress: {

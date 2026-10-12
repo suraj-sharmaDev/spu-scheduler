@@ -14,6 +14,8 @@ everything in the browser.
 | Project registry | `src/lib/tracker/projects.ts` |
 | Content types | `src/lib/tracker/types.ts` |
 | Workbook importer | `scripts/import-project.ts` |
+| Rewritten lessons (examples, hints, recall) | `src/data/projects/cpp-developer.lessons.ts` |
+| Lesson splicing / recall spacing | `src/lib/tracker/lessons.ts`, `src/lib/tracker/recall.ts` |
 | DB schema / migrations | `src/lib/tracker/db/schema.ts`, `drizzle/` |
 | Server functions (all reads/writes) | `src/lib/tracker/api.ts` |
 | Login / session cookie | `src/lib/tracker/auth.server.ts` |
@@ -38,7 +40,7 @@ pnpm db:generate   # after editing schema.ts: write a new migration, then review
 ```
 
 Tables: `task_progress`, `checklist_checks`, `attendance`, `weekly_reflections`,
-`project_reviews`, `study_sessions`. Missed sessions are never stored; they're
+`project_reviews`, `study_sessions`, `recall_reviews`. Missed sessions are never stored; they're
 scheduled slots with no `attendance` row.
 
 **Guided sessions (`study_sessions`).** Only one session can be open at a time, across
@@ -48,6 +50,34 @@ time plus a start time while running) and the current step live in the row, so s
 can pause on her laptop and carry on from her phone. Finishing closes the session
 and adds its minutes to the task in one SQL statement, so a second device can't
 count them twice. Discarding deletes the open row; ticks and notes aren't touched.
+
+## Lessons and recall
+
+Samanata forgets earlier sessions quickly, so sessions follow a worked-example
+routine instead of "look it up":
+
+1. **Remember**: her one-sentence summary from last time, then 3 recall
+   questions (6 on review days). She taps to reveal, then marks "I knew it" or
+   "Not yet".
+2. **Watch**: one example in the same café setting every time, split into
+   labelled chunks, with a "guess what it prints" question.
+3. **Put it in order**: tap shuffled lines into order. Practice only; nothing saved.
+4. **Build**: one step on screen at a time. Hints and the example open in a modal.
+5. **Check**, then **Say it back**: one sentence, required unless she's stuck.
+   It's saved on the session (`study_sessions.takeaway`) and shown in My notebook.
+
+Weeks 1–3 are written in `cpp-developer.lessons.ts`. They replace workbook weeks
+1–2, and everything after is renumbered. Rules for new lessons: at most 2 new
+concepts each (a test enforces it), an example and recall questions on every
+non-review lesson, and an order puzzle whose prompt allows only one right order.
+Tasks without a lesson still use the old read/look-up routine, plus Remember.
+
+**Recall spacing** counts finished sessions, not days. "I knew it" moves a card
+to the next box (asked again after 2, 4, 8, then 16 sessions). "Not yet" sends it
+back to the start (asked next session). Lesson cards come from `lesson.recall`;
+older tasks get one card per concept they introduce. Card ids are `l3.r0` or
+`c:<concept>`, so rewording a question keeps its history, but reordering a
+lesson's questions moves it.
 
 ## Adding a project
 

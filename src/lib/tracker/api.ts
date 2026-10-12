@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { and, eq, isNotNull, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import {
 	endSession,
 	type Role,
@@ -13,18 +13,21 @@ import {
 	attendance,
 	checklistChecks,
 	projectReviews,
+	recallReviews,
 	studySessions,
 	taskProgress,
 	weeklyReflections,
 } from "./db/schema";
 import * as v from "./input";
 import { getProject } from "./projects";
+import { MAX_BOX, type ReviewState, recallCards } from "./recall";
 import { classifyCheckIn, localDate, openSlot } from "./schedule";
 import { TASK_STATUSES, type TaskStatus } from "./status";
 import type { Project } from "./types";
 
 const MAX_NOTES = 20_000;
 const MAX_ANSWER = 5_000;
+const MAX_TAKEAWAY = 1_000;
 
 // --- shapes sent to the client (dates as ISO strings) ------------------------
 
@@ -64,6 +67,10 @@ export interface TrackerState {
 	>;
 	/** The one unfinished guided session, from any project. */
 	activeSession: ActiveSession | null;
+	/** Finished sessions in this project, newest first. */
+	history: SessionLog[];
+	/** Recall answers by card id. */
+	recall: Record<string, ReviewState>;
 	/** Server clock at read time, so the client can correct its timer for skew. */
 	serverNow: string;
 }
@@ -77,6 +84,15 @@ export interface ActiveSession {
 	runningSince: string | null;
 	bankedMs: number;
 	step: number;
+}
+
+export interface SessionLog {
+	id: number;
+	taskId: string;
+	endedAt: string;
+	minutes: number | null;
+	outcome: TaskStatus | null;
+	takeaway: string | null;
 }
 
 function toActiveSession(r: typeof studySessions.$inferSelect): ActiveSession {
@@ -145,31 +161,50 @@ export const getTrackerState = createServerFn({ method: "GET" })
 		const role = requireRole("learner", "admin");
 		const db = getDb();
 		const slug = data.project;
-		const [progress, checks, rows, reflections, reviews, active] =
-			await Promise.all([
-				db
-					.select()
-					.from(taskProgress)
-					.where(eq(taskProgress.projectSlug, slug)),
-				db
-					.select()
-					.from(checklistChecks)
-					.where(eq(checklistChecks.projectSlug, slug)),
-				db.select().from(attendance).orderBy(attendance.checkedInAt),
-				db
-					.select()
-					.from(weeklyReflections)
-					.where(eq(weeklyReflections.projectSlug, slug)),
-				db
-					.select()
-					.from(projectReviews)
-					.where(eq(projectReviews.projectSlug, slug)),
-				db
-					.select()
-					.from(studySessions)
-					.where(isNull(studySessions.endedAt))
-					.limit(1),
-			]);
+		const [
+			progress,
+			checks,
+			rows,
+			reflections,
+			reviews,
+			active,
+			history,
+			recall,
+		] = await Promise.all([
+			db.select().from(taskProgress).where(eq(taskProgress.projectSlug, slug)),
+			db
+				.select()
+				.from(checklistChecks)
+				.where(eq(checklistChecks.projectSlug, slug)),
+			db.select().from(attendance).orderBy(attendance.checkedInAt),
+			db
+				.select()
+				.from(weeklyReflections)
+				.where(eq(weeklyReflections.projectSlug, slug)),
+			db
+				.select()
+				.from(projectReviews)
+				.where(eq(projectReviews.projectSlug, slug)),
+			db
+				.select()
+				.from(studySessions)
+				.where(isNull(studySessions.endedAt))
+				.limit(1),
+			db
+				.select()
+				.from(studySessions)
+				.where(
+					and(
+						eq(studySessions.projectSlug, slug),
+						isNotNull(studySessions.endedAt),
+					),
+				)
+				.orderBy(desc(studySessions.endedAt)),
+			db
+				.select()
+				.from(recallReviews)
+				.where(eq(recallReviews.projectSlug, slug)),
+		]);
 		return {
 			role,
 			progress: Object.fromEntries(
@@ -202,6 +237,23 @@ export const getTrackerState = createServerFn({ method: "GET" })
 				]),
 			),
 			activeSession: active[0] ? toActiveSession(active[0]) : null,
+			history: history.flatMap((r) =>
+				r.endedAt
+					? [
+							{
+								id: r.id,
+								taskId: r.taskId,
+								endedAt: r.endedAt.toISOString(),
+								minutes: r.minutes,
+								outcome: r.outcome,
+								takeaway: r.takeaway,
+							},
+						]
+					: [],
+			),
+			recall: Object.fromEntries(
+				recall.map((r) => [r.cardId, { box: r.box, reviewedAt: r.reviewedAt }]),
+			),
 			serverNow: new Date().toISOString(),
 		};
 	});
@@ -540,6 +592,10 @@ export const finishStudySession = createServerFn({ method: "POST" })
 			taskId: taskFrom(project, o.taskId),
 			outcome: v.oneOf(o.outcome, "Outcome", TASK_STATUSES),
 			minutes: v.integer(o.minutes, "Minutes", 0, 1440),
+			takeaway:
+				o.takeaway === undefined
+					? null
+					: v.string(o.takeaway, "Takeaway", MAX_TAKEAWAY).trim() || null,
 		};
 	})
 	.handler(async ({ data }) => {
@@ -550,6 +606,7 @@ export const finishStudySession = createServerFn({ method: "POST" })
 				set ended_at = now(),
 					minutes = ${data.minutes},
 					outcome = ${data.outcome},
+					takeaway = ${data.takeaway},
 					banked_ms = banked_ms + case when running_since is null then 0
 						else greatest(0, floor(extract(epoch from (now() - running_since)) * 1000))::int end,
 					running_since = null
@@ -582,4 +639,58 @@ export const discardStudySession = createServerFn({ method: "POST" })
 		if (deleted.length === 0) {
 			throw new Error("This session was already finished or discarded.");
 		}
+	});
+
+// --- spaced recall ------------------------------------------------------------------
+
+/**
+ * Record an answer to a recall card. Got it moves the card up a box (asked less
+ * often); not yet sends it back to box 0. A card counts once per finished-session
+ * count, so a double tap can't move it up twice.
+ */
+export const reviewRecallCard = createServerFn({ method: "POST" })
+	.validator((input: unknown) => {
+		const o = v.object(input);
+		const project = projectFrom(o.project);
+		const cardId = v.string(o.cardId, "Card", 80);
+		if (!recallCards(project).some((c) => c.id === cardId)) {
+			throw new Error(`Unknown recall card "${cardId}"`);
+		}
+		return {
+			project: project.slug,
+			cardId,
+			gotIt: v.boolean(o.gotIt, "Got it"),
+		};
+	})
+	.handler(async ({ data }) => {
+		requireRole("learner");
+		const db = getDb();
+		const [{ done }] = await db
+			.select({ done: sql<number>`count(*)::int` })
+			.from(studySessions)
+			.where(
+				and(
+					eq(studySessions.projectSlug, data.project),
+					isNotNull(studySessions.endedAt),
+				),
+			);
+		await db
+			.insert(recallReviews)
+			.values({
+				projectSlug: data.project,
+				cardId: data.cardId,
+				box: data.gotIt ? 1 : 0,
+				reviewedAt: done,
+			})
+			.onConflictDoUpdate({
+				target: [recallReviews.projectSlug, recallReviews.cardId],
+				set: {
+					box: data.gotIt
+						? sql`least(${MAX_BOX}, ${recallReviews.box} + 1)`
+						: 0,
+					reviewedAt: done,
+					updatedAt: new Date(),
+				},
+				setWhere: sql`${recallReviews.reviewedAt} < ${done}`,
+			});
 	});

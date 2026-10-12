@@ -11,6 +11,7 @@ import {
 	finishStudySession,
 	getTrackerState,
 	logMakeup,
+	reviewRecallCard,
 	saveProjectReview,
 	saveWeeklyReflection,
 	startStudySession,
@@ -19,6 +20,7 @@ import {
 	updateStudySession,
 	updateTask,
 } from "./api";
+import { nextBox } from "./recall";
 import { pauseTimer, resumeTimer, timerOf } from "./session";
 import type { TaskStatus } from "./status";
 
@@ -190,6 +192,7 @@ export function useFinishSession(project: string) {
 			taskId: string;
 			outcome: TaskStatus;
 			minutes: number;
+			takeaway: string;
 		}) => finishStudySession({ data: { project, ...vars } }),
 	);
 }
@@ -199,5 +202,23 @@ export function useFinishSession(project: string) {
 export function useDiscardSession(project: string) {
 	return useTrackerMutation(project, (id: number) =>
 		discardStudySession({ data: { id } }),
+	);
+}
+
+export function useReviewCard(project: string) {
+	return useTrackerMutation(
+		project,
+		(vars: { cardId: string; gotIt: boolean }) =>
+			reviewRecallCard({ data: { project, ...vars } }),
+		(state, { cardId, gotIt }) => ({
+			...state,
+			recall: {
+				...state.recall,
+				[cardId]: {
+					box: nextBox(state.recall[cardId]?.box, gotIt),
+					reviewedAt: state.history.length,
+				},
+			},
+		}),
 	);
 }

@@ -14,6 +14,7 @@ import { formatElapsed } from "#/lib/tracker/session";
 import { TASK_STATUSES } from "#/lib/tracker/status";
 import type { Project, Task } from "#/lib/tracker/types";
 import { useAutosaveNotes, useSessionElapsed } from "#/lib/tracker/useSession";
+import { ExampleButton } from "./lesson";
 import { NotesBox } from "./NotesBox";
 import {
 	Checklist,
@@ -72,6 +73,10 @@ export function TaskPanel({
 				<p className="whitespace-pre-line rounded-xl bg-amber-50/70 px-4 py-3 text-sm text-slate-700">
 					{task.intro.join("\n")}
 				</p>
+			) : null}
+
+			{task.lesson?.example ? (
+				<ExampleButton example={task.lesson.example} />
 			) : null}
 
 			<Section title="What to do">

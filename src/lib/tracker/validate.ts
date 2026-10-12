@@ -42,6 +42,24 @@ export function validateProject(project: Project): void {
 				errors.push(`${t.id}: unknown concept "${ref.conceptId}"`);
 			}
 		}
+		if (t.lesson) {
+			const { example, order, recall } = t.lesson;
+			if (!t.checkpoint && !example)
+				errors.push(`${t.id}: lesson has no example`);
+			if (example && example.blocks.length === 0) {
+				errors.push(`${t.id}: example has no code`);
+			}
+			if (order && order.lines.length < 3) {
+				errors.push(`${t.id}: order puzzle needs at least 3 lines`);
+			}
+			if (!t.checkpoint && recall.length === 0) {
+				errors.push(`${t.id}: lesson has no recall questions`);
+			}
+			for (const r of recall) {
+				if (!r.q.trim() || !r.a.trim())
+					errors.push(`${t.id}: empty recall item`);
+			}
+		}
 	}
 
 	for (const m of project.milestones) {

@@ -15,6 +15,13 @@
       "when": 1790441398957,
       "tag": "0001_study_sessions",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791785309249,
+      "tag": "0002_teaching_method",
+      "breakpoints": true
     }
   ]
 }

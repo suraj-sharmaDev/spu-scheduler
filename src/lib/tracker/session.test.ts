@@ -15,9 +15,35 @@ const project = getProject("cpp-developer");
 if (!project) throw new Error("cpp-developer missing");
 
 describe("sessionSteps", () => {
-	it("follows the six-step routine", () => {
-		const s1 = project.tasks[0];
-		expect(sessionSteps(s1).map((s) => s.kind)).toEqual([
+	const byId = (id: string) => {
+		const t = project.tasks.find((t) => t.id === id);
+		if (!t) throw new Error(`${id} missing`);
+		return t;
+	};
+	const kinds = (id: string, isFirst = false) =>
+		sessionSteps(byId(id), { isFirst }).map((s) => s.kind);
+
+	it("starts the very first session without a recall step", () => {
+		expect(kinds("l1", true)).toEqual(["watch", "order", "build", "check"]);
+	});
+
+	it("starts every later lesson by remembering", () => {
+		expect(kinds("l2")).toEqual([
+			"remember",
+			"watch",
+			"order",
+			"build",
+			"check",
+		]);
+	});
+
+	it("skips the example and puzzle on review days", () => {
+		expect(kinds("l5")).toEqual(["remember", "build", "check"]);
+	});
+
+	it("keeps the older routine for tasks without a lesson", () => {
+		expect(kinds("s11")).toEqual([
+			"remember",
 			"read",
 			"words",
 			"research",
@@ -29,12 +55,13 @@ describe("sessionSteps", () => {
 
 	it("skips steps with nothing to show", () => {
 		const bare = {
-			...project.tasks[0],
+			...byId("s11"),
 			concepts: [],
 			thinkAbout: [],
 			doneWhen: [],
 		};
-		expect(sessionSteps(bare).map((s) => s.kind)).toEqual([
+		expect(sessionSteps(bare, { isFirst: false }).map((s) => s.kind)).toEqual([
+			"remember",
 			"read",
 			"plan",
 			"build",
