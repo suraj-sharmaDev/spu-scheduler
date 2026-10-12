@@ -60,7 +60,7 @@ function TaskPage() {
 						<SessionLauncher project={project} task={task} state={state} />
 					</Card>
 					{/* Everything the session covers, for quick fixes outside a session. */}
-					<details className="group rounded-2xl bg-white shadow-sm ring-1 ring-rose-100">
+					<details className="group rounded-2xl bg-white border border-slate-200">
 						<summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-medium text-slate-600 [&::-webkit-details-marker]:hidden">
 							See everything for this session (checklists, status, minutes,
 							notes)

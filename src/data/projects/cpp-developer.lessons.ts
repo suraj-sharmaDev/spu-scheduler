@@ -41,7 +41,7 @@ export const cppLessons: LessonPlan = {
 				},
 				{
 					label: "2. Watch (10 min)",
-					text: "Read the example one piece at a time. Guess what it does, then type it in and run it.",
+					text: "Read the example top to bottom. Guess what it does, then type it in and run it.",
 				},
 				{
 					label: "3. Put it in order (5 min)",

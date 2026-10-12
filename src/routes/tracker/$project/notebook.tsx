@@ -29,16 +29,23 @@ function Notebook() {
 	return (
 		<div className="mx-auto max-w-2xl space-y-8">
 			<div>
-				<h1 className="font-display text-3xl font-semibold text-rose-950">
+				<h1 className="font-display text-3xl font-semibold text-slate-900">
 					My notebook
 				</h1>
 				<p className="mt-1 text-slate-600">
 					What you learned, in your own words. Newest first.
 				</p>
+				<Link
+					to="/tracker/$project/concepts"
+					params={{ project: project.slug }}
+					className="mt-2 inline-block text-sm text-slate-500 underline-offset-4 hover:text-slate-900 hover:underline"
+				>
+					All the concepts, explained plainly
+				</Link>
 			</div>
 
 			{state.history.length === 0 ? (
-				<div className="rounded-3xl bg-white px-6 py-12 text-center shadow-sm ring-1 ring-rose-100">
+				<div className="rounded-3xl bg-white px-6 py-12 text-center border border-slate-200">
 					<NotebookPen className="mx-auto h-10 w-10 text-rose-300" />
 					<p className="mt-4 text-lg text-slate-700">
 						Your notebook fills up as you finish sessions.
@@ -59,7 +66,7 @@ function Notebook() {
 						return (
 							<li
 								key={entry.id}
-								className="space-y-4 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-rose-100"
+								className="space-y-4 rounded-3xl bg-white p-6 border border-slate-200"
 							>
 								<p className="text-sm text-slate-500">
 									{dateFormatter.format(new Date(entry.endedAt))} · #

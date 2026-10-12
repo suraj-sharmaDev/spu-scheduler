@@ -28,7 +28,7 @@ function ReflectPage() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h1 className="font-display text-3xl font-semibold text-rose-950">
+				<h1 className="font-display text-3xl font-semibold text-slate-900">
 					Reflect
 				</h1>
 				<p className="mt-1 text-slate-600">
@@ -47,7 +47,7 @@ function ReflectPage() {
 								type="button"
 								onClick={() => setWeek(m.number)}
 								aria-pressed={week === m.number}
-								className={`relative h-9 w-9 rounded-full text-sm font-medium transition ${week === m.number ? "bg-rose-500 text-white" : saved ? "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200" : "bg-white text-slate-600 ring-1 ring-rose-100 hover:bg-rose-50"}`}
+								className={`relative h-9 w-9 rounded-full text-sm font-medium transition ${week === m.number ? "bg-rose-500 text-white" : saved ? "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200" : "bg-white text-slate-600 border border-slate-200 hover:bg-rose-50"}`}
 								title={`Week ${m.number}${saved ? " · filled in" : ""}`}
 							>
 								{m.number}
@@ -203,7 +203,7 @@ function ReviewForm({
 	}
 
 	return (
-		<details className="rounded-xl ring-1 ring-rose-100" open={!saved}>
+		<details className="rounded-xl border border-slate-200" open={!saved}>
 			<summary className="flex cursor-pointer items-center gap-2 px-4 py-3 font-medium text-slate-800">
 				{saved ? <CheckCircle2 className="h-4 w-4 text-emerald-500" /> : null}
 				{subject}

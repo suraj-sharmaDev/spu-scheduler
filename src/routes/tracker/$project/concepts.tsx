@@ -31,12 +31,12 @@ function Concepts() {
 	);
 
 	const chip = (active: boolean) =>
-		`rounded-full px-3 py-1 text-sm transition ${active ? "bg-rose-500 text-white" : "bg-white text-slate-600 ring-1 ring-rose-100 hover:bg-rose-50"}`;
+		`rounded-full px-3 py-1 text-sm transition ${active ? "bg-rose-500 text-white" : "bg-white text-slate-600 border border-slate-200 hover:bg-rose-50"}`;
 
 	return (
 		<div className="space-y-4">
 			<div>
-				<h1 className="font-display text-3xl font-semibold text-rose-950">
+				<h1 className="font-display text-3xl font-semibold text-slate-900">
 					Concepts
 				</h1>
 				<p className="mt-1 text-slate-600">
@@ -46,7 +46,7 @@ function Concepts() {
 			</div>
 
 			<div className="space-y-3">
-				<label className="flex items-center gap-2 rounded-xl bg-white px-3 ring-1 ring-rose-100 focus-within:ring-2 focus-within:ring-rose-300">
+				<label className="flex items-center gap-2 rounded-xl bg-white px-3 border border-slate-200 focus-within:ring-2 focus-within:ring-rose-300">
 					<Search className="h-4 w-4 text-slate-400" />
 					<input
 						value={query}
@@ -115,7 +115,7 @@ function Concepts() {
 													key={t.id}
 													to="/tracker/$project/tasks/$taskId"
 													params={{ project: project.slug, taskId: t.id }}
-													className="rounded bg-white px-1.5 py-0.5 font-medium text-rose-600 ring-1 ring-rose-100 hover:bg-rose-100"
+													className="rounded bg-white px-1.5 py-0.5 font-medium text-rose-600 border border-slate-200 hover:bg-rose-100"
 													title={t.title}
 												>
 													#{t.number}

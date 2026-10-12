@@ -2,13 +2,22 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ResetTracker } from "#/components/tracker/ResetTracker";
 import { Card, Meter, StatTile } from "#/components/tracker/ui";
 import { WeekChart } from "#/components/tracker/WeekChart";
+import { WeekStrip } from "#/components/tracker/WeekStrip";
+import type { TrackerState } from "#/lib/tracker/api";
 import {
 	milestoneRows,
 	toAttendanceLike,
 	totals,
 } from "#/lib/tracker/progress";
 import { useTracker } from "#/lib/tracker/queries";
-import { allWeeks } from "#/lib/tracker/schedule";
+import {
+	allWeeks,
+	localDate,
+	TRACKER_START_DATE,
+	weekStartOf,
+	weekSummary,
+} from "#/lib/tracker/schedule";
+import type { Project } from "#/lib/tracker/types";
 import { useNow } from "#/lib/tracker/useNow";
 import { useProject } from "#/lib/tracker/useProject";
 
@@ -27,6 +36,102 @@ const shortDate = (d: string) =>
 function Progress() {
 	const project = useProject();
 	const state = useTracker(project.slug);
+	return state.role === "learner" ? (
+		<LearnerProgress project={project} state={state} />
+	) : (
+		<AdminProgress project={project} state={state} />
+	);
+}
+
+/**
+ * Two things: this week's check-ins, and the plan as a grid of dots that
+ * fills in. Numbers that would read "0" are left out until there's something
+ * to show.
+ */
+function LearnerProgress({
+	project,
+	state,
+}: {
+	project: Project;
+	state: TrackerState;
+}) {
+	const now = useNow();
+	const rows = milestoneRows(project, state);
+	const t = totals(project, state);
+	const week = now
+		? (() => {
+				const today = localDate(now);
+				const start = weekStartOf(
+					today < TRACKER_START_DATE ? TRACKER_START_DATE : today,
+				);
+				return weekSummary(start, toAttendanceLike(state.attendance), now);
+			})()
+		: null;
+	const currentWeek = rows.find((r) => r.done < r.sessions)?.milestone.number;
+
+	return (
+		<div className="mx-auto max-w-xl space-y-10">
+			<h1 className="font-display text-3xl font-semibold">How it's going</h1>
+
+			{week ? (
+				<section className="space-y-3">
+					<h2 className="text-sm font-medium text-slate-500">This week</h2>
+					<WeekStrip week={week} />
+				</section>
+			) : null}
+
+			<section className="space-y-3">
+				<h2 className="text-sm font-medium text-slate-500">
+					The plan{t.done > 0 ? ` · ${t.done} of ${t.tasks} sessions done` : ""}
+				</h2>
+				<ol className="space-y-2">
+					{rows.map((r) => (
+						<li
+							key={r.milestone.id}
+							className="flex items-center gap-4 text-sm"
+						>
+							<span
+								className={`w-16 shrink-0 tabular-nums ${r.milestone.number === currentWeek ? "font-semibold text-slate-900" : "text-slate-500"}`}
+							>
+								Week {r.milestone.number}
+							</span>
+							<span
+								role="img"
+								className="flex gap-1.5"
+								aria-label={`${r.done} of ${r.sessions} done`}
+							>
+								{Array.from({ length: r.sessions }, (_, i) => (
+									<span
+										// biome-ignore lint/suspicious/noArrayIndexKey: fixed-length dot row
+										key={i}
+										className={`h-3.5 w-3.5 rounded-full ${i < r.done ? "bg-rose-500" : "bg-slate-200"}`}
+									/>
+								))}
+							</span>
+							<span className="min-w-0 truncate text-slate-500">
+								{r.milestone.subproject}
+							</span>
+						</li>
+					))}
+				</ol>
+			</section>
+
+			{t.minutes > 0 ? (
+				<p className="text-sm text-slate-500">
+					{(t.minutes / 60).toFixed(1)} hours of practice so far.
+				</p>
+			) : null}
+		</div>
+	);
+}
+
+function AdminProgress({
+	project,
+	state,
+}: {
+	project: Project;
+	state: TrackerState;
+}) {
 	const now = useNow();
 	const rows = milestoneRows(project, state);
 	const t = totals(project, state);
@@ -46,7 +151,7 @@ function Progress() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h1 className="font-display text-3xl font-semibold text-rose-950">
+				<h1 className="font-display text-3xl font-semibold text-slate-900">
 					How far you've come
 				</h1>
 				<p className="mt-1 text-slate-600">{project.title}</p>

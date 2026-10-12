@@ -18,7 +18,7 @@ export function Card({
 }) {
 	return (
 		<section
-			className={`rounded-2xl bg-white p-5 shadow-sm ring-1 ring-rose-100 sm:p-6 ${className}`}
+			className={`rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 ${className}`}
 		>
 			{title || right ? (
 				<header className="mb-4 flex items-start justify-between gap-4">
@@ -257,7 +257,7 @@ export function StatTile({
 	hint?: ReactNode;
 }) {
 	return (
-		<div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-rose-100">
+		<div className="rounded-2xl border border-slate-200 bg-white p-4">
 			<div className="text-2xl font-semibold text-slate-900">{value}</div>
 			<div className="text-sm text-slate-600">{label}</div>
 			{hint ? <div className="mt-1 text-xs text-slate-400">{hint}</div> : null}

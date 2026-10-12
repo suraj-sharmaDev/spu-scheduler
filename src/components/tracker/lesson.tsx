@@ -5,6 +5,7 @@
 import {
 	BookOpen,
 	Check,
+	Copy,
 	Eye,
 	Lightbulb,
 	RotateCcw,
@@ -48,43 +49,67 @@ function Reveal({
 	);
 }
 
+/** Copies text to the clipboard and says so for a moment. */
+function CopyButton({
+	text,
+	label = "Copy",
+}: {
+	text: string;
+	label?: string;
+}) {
+	const [copied, setCopied] = useState(false);
+	async function copy() {
+		await navigator.clipboard.writeText(text);
+		setCopied(true);
+		setTimeout(() => setCopied(false), 1500);
+	}
+	return (
+		<button
+			type="button"
+			onClick={copy}
+			className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+		>
+			{copied ? (
+				<Check className="h-3.5 w-3.5 text-emerald-600" />
+			) : (
+				<Copy className="h-3.5 w-3.5" />
+			)}
+			{copied ? "Copied" : label}
+		</button>
+	);
+}
+
 /**
- * The labelled example. `stepwise` reveals one piece at a time (first viewing,
- * so she isn't handed the whole program at once); otherwise everything shows.
+ * The labelled example, all of it at once so she can read it next to CLion
+ * without tapping back and forth. Each block and the whole program can be
+ * copied straight into the editor.
  */
 export function ExampleView({
 	example,
-	stepwise = false,
 	footer,
 }: {
 	example: Example;
-	stepwise?: boolean;
-	/** Shown once every piece is visible. */
 	footer?: ReactNode;
 }) {
-	const [shown, setShown] = useState(stepwise ? 1 : example.blocks.length);
-	const allShown = shown >= example.blocks.length;
+	const whole = example.blocks.map((b) => b.code).join("\n");
 	return (
 		<div className="space-y-5">
-			<p className="font-medium text-slate-800">{example.title}</p>
-			{example.blocks.slice(0, shown).map((block) => (
+			<div className="flex items-center justify-between gap-3">
+				<p className="font-medium text-slate-800">{example.title}</p>
+				<CopyButton text={whole} label="Copy the whole program" />
+			</div>
+			{example.blocks.map((block) => (
 				<div key={block.label}>
-					<p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-rose-700/80">
-						{block.label}
-					</p>
+					<div className="mb-1.5 flex items-center justify-between">
+						<p className="text-xs font-semibold uppercase tracking-wide text-rose-700/80">
+							{block.label}
+						</p>
+						<CopyButton text={block.code} />
+					</div>
 					<CodeBlock code={block.code} />
 				</div>
 			))}
-			{!allShown ? (
-				<button
-					type="button"
-					onClick={() => setShown((n) => n + 1)}
-					className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-rose-700 ring-1 ring-rose-200 hover:bg-rose-50"
-				>
-					Next piece ({shown + 1} of {example.blocks.length})
-				</button>
-			) : null}
-			{allShown && example.predict ? (
+			{example.predict ? (
 				<div className="space-y-3 rounded-2xl bg-amber-50/80 p-4">
 					<p className="text-sm font-semibold text-amber-900">
 						Guess before you run it
@@ -93,7 +118,7 @@ export function ExampleView({
 					<Reveal answer={example.predict.answer} />
 				</div>
 			) : null}
-			{allShown ? footer : null}
+			{footer}
 		</div>
 	);
 }

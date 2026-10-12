@@ -278,14 +278,24 @@ export function SessionLauncher({
 	task: Task;
 	state: TrackerState;
 }) {
+	const milestone = project.milestones.find((m) => m.id === task.milestoneId);
+	const inWeek = project.tasks.filter(
+		(t) => t.milestoneId === task.milestoneId,
+	).length;
+	// Just where it sits and what it's called; stars, pills and meters are
+	// noise when the only thing to do is press the button.
 	return (
 		<div className="space-y-5">
-			<TaskHeader project={project} task={task} state={state} />
+			<header>
+				<p className="text-sm text-slate-500">
+					Week {milestone?.number} · Session {task.sessionInMilestone} of{" "}
+					{inWeek}
+				</p>
+				<h2 className="mt-1 font-display text-2xl font-semibold text-slate-900">
+					{task.title}
+				</h2>
+			</header>
 			<SessionButton project={project} task={task} state={state} />
-			<p className="text-center text-sm text-slate-500">
-				It walks you through the whole session step by step and times it for
-				you.
-			</p>
 		</div>
 	);
 }

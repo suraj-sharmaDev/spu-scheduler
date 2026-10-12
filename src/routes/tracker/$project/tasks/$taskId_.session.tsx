@@ -595,7 +595,6 @@ function StepBody({
 					) : null}
 					<ExampleView
 						example={lesson.example}
-						stepwise
 						footer={
 							<p className="rounded-xl bg-rose-50/70 px-4 py-3 text-slate-700">
 								Now type it into a new file and run it. Did it do what you
@@ -1212,7 +1211,7 @@ function Celebration({
 			<span className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-rose-100">
 				<Heart className="h-10 w-10 fill-rose-500 text-rose-500" />
 			</span>
-			<h1 className="mt-6 font-display text-3xl font-semibold text-rose-950">
+			<h1 className="mt-6 font-display text-3xl font-semibold text-slate-900">
 				Session saved
 			</h1>
 			<p className="mt-2 text-slate-600">
@@ -1220,7 +1219,7 @@ function Celebration({
 			</p>
 			<p className="mt-4 text-lg text-slate-800">{CHEERS[result.status]}</p>
 			{result.takeaway ? (
-				<p className="mt-6 rounded-2xl bg-white px-5 py-4 text-slate-700 shadow-sm ring-1 ring-rose-100">
+				<p className="mt-6 rounded-2xl bg-white px-5 py-4 text-slate-700 border border-slate-200">
 					You learned: “{result.takeaway}”
 				</p>
 			) : null}

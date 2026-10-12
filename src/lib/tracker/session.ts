@@ -33,7 +33,7 @@ const STEPS: Record<StepKind, Omit<SessionStep, "kind">> = {
 	watch: {
 		title: "Watch",
 		minutes: "10 min",
-		hint: "Read it one piece at a time. Then type it in and run it.",
+		hint: "Read it top to bottom. Then type it in (or copy it) and run it.",
 	},
 	order: {
 		title: "Put it in order",
