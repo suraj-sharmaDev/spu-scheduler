@@ -97,10 +97,10 @@ function Resume() {
 	];
 
 	return (
-		<main className="mx-auto min-h-[11in] w-[8.5in] max-w-full bg-white px-[0.5in] py-[0.45in] font-[Arial,Helvetica,sans-serif] text-[10.5pt] leading-snug text-black shadow-lg print:min-h-0 print:w-auto print:p-0 print:shadow-none">
+		<main className="mx-auto min-h-[11in] w-[8.5in] max-w-full bg-white px-[0.5in] py-[0.45in] font-[Arial,Helvetica,sans-serif] text-[11pt] leading-normal text-black shadow-lg print:min-h-0 print:w-auto print:p-0 print:shadow-none">
 			<header className="text-center">
-				<h1 className="text-[20pt] font-bold tracking-wide">{CV.name}</h1>
-				<p className="mt-1">
+				<h1 className="text-[24pt] font-bold tracking-wide">{CV.name}</h1>
+				<p className="mt-1 text-[10pt]">
 					{contact.map((item, i) => (
 						<span key={item}>
 							{i > 0 ? " | " : null}
@@ -116,7 +116,7 @@ function Resume() {
 
 			<Section title="Education">
 				{CV.education.map((e) => (
-					<div key={e.school} className="mt-1.5 first:mt-0">
+					<div key={e.school} className="mt-2.5 first:mt-0">
 						<Row left={<strong>{e.school}</strong>} right={e.location} />
 						<Row
 							left={
@@ -150,7 +150,7 @@ function Resume() {
 
 			<Section title="Leadership Experience">
 				{CV.leadership.map((job) => (
-					<div key={`${job.title}-${job.org}`} className="mt-1.5 first:mt-0">
+					<div key={`${job.title}-${job.org}`} className="mt-2.5 first:mt-0">
 						<Row left={<strong>{job.title}</strong>} right={job.dates} />
 						<Row left={<em>{job.org}</em>} right={job.location} />
 						<Bullets items={job.bullets} />
@@ -175,8 +175,8 @@ function ContactItem({ text }: { text: string }) {
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
 	return (
-		<section className="mt-3 break-inside-avoid">
-			<h2 className="mb-1 border-b border-black text-[11pt] font-bold uppercase tracking-wider">
+		<section className="mt-4.5 break-inside-avoid">
+			<h2 className="mb-1.5 border-b border-black text-[12pt] font-bold uppercase tracking-wider">
 				{title}
 			</h2>
 			{children}

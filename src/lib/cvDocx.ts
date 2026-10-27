@@ -14,17 +14,18 @@ import { CV, type Cv, formatGpa, phoneHref } from "./cv";
 const INCH = 1440;
 const MARGIN = INCH / 2;
 const TEXT_WIDTH = 8.5 * INCH - 2 * MARGIN;
-const BODY_SIZE = 21; // 10.5pt, same as the /cv page
+const BODY_SIZE = 22; // 11pt, same as the /cv page
+const CONTACT_SIZE = 20; // 10pt
 const FONT = "Arial";
 
 function heading(title: string): Paragraph {
 	return new Paragraph({
-		spacing: { before: 200, after: 60 },
+		spacing: { before: 320, after: 80 },
 		border: {
 			bottom: { style: BorderStyle.SINGLE, size: 6, color: "000000", space: 1 },
 		},
 		children: [
-			new TextRun({ text: title.toUpperCase(), bold: true, size: 22 }),
+			new TextRun({ text: title.toUpperCase(), bold: true, size: 24 }),
 		],
 	});
 }
@@ -42,30 +43,35 @@ function bullet(text: string): Paragraph {
 	return new Paragraph({ bullet: { level: 0 }, children: [new TextRun(text)] });
 }
 
+// Smaller than body so the contact line, LinkedIn URL included, stays on one line.
+function contactRun(text: string): TextRun {
+	return new TextRun({ text, size: CONTACT_SIZE });
+}
+
 export function buildCvDocument(cv: Cv = CV): Document {
 	const contact: (TextRun | ExternalHyperlink)[] = [
-		new TextRun(`${cv.location} | `),
+		contactRun(`${cv.location} | `),
 		new ExternalHyperlink({
 			link: phoneHref(cv.phone),
-			children: [new TextRun(cv.phone)],
+			children: [contactRun(cv.phone)],
 		}),
-		new TextRun(" | "),
+		contactRun(" | "),
 		new ExternalHyperlink({
 			link: `mailto:${cv.email}`,
-			children: [new TextRun(cv.email)],
+			children: [contactRun(cv.email)],
 		}),
 	];
 	for (const l of cv.links) {
 		contact.push(
-			new TextRun(" | "),
-			new ExternalHyperlink({ link: l.href, children: [new TextRun(l.label)] }),
+			contactRun(" | "),
+			new ExternalHyperlink({ link: l.href, children: [contactRun(l.label)] }),
 		);
 	}
 
 	const body: Paragraph[] = [
 		new Paragraph({
 			alignment: AlignmentType.CENTER,
-			children: [new TextRun({ text: cv.name, bold: true, size: 40 })],
+			children: [new TextRun({ text: cv.name, bold: true, size: 48 })],
 		}),
 		new Paragraph({ alignment: AlignmentType.CENTER, children: contact }),
 
@@ -79,7 +85,7 @@ export function buildCvDocument(cv: Cv = CV): Document {
 		const degree =
 			e.gpa === undefined ? e.degree : `${e.degree} | GPA: ${formatGpa(e.gpa)}`;
 		body.push(
-			row(new TextRun({ text: e.school, bold: true }), e.location, i ? 80 : 0),
+			row(new TextRun({ text: e.school, bold: true }), e.location, i ? 200 : 0),
 			row(new TextRun({ text: degree, italics: true }), e.dates),
 			...(e.details ?? []).map(bullet),
 		);
@@ -107,7 +113,7 @@ export function buildCvDocument(cv: Cv = CV): Document {
 	body.push(heading("Leadership Experience"));
 	cv.leadership.forEach((job, i) => {
 		body.push(
-			row(new TextRun({ text: job.title, bold: true }), job.dates, i ? 80 : 0),
+			row(new TextRun({ text: job.title, bold: true }), job.dates, i ? 200 : 0),
 			row(new TextRun({ text: job.org, italics: true }), job.location),
 			...job.bullets.map(bullet),
 		);
@@ -119,7 +125,13 @@ export function buildCvDocument(cv: Cv = CV): Document {
 		creator: cv.name,
 		title: `${cv.name} Resume`,
 		styles: {
-			default: { document: { run: { font: FONT, size: BODY_SIZE } } },
+			default: {
+				document: {
+					run: { font: FONT, size: BODY_SIZE },
+					// 1.25x line spacing, tuned with the larger spacing above so the page is ~93% full.
+					paragraph: { spacing: { line: 300 } },
+				},
+			},
 		},
 		sections: [
 			{
